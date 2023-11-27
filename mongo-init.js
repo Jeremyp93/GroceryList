@@ -1,16 +1,16 @@
 db.createUser({
-  user: "grocerylist",
-  pwd: "Triage-Scorer-Sequester9-Existing",
+  user: process.env.MONGO_GROCERYLIST_USERNAME,
+  pwd: process.env.MONGO_GROCERYLIST_PASSWORD,
   roles: [
     {
       role: "readWrite",
-      db: "grocery_list",
+      db: process.env.MONGO_INITDB_DATABASE,
     },
   ],
 });
 
-db = new Mongo().getDB("grocery_list");
+db = new Mongo().getDB(process.env.MONGO_INITDB_DATABASE);
 
-db.createCollection("user", { capped: false });
-db.createCollection("store", { capped: false });
-db.createCollection("grocerylist", { capped: false });
+db.createCollection("User", { capped: false });
+db.createCollection("Store", { capped: false });
+db.createCollection("GroceryList", { capped: false });
