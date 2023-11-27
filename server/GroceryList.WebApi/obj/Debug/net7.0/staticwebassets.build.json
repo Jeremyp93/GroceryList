@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "nohz4wyj2e/vrjmTMpCpe/oo7LKvBviSxcW+VPASkA4=",
+  "Source": "GroceryList.WebApi",
+  "BasePath": "_content/GroceryList.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

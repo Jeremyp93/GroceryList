@@ -1,0 +1,92 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    background-color: #F7F3F6;
+    text-align: center;
+
+    &.modal-open {
+        overflow: hidden;
+    }
+
+    .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mt-20 {
+        margin-top: 20px;
+    }
+}
+
+input[type="text"],
+input[type="number"] {
+    background-color: transparent;
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #C8963E;
+    outline: none;
+    color: #595959;
+    font-size: large;
+
+    &:focus {
+        //background-color: rgb(255, 255, 255, 0.8);
+        border: 1px solid #C8963E;
+        border-radius: 5px;
+        //padding: 5px;
+    }
+}
+
+select {
+    width: 100%;
+    //width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #C8963E;
+    background-color: transparent;
+    color: #595959;
+    cursor: pointer;
+    font-size: large;
+    //appearance: none;
+
+    &:focus {
+        outline: none;
+        border: 1px solid #C8963E;
+        border-radius: 5px;
+        //background-color: #fff;
+        //border-bottom: unset;
+    }
+}
+
+/* .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    padding: 20px 10px;
+    box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, .1);
+
+    .group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+
+        span {
+            color: #EB5E55;
+            font-size: small;
+            margin-top: 5px;
+            ;
+        }
+
+        label {
+            font-size: large;
+            font-weight: bold;
+            color: #595959;
+        }
+
+        &:not(:last-child) {
+            margin-bottom: 20px;
+        }
+    }
+} */

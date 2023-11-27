@@ -1,0 +1,30 @@
+button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: #C8963E;
+    color: #fff;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+
+    &.danger {
+        background-color: #EB5E55;
+    }
+
+    &.success {
+        background-color: #91C499;
+    }
+
+    &:hover {
+        background-color: #595959;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+}

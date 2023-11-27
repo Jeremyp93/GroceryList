@@ -1,0 +1,206 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\SRC\\GroceryList\\server\\GroceryList.Infrastructure\\GroceryList.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "C:\\SRC\\GroceryList\\server\\GroceryList.Application\\GroceryList.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\SRC\\GroceryList\\server\\GroceryList.Application\\GroceryList.Application.csproj",
+        "projectName": "GroceryList.Application",
+        "projectPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Application\\GroceryList.Application.csproj",
+        "packagesPath": "C:\\Users\\jerem\\.nuget\\packages\\",
+        "outputPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\jerem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\SRC\\GroceryList\\server\\GroceryList.Domain\\GroceryList.Domain.csproj": {
+                "projectPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Domain\\GroceryList.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\SRC\\GroceryList\\server\\GroceryList.Domain\\GroceryList.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\SRC\\GroceryList\\server\\GroceryList.Domain\\GroceryList.Domain.csproj",
+        "projectName": "GroceryList.Domain",
+        "projectPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Domain\\GroceryList.Domain.csproj",
+        "packagesPath": "C:\\Users\\jerem\\.nuget\\packages\\",
+        "outputPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\jerem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\SRC\\GroceryList\\server\\GroceryList.Infrastructure\\GroceryList.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\SRC\\GroceryList\\server\\GroceryList.Infrastructure\\GroceryList.Infrastructure.csproj",
+        "projectName": "GroceryList.Infrastructure",
+        "projectPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Infrastructure\\GroceryList.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\jerem\\.nuget\\packages\\",
+        "outputPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\jerem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\SRC\\GroceryList\\server\\GroceryList.Application\\GroceryList.Application.csproj": {
+                "projectPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Application\\GroceryList.Application.csproj"
+              },
+              "C:\\SRC\\GroceryList\\server\\GroceryList.Domain\\GroceryList.Domain.csproj": {
+                "projectPath": "C:\\SRC\\GroceryList\\server\\GroceryList.Domain\\GroceryList.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[7.0.14, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.22.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
