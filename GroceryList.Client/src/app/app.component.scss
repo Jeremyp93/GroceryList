@@ -1,3 +1,42 @@
+.top-menu {
+    position: fixed;
+    top: 0;
+    left: 25%;
+    width: 50%;
+    height: 40px;
+    background-color: #F7F3F6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 1;
+
+    @media screen and (max-width: 991px) {
+        width: 95%;
+        left: 0;
+    }
+
+    p,a {
+        margin: 0;
+        color: #595959;
+        font-size: medium;
+
+        -webkit-user-select: none;
+        /* Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer/Edge */
+        user-select: none;
+        /* Generic */
+    }
+
+    a {
+        text-decoration: none;
+        cursor: pointer;
+    }
+}
+
 .bottom-menu {
     position: fixed;
     bottom: 0;
@@ -56,6 +95,7 @@
 .container {
     width: 50%;
     margin: 0 auto;
+    padding-top: 20px;
     padding-bottom: 66px;
 
     &.keyboard-open {

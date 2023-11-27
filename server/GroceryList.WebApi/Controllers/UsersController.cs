@@ -63,7 +63,7 @@ public class UsersController : BaseController
             return ErrorResponse(result);
         }
 
-        return Ok(result.Data);
+        return Ok(new TokenResponse { Token = result.Data });
     }
 
     [HttpPost]

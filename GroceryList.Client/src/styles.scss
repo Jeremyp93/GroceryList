@@ -19,7 +19,9 @@ body {
 }
 
 input[type="text"],
-input[type="number"] {
+input[type="number"],
+input[type="email"],
+input[type="password"] {
     background-color: transparent;
     width: calc(100% - 20px);
     padding: 10px;

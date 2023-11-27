@@ -6,7 +6,8 @@ export const ROUTES_PARAM = {
     GROCERY_LIST: 'grocery-lists',
     STORE: 'stores',
     EDIT: 'edit',
-    NEW: 'new'
+    NEW: 'new',
+    LOGIN: 'login'
 }
 
 export const INGREDIENT_FORM = {

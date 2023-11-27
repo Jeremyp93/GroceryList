@@ -1,6 +1,13 @@
+@if(showMenu) {
+<div class="top-menu">
+  <p>{{ username$ | async }}</p>
+  <a (click)="onLogout()">Logout</a>
+</div>
+}
 <div class="container" [class.keyboard-open]="isKeyboardOpen">
   <router-outlet></router-outlet>
 </div>
+@if(showMenu) {
 <div class="bottom-menu" [class.keyboard-open]="isKeyboardOpen">
   <ul>
     <li routerLinkActive="active">
@@ -23,3 +30,4 @@
     </li>
   </ul>
 </div>
+}

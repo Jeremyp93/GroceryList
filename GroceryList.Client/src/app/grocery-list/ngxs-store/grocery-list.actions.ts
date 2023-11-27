@@ -1,6 +1,4 @@
-import { Section } from "../../store/types/section.type";
 import { GroceryList, GroceryListForm } from "../types/grocery-list.type";
-import { Ingredient } from "../types/ingredient.type";
 
 
 export class AddGroceryList {

@@ -1,5 +1,6 @@
 export const environment = {
     production: true,
     groceryListApiUrl: 'http://localhost:6578/api/grocerylists',
-    storeApiUrl: 'http://localhost:6578/api/stores'
+    storeApiUrl: 'http://localhost:6578/api/stores',
+    userApiUrl: 'http://localhost:6578/api/users'
 };
