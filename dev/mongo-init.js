@@ -79,8 +79,8 @@ db.GroceryList.insert([
   {
     _id: BinData(3, "KF1Uwz3/qUS1gOnbU4fwHw=="),
     name: "List Maxi - course semaine",
-    userId: "00000000-0000-0000-0000-000000000000",
-    storeId: "3f5188e5-637d-4d32-b34f-89a0fff34e15",
+    userId: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
+    storeId: BinData(3, "5YhRP31jMk2zT4mg//NOFQ=="),
     ingredients: [
       {
         _id: "456151ee-f14c-43a3-b332-a789a44f3cc9",
@@ -160,8 +160,8 @@ db.GroceryList.insert([
   {
     _id: BinData(3, "ViuW04NJcEKrBKuznIulIQ=="),
     name: "List Jean-Talon",
-    userId: "00000000-0000-0000-0000-000000000000",
-    storeId: "4c241fbe-ae5e-4838-9baa-68489fb90232",
+    userId: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
+    storeId: BinData(3, "vh8kTF6uOEibqmhIn7kCMg=="),
     ingredients: [
       {
         _id: "8e5734e4-e60d-48bf-881e-6bae7fca195c",

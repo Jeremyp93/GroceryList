@@ -1,4 +1,4 @@
-<app-header title="Add Gorcery List" [backButton]="true"></app-header>
+<app-header [title]="title" [backButton]="true"></app-header>
 @if (groceryListForm) {
 <form [formGroup]="groceryListForm" (ngSubmit)="onSubmit()" autocomplete="off">
   <div class="submit top">
@@ -110,5 +110,10 @@
   </div>
 </form>
 } @else {
-<p>Loading...</p>
+<div class="flex-center mt-20">
+  <app-loading
+    [size]="loadingSizes.large"
+    [color]="loadingColors.app"
+  ></app-loading>
+</div>
 }

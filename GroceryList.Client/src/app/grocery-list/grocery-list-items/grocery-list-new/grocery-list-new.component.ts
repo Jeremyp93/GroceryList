@@ -12,14 +12,19 @@ import { ButtonComponent } from '../../../shared/button/button.component';
 import { GroceryListService } from '../../grocery-list.service';
 import { Ingredient } from '../../types/ingredient.type';
 import { Store } from '../../../store/types/store.type';
-import { AddGroceryList, UpdateGroceryList } from '../../ngxs-store/grocery-list.actions';
+import { AddGroceryList, GetGroceryLists, GetSelectedGroceryList, UpdateGroceryList } from '../../ngxs-store/grocery-list.actions';
 import { ButtonStyle } from '../../../shared/button/button-style.enum';
 import { ROUTES_PARAM, GROCERY_LIST_FORM, INGREDIENT_FORM } from '../../../constants';
+import { GroceryListState } from '../../ngxs-store/grocery-list.state';
+import { GroceryList } from '../../types/grocery-list.type';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
+import { LoadingSize } from '../../../shared/loading/loading-size.enum';
+import { LoadingColor } from '../../../shared/loading/loading-color.enum';
 
 @Component({
   selector: 'app-grocery-list-new',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule],
+  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent],
   templateUrl: './grocery-list-new.component.html',
   styleUrl: './grocery-list-new.component.scss'
 })
@@ -36,6 +41,7 @@ export class GroceryListNewComponent implements OnInit {
   idToEdit: string | null = null;
   submitted: boolean = false;
   isLoading: boolean = false;
+  title: string = '';
 
   @ViewChildren('inputFields') inputFields!: QueryList<ElementRef>;
 
@@ -47,12 +53,21 @@ export class GroceryListNewComponent implements OnInit {
     return ButtonStyle;
   }
 
+  get loadingSizes(): typeof LoadingSize {
+    return LoadingSize;
+  }
+
+  get loadingColors(): typeof LoadingColor {
+    return LoadingColor;
+  }
+
   ngOnInit(): void {
     this.route.params.subscribe(async (params: Params) => {
       this.idToEdit = params[ROUTES_PARAM.ID_PARAMETER];
       if (this.idToEdit) {
         this.editMode = true;
       }
+      this.title = `${this.editMode ? 'Edit' : 'Add'} Grocery List`;
       await this.#initForm();
       this.stores$ = this.storeService.getAllStores();
     });
@@ -113,29 +128,44 @@ export class GroceryListNewComponent implements OnInit {
   }
 
   #initForm = async () => {
-    let name: string = '';
-    let storeId: string = '';
-    let ingredients: FormArray<any> = new FormArray<any>([]);
-
     if (this.editMode) {
-      const groceryList = await lastValueFrom(this.groceryListService.getGroceryList(this.idToEdit!));
-      name = groceryList.name;
-      if (groceryList.store) {
-        storeId = groceryList.store.id;
-        this.categories = groceryList.store.sections.map(s => s.name);
+      const groceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+      if (!groceryList) {
+        await lastValueFrom(this.ngStore.dispatch(new GetSelectedGroceryList(this.idToEdit!)));
+        const list = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+        this.#setupEditForm(list!);
+        return;
       }
-      if (groceryList.ingredients.length > 0) {
-        groceryList.ingredients.forEach((ingredient: Ingredient) => {
-          ingredients.push(new FormGroup({
-            id: new FormControl(ingredient.id),
-            name: new FormControl(ingredient.name, Validators.required),
-            amount: new FormControl(ingredient.amount, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
-            category: new FormControl(ingredient.category)
-          }));
-        });
-      }
+
+      this.#setupEditForm(groceryList!);
+    } else {
+      this.#setupForm('', '', new FormArray<any>([]));
+    }
+  }
+
+  #setupEditForm = (groceryList: GroceryList) => {
+    const name = groceryList.name;
+    let storeId = '';
+    let ingredients: FormArray<any> = new FormArray<any>([]);
+    if (groceryList.store) {
+      storeId = groceryList.store.id;
+      this.categories = groceryList.store.sections.map(s => s.name);
+    }
+    if (groceryList.ingredients.length > 0) {
+      groceryList.ingredients.forEach((ingredient: Ingredient) => {
+        ingredients.push(new FormGroup({
+          id: new FormControl(ingredient.id),
+          name: new FormControl(ingredient.name, Validators.required),
+          amount: new FormControl(ingredient.amount, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
+          category: new FormControl(ingredient.category)
+        }));
+      });
     }
 
+    this.#setupForm(name, storeId, ingredients);
+  }
+
+  #setupForm = (name: string, storeId: string, ingredients: FormArray) => {
     this.groceryListForm = new FormGroup({
       name: new FormControl(name, Validators.required),
       storeId: new FormControl(storeId),

@@ -93,8 +93,10 @@ public static class ServiceCollectionExtensions
     {
         services.ConfigureOptions<JwtOptionsSetup>();
         services.ConfigureOptions<JwtBearerOptionsSetup>();
-        services.AddTransient<IJwtProvider, JwtProvider>();
-        services.AddTransient<IPasswordHasher, PasswordHasher>();
+        services.AddHttpContextAccessor();
+        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IClaimReader, ClaimReader>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();

@@ -101,16 +101,16 @@ export class GroceryListItemsComponent implements OnInit {
   }
 
   selectList = (list: GroceryList) => {
-    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(_ => this.router.navigate([ROUTES_PARAM.GROCERY_LIST, list.id]));
+    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.router.navigate([ROUTES_PARAM.GROCERY_LIST, list.id]));
   }
 
   newList = () => {
     this.router.navigate([ROUTES_PARAM.GROCERY_LIST, ROUTES_PARAM.NEW]);
   }
 
-  editList = (event: Event, id: string) => {
+  editList = (event: Event, list: GroceryList) => {
     this.preventPropagation(event);
-    this.router.navigate([ROUTES_PARAM.GROCERY_LIST, id, ROUTES_PARAM.EDIT]);
+    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.router.navigate([ROUTES_PARAM.GROCERY_LIST, list.id, ROUTES_PARAM.EDIT]));
   }
 
   showDeleteList = (event: Event, list: GroceryList) => {

@@ -10,10 +10,12 @@ using GroceryList.Application.Queries.GroceryLists.GetGroceryLists;
 using GroceryList.Domain.Aggregates.GroceryLists;
 using GroceryList.WebApi.Models.GroceryLists;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroceryList.WebApi.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class GroceryListsController : BaseController
@@ -61,7 +63,6 @@ public class GroceryListsController : BaseController
         var result = await _mediator.Send(new AddGroceryListCommand()
         {
             Name = groceryListRequest.Name,
-            UserId = groceryListRequest.UserId,
             StoreId = groceryListRequest.StoreId,
             Ingredients = groceryListRequest.Ingredients
         });
@@ -98,7 +99,6 @@ public class GroceryListsController : BaseController
         {
             Id = id,
             Name = groceryListRequest.Name,
-            UserId = groceryListRequest.UserId,
             StoreId = groceryListRequest.StoreId,
             Ingredients = groceryListRequest.Ingredients
         });

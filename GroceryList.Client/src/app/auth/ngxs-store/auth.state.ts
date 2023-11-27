@@ -41,11 +41,9 @@ export class AuthState {
     login(ctx: StateContext<AuthStateModel>, action: Login) {
         return this.authService.login(action.payload).pipe(
             catchError(error => {
-                console.log(error);
                 return throwError(() => Error('test'));
             }),
             tap((result: TokenResponseDto) => {
-                console.log(result);
                 ctx.patchState({
                     token: result.token,
                     username: action.payload.username

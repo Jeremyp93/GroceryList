@@ -32,3 +32,10 @@ export class SetSelectedGroceryList {
     constructor(public payload: GroceryList | null) {
     }
 }
+
+export class GetSelectedGroceryList {
+    static readonly type = '[GroceryList] Get Selected';
+
+    constructor(public id: string) {
+    }
+}

@@ -9,13 +9,6 @@
         width="20"
       />
     </app-button>
-    <app-button (click)="editGroceryList()">
-      <img
-        src="../../../assets/icons/icons8-edit-24.png"
-        alt="edit-icon"
-        width="20"
-      />
-    </app-button>
     <app-button
       (click)="saveIngredients()"
       [buttonStyle]="saved ? buttonStyles.success : buttonStyles.normal"
@@ -36,6 +29,14 @@
       />
       }
     </app-button>
+    @if((ingredients$ | async)?.length){
+    <app-button (click)="editGroceryList()">
+      <img
+        src="../../../assets/icons/icons8-edit-24.png"
+        alt="edit-icon"
+        width="20"
+      />
+    </app-button>
     <app-button (click)="resetIngredients()">
       <img
         src="../../../assets/icons/icons8-reset-24.png"
@@ -50,6 +51,7 @@
         width="20"
       />
     </app-button>
+    }
   </div>
 </div>
 @if (isLoading) {

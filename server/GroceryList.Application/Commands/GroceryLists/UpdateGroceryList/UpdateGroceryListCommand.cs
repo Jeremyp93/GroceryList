@@ -6,7 +6,6 @@ public record UpdateGroceryListCommand() : IRequest<Result<GroceryListResponseDt
 {
     public Guid Id { get; set; } = Guid.Empty;
     public string Name { get; set; } = string.Empty;
-    public Guid UserId { get; set; } = Guid.Empty;
     public Guid? StoreId { get; set; } = Guid.Empty;
     public List<IngredientDto>? Ingredients { get; set; }
 }

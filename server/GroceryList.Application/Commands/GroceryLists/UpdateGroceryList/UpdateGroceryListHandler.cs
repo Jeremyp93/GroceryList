@@ -1,4 +1,5 @@
-﻿using GroceryList.Application.Helpers;
+﻿using GroceryList.Application.Abstractions;
+using GroceryList.Application.Helpers;
 using GroceryList.Application.Queries.GroceryLists;
 using GroceryList.Domain.Aggregates.GroceryLists;
 using GroceryList.Domain.Exceptions;
@@ -11,11 +12,13 @@ public class UpdateGroceryListHandler : IRequestHandler<UpdateGroceryListCommand
 {
     private readonly IGroceryListRepository _repository;
     private readonly IStoreRepository _storeRepository;
+    private readonly IClaimReader _claimReader;
 
-    public UpdateGroceryListHandler(IGroceryListRepository repository, IStoreRepository storeRepository)
+    public UpdateGroceryListHandler(IGroceryListRepository repository, IStoreRepository storeRepository, IClaimReader claimReader)
     {
         _repository = repository;
         _storeRepository = storeRepository;
+        _claimReader = claimReader;
     }
 
     public async Task<Result<GroceryListResponseDto>> Handle(UpdateGroceryListCommand command, CancellationToken cancellationToken)
@@ -31,9 +34,16 @@ public class UpdateGroceryListHandler : IRequestHandler<UpdateGroceryListCommand
             var ingredients = command
               .Ingredients?
               .Select(x => Ingredient.Create(x.Name, x.Amount, Category.Create(x.Category)))
-              .ToList();
+            .ToList();
 
-            groceryList.Update(command.Name, command.UserId, command.StoreId, ingredients);
+            var userId = _claimReader.GetUserIdFromClaim();
+
+            if (groceryList.UserId != userId)
+            {
+                return Result<GroceryListResponseDto>.Failure(ResultStatusCode.ValidationError, $"Grocery List does not belong to user {userId}");
+            }
+
+            groceryList.Update(command.Name, userId, command.StoreId, ingredients);
 
             await _repository.UpdateAsync(groceryList);
 

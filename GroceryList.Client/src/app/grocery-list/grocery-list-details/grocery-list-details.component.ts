@@ -19,9 +19,8 @@ import { Store } from '../../store/types/store.type';
 import { Section } from '../../store/types/section.type';
 import { IngredientState } from '../ngxs-store/ingredient.state';
 import { AddIngredient, DeleteIngredient, ResetIngredients, SaveIngredients, SelectIngredient } from '../ngxs-store/ingredient.actions';
-import { AddGroceryList, SetSelectedGroceryList } from '../ngxs-store/grocery-list.actions';
+import { AddGroceryList, GetSelectedGroceryList, SetSelectedGroceryList } from '../ngxs-store/grocery-list.actions';
 import { GroceryListState } from '../ngxs-store/grocery-list.state';
-import { GroceryList } from '../types/grocery-list.type';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
 import { ROUTES_PARAM, GROCERY_LIST_FORM } from '../../constants';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
@@ -50,7 +49,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
   ngStore = inject(NgxsStore);
   @Select(IngredientState.getIngredients) ingredients$!: Observable<Ingredient[]>;
   @Select(IngredientState.getSections) sections$!: Observable<Section[]>;
-  @Select(GroceryListState.getSelectedGroceryList) selectedGrocery$!: Observable<GroceryList>;
   stores$!: Observable<Store[]>;
   id = '';
   sections: Section[] = [];
@@ -78,24 +76,21 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.route.params.subscribe((params: Params) => {
+    this.route.params.subscribe(async (params: Params) => {
       this.id = params[ROUTES_PARAM.ID_PARAMETER];
-      this.selectedGrocery$.pipe(take(1)).subscribe({
-        next: async (list) => {
-          let groceryList: GroceryList = list;
-          if (!groceryList) {
-            groceryList = await lastValueFrom(this.groceryListService.getGroceryList(this.id));
-            this.ngStore.dispatch(new SetSelectedGroceryList(groceryList));
-          }
-          this.storeId = groceryList.store?.id;
-          this.title = groceryList.name;
-          this.initForm();
+      let selectedGroceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+      if (!selectedGroceryList) {
+        await lastValueFrom(this.ngStore.dispatch(new GetSelectedGroceryList(this.id)));
+        selectedGroceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+        if (!selectedGroceryList) {
           this.isLoading = false;
-        },
-        error: () => {
-          this.isLoading = false;
+          return;
         }
-      });
+      }
+      this.storeId = selectedGroceryList.store?.id;
+      this.title = selectedGroceryList.name;
+      this.initForm();
+      this.isLoading = false;
     });
   }
 
@@ -164,7 +159,8 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
     const storeId = this.exportForm.value.storeId;
     this.exportFormSubmitted = true;
     if (this.exportForm.invalid) return;
-    const groceryList = await lastValueFrom(this.groceryListService.getGroceryList(this.id));
+    const groceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+    //const groceryList = await lastValueFrom(this.groceryListService.getGroceryList(this.id));
     this.ingredients$.pipe(take(1)).subscribe(ingredients => {
       const newList = { ...groceryList, name: name, storeId: storeId, ingredients: [...ingredients.filter(i => !i.selected)] };
       this.ngStore.dispatch(new AddGroceryList(newList)).subscribe(_ => {

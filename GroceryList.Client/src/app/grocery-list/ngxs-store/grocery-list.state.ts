@@ -4,7 +4,7 @@ import { inject } from '@angular/core';
 
 import { GroceryList } from '../types/grocery-list.type';
 import { GroceryListService } from '../grocery-list.service';
-import { AddGroceryList, DeleteGroceryList, GetGroceryLists, SetSelectedGroceryList, UpdateGroceryList } from './grocery-list.actions';
+import { AddGroceryList, DeleteGroceryList, GetGroceryLists, GetSelectedGroceryList, SetSelectedGroceryList, UpdateGroceryList } from './grocery-list.actions';
 import { Ingredient } from '../types/ingredient.type';
 import { SetIngredients, SetSections } from './ingredient.actions';
 import { throwError } from 'rxjs';
@@ -122,6 +122,24 @@ export class GroceryListState {
 
         dispatch(new SetIngredients(payload?.ingredients ?? []));
         dispatch(new SetSections(payload?.store?.sections ?? []));
+    }
+
+    @Action(GetSelectedGroceryList)
+    getSelectedGroceryList({ getState, setState, dispatch }: StateContext<GroceryListStateModel>, { id }: GetSelectedGroceryList) {
+        return this.groceryListService.getGroceryList(id).pipe(
+            catchError(error => {
+                return throwError(() => new Error(`Gorcery List could not been retrieved. (${error})`));
+            }),
+            tap((result) => {
+                const state = getState();
+                setState({
+                    ...state,
+                    selectedGroceryList: result
+                });
+
+                dispatch(new SetIngredients(result?.ingredients ?? []));
+                dispatch(new SetSections(result?.store?.sections ?? []));
+            }));
     }
 }
 
