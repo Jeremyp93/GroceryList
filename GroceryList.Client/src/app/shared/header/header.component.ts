@@ -2,6 +2,7 @@ import { Component, Input, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ButtonComponent } from '../button/button.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ButtonHover } from '../button/button-hover.enum';
 
 @Component({
   selector: 'app-header',
@@ -13,9 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class HeaderComponent {
   @Input() title: string = '';
   @Input() backButton: boolean = false;
-
   router = inject(Router);
   route = inject(ActivatedRoute);
+
+  public get hoverChoices(): typeof ButtonHover {
+    return ButtonHover;
+  }
 
   back = () => {
     this.router.navigate(['../'], { relativeTo: this.route });

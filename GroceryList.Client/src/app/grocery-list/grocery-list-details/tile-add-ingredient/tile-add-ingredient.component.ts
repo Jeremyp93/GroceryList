@@ -7,6 +7,7 @@ import { ButtonComponent } from '../../../shared/button/button.component';
 import { Ingredient } from '../../types/ingredient.type';
 import { Section } from '../../../store/types/section.type';
 import { INGREDIENT_FORM } from '../../../constants';
+import { ButtonHover } from '../../../shared/button/button-hover.enum';
 
 @Component({
   selector: 'app-tile-add-ingredient',
@@ -24,6 +25,10 @@ export class TileAddIngredientComponent implements OnInit, AfterViewInit {
   categories: string[] = [];
   addForm!: FormGroup;
   formSubmitted: boolean = false;
+
+  public get hoverChoices(): typeof ButtonHover {
+    return ButtonHover;
+  }
 
   @HostListener('document:click', ['$event.target'])
   onClick(target: EventTarget | null): void {

@@ -12,9 +12,17 @@ a {
     border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
+    transition: transform 0.3s ease;
 
-/* Hover effect */
-a:hover {
-    background-color: $secondary-color;
+    &.hover-up {
+        transform: translateY(-3px);
+    }
+
+    &.hover-invert {
+        ::ng-deep {
+            img {
+                filter: invert(1);
+            }
+        }
+    }
 }

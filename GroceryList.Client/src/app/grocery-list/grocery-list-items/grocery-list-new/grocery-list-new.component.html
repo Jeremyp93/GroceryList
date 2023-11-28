@@ -7,7 +7,11 @@
   class="form"
 >
   <div class="submit top">
-    <app-button type="submit" class="button-submit" [loading]="isLoading"
+    <app-button
+      type="submit"
+      class="button-submit"
+      [loading]="isLoading"
+      [buttonHover]="hoverChoices.invert"
       ><img
         src="../../../../assets/icons/icons8-check-24.png"
         alt="submit-icon"
@@ -44,7 +48,10 @@
     <div class="group" formArrayName="ingredients">
       <div class="ingredient-title">
         <label>Items</label>
-        <app-button type="button" (click)="onAddIngredient()"
+        <app-button
+          type="button"
+          (click)="onAddIngredient()"
+          [buttonHover]="hoverChoices.invert"
           ><img
             src="../../../../assets/icons/icons8-plus-24.png"
             alt="add-icon"
@@ -93,6 +100,7 @@
           <app-button
             [buttonStyle]="buttonStyles.danger"
             (click)="onDeleteIngredient(ingredientControl.value.id)"
+            [buttonHover]="hoverChoices.invert"
             ><img
               src="../../../assets/icons/icons8-delete-24.png"
               alt="delete-icon"
@@ -106,7 +114,10 @@
     </div>
   </div>
   <div class="submit bottom">
-    <app-button type="submit" [loading]="isLoading"
+    <app-button
+      type="submit"
+      [loading]="isLoading"
+      [buttonHover]="hoverChoices.invert"
       ><img
         src="../../../../assets/icons/icons8-check-24.png"
         alt="submit-icon"

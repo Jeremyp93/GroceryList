@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../../shared/button/button.component';
 import { Ingredient } from '../../types/ingredient.type';
 import { ButtonStyle } from '../../../shared/button/button-style.enum';
+import { ButtonHover } from '../../../shared/button/button-hover.enum';
 
 @Component({
   selector: 'app-tile-ingredient',
@@ -18,6 +19,10 @@ export class TileIngredientComponent {
 
   get buttonStyles(): typeof ButtonStyle {
     return ButtonStyle;
+  }
+
+  public get hoverChoices(): typeof ButtonHover {
+    return ButtonHover;
   }
 
   showDeleteList = (event: Event) => {

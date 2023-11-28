@@ -10,6 +10,7 @@ button {
     color: #fff;
     border-radius: 50%;
     transition: background-color 0.3s ease;
+    transition: transform 0.3s ease;
     border: none;
     cursor: pointer;
 
@@ -21,8 +22,16 @@ button {
         background-color: $success-color;
     }
 
-    &:hover {
-        background-color: $secondary-color;
+    &.hover-invert {
+        ::ng-deep {
+            img {
+                filter: invert(1);
+            }
+        }
+    }
+
+    &.hover-up {
+        transform: translateY(-3px);
     }
 
     &:disabled {

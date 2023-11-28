@@ -1,6 +1,9 @@
 <div class="header">
   @if(backButton) {
-  <app-button class="button" (click)="back()"
+  <app-button
+    class="button"
+    (click)="back()"
+    [buttonHover]="hoverChoices.invert"
     ><img
       src="../../../assets/icons/icons8-back-24.png"
       alt="back-icon"

@@ -21,6 +21,7 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
 import { LinkMapsStorePipe } from './link-maps-store.pipe';
+import { ButtonHover } from '../../shared/button/button-hover.enum';
 
 @Component({
   selector: 'app-grocery-list-items',
@@ -69,6 +70,10 @@ export class GroceryListItemsComponent implements OnInit {
 
   get loadingColors(): typeof LoadingColor {
     return LoadingColor;
+  }
+
+  public get hoverChoices(): typeof ButtonHover {
+    return ButtonHover;
   }
 
   ngOnInit(): void {

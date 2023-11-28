@@ -19,7 +19,10 @@
         </div>
       </div>
       <div class="submit bottom">
-        <app-button type="submit" [loading]="isLoading"
+        <app-button
+          type="submit"
+          [loading]="isLoading"
+          [buttonHover]="hoverChoices.invert"
           ><img
             src="../../../../assets/icons/icons8-check-24.png"
             alt="submit-icon"
@@ -32,7 +35,7 @@
 <div class="header">
   <app-header title="Grocery Lists"></app-header>
   <div class="menu">
-    <app-button (click)="newList()">
+    <app-button (click)="newList()" [buttonHover]="hoverChoices.invert">
       <img
         src="../../../assets/icons/icons8-plus-24.png"
         alt="add-icon"
