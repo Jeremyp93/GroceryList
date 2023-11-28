@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\GroceryList.WebApi.props" />
-</Project>
