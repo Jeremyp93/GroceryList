@@ -5,6 +5,9 @@
 /tmp
 /out-tsc
 /bazel-out
+# Ignore .NET compiled output
+**/bin/
+**/obj/
 
 # Node
 /node_modules
@@ -46,3 +49,5 @@ Thumbs.db
 
 # Database
 database
+
+**/.vs/

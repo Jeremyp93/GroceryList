@@ -67,7 +67,7 @@ public class UsersController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddUser([FromBody] UserRequest userRequest)
+    public async Task<IActionResult> Register([FromBody] UserRequest userRequest)
     {
         var result = await _mediator.Send(new AddUserCommand()
         {

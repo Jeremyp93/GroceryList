@@ -18,7 +18,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, Result<string>>
 
     public async Task<Result<string>> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        var user = await _repository.SingleOrDefaultAsync(u => u.Email == command.Email, "");
+        var user = await _repository.SingleOrDefaultAsync(u => u.Email.ToLower() == command.Email.ToLower(), "");
         if (user is null)
         {
             return Result<string>.Failure(ResultStatusCode.ValidationError, "Invalid credentials.");

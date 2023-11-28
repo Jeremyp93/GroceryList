@@ -1,9 +1,8 @@
 ﻿using GroceryList.Domain.Exceptions;
-using GroceryList.Domain.SeedWork;
 
 namespace GroceryList.Domain.Aggregates.GroceryLists;
 
-public class Ingredient : Entity
+public record Ingredient
 {
     private const int MinAmount = 1;
 
@@ -29,7 +28,6 @@ public class Ingredient : Entity
 
         return new Ingredient()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Amount = amount,
             Category = category

@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable, catchError, throwError } from "rxjs";
 
 import { Login as LoginType } from "./types/login.type";
+import { Register as RegisterType } from "./types/register.type";
 import { environment } from "../../environments/environment";
 import { ROUTES_PARAM } from "../constants";
 import { TokenResponseDto } from "./dtos/token-response-dto.type";
@@ -13,6 +14,10 @@ export class AuthService {
 
     login = (login: LoginType): Observable<TokenResponseDto> => {
         return this.httpClient.post<TokenResponseDto>(`${environment.userApiUrl}/${ROUTES_PARAM.LOGIN}`, { email: login.username, password: login.password }).pipe(catchError(this.#handleError));
+    }
+
+    register = (registerModel: RegisterType): Observable<void> => {
+        return this.httpClient.post<void>(`${environment.userApiUrl}`, registerModel).pipe(catchError(this.#handleError));
     }
 
     #handleError = (errorResponse: HttpErrorResponse) => {

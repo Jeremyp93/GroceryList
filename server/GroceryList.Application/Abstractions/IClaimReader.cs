@@ -2,4 +2,6 @@
 public interface IClaimReader
 {
     Guid GetUserIdFromClaim();
+
+    string GetUsernameFromClaim();
 }

@@ -1,6 +1,6 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { tap } from 'rxjs';
-import { Injectable, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { v4 as UUID } from 'uuid';
 
 import { Ingredient } from '../types/ingredient.type';
@@ -38,7 +38,7 @@ export class IngredientState {
         const state = getState();
         setState({
             ...state,
-            ingredients: ingredients,
+            ingredients: ingredients.map(i => ({ ...i, id: UUID() })),
         });
     }
 

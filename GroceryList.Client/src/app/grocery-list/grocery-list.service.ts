@@ -62,7 +62,7 @@ export class GroceryListService {
             id: dto.id,
             name: dto.name,
             store: dto.store,
-            ingredients: dto.ingredients.map(i => ({ id: i.id, name: i.name, amount: i.amount, category: i.category, selected: false })),
+            ingredients: dto.ingredients.map(i => ({ id: '', name: i.name, amount: i.amount, category: i.category, selected: false })),
             createdAt: dto.createdAt,
             showDelete: false
         };
@@ -70,7 +70,7 @@ export class GroceryListService {
 
     #fromIngredientDto = (dto: IngredientDto): Ingredient => {
         return {
-            id: dto.id,
+            id: '',
             name: dto.name,
             amount: dto.amount,
             category: dto.category,

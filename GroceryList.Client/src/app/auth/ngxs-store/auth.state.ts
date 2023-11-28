@@ -1,33 +1,39 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { Login, Logout } from "./auth.actions";
-import { AuthService } from "../auth.service";
 import { catchError, tap, throwError } from "rxjs";
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+import { Login, Logout, Register } from "./auth.actions";
+import { AuthService } from "../auth.service";
 import { TokenResponseDto } from "../dtos/token-response-dto.type";
 
 export interface AuthStateModel {
     token: string | null;
     username: string | null;
+    name: string | null
 }
 
 @State<AuthStateModel>({
     name: 'auth',
     defaults: {
         token: null,
-        username: null
+        username: null,
+        name: null
     }
 })
 
 @Injectable()
 export class AuthState {
+    jwtHelper = inject(JwtHelperService);
+
     @Selector()
     static token(state: AuthStateModel): string | null {
         return state.token;
     }
 
     @Selector()
-    static username(state: AuthStateModel): string | null {
-        return state.username;
+    static getName(state: AuthStateModel): string | null {
+        return state.name;
     }
 
     @Selector()
@@ -40,14 +46,25 @@ export class AuthState {
     @Action(Login)
     login(ctx: StateContext<AuthStateModel>, action: Login) {
         return this.authService.login(action.payload).pipe(
-            catchError(error => {
-                return throwError(() => Error('test'));
+            catchError((error: Error) => {
+                return throwError(() => new Error(`Login was not succesful. (${error.message})`));
             }),
             tap((result: TokenResponseDto) => {
+                const tokenDecoded = this.jwtHelper.decodeToken(result.token);
                 ctx.patchState({
                     token: result.token,
-                    username: action.payload.username
+                    username: action.payload.username,
+                    name: tokenDecoded.name
                 });
+            })
+        );
+    }
+
+    @Action(Register)
+    register(_: StateContext<AuthStateModel>, action: Register) {
+        return this.authService.register(action.payload).pipe(
+            catchError((error: Error) => {
+                return throwError(() => new Error(`Signing up was not succesful. (${error.message})`));
             })
         );
     }
@@ -56,7 +73,8 @@ export class AuthState {
     logout(ctx: StateContext<AuthStateModel>) {
         ctx.setState({
             token: null,
-            username: null
+            username: null,
+            name: null
         });
     }
 }

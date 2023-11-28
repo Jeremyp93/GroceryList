@@ -7,7 +7,8 @@ export const ROUTES_PARAM = {
     STORE: 'stores',
     EDIT: 'edit',
     NEW: 'new',
-    LOGIN: 'login'
+    LOGIN: 'login',
+    REGISTER: 'register'
 }
 
 export const INGREDIENT_FORM = {
@@ -21,4 +22,17 @@ export const GROCERY_LIST_FORM = {
     NAME: 'name',
     STORE_ID: 'storeId',
     INGREDIENTS: 'ingredients'
+};
+
+export const LOGIN_FORM = {
+    USERNAME: 'username',
+    PASSWORD: 'password'
+};
+
+export const SIGNUP_FORM = {
+    FIRST_NAME: 'firstName',
+    LAST_NAME: 'lastName',
+    EMAIL: 'email',
+    PASSWORD: 'password',
+    CONFIRM_PASSWORD: 'confirmPassword'
 };

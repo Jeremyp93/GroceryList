@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ROUTES_PARAM } from './constants';
 import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
-import { Login, Logout } from './auth/ngxs-store/auth.actions';
+import { Logout } from './auth/ngxs-store/auth.actions';
 import { AuthState } from './auth/ngxs-store/auth.state';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -19,7 +18,7 @@ export class AppComponent implements OnInit {
   router = inject(Router);
   actions = inject(Actions);
   ngxsStore = inject(Store);
-  @Select(AuthState.username) username$!: Observable<string>;
+  @Select(AuthState.getName) name$!: Observable<string>;
   isKeyboardOpen = false;
   previousHeight: number = 0;
   groceryListRoute: string = '/' + ROUTES_PARAM.GROCERY_LIST;

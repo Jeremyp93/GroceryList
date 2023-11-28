@@ -10,6 +10,7 @@ import { StoreListComponent } from './store/store-list/store-list.component';
 import { ROUTES_PARAM } from './constants';
 import { authGuard } from './auth/auth.guard';
 import { AuthComponent } from './auth/auth.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: ROUTES_PARAM.GROCERY_LIST, pathMatch: 'full' },
@@ -29,4 +30,7 @@ export const routes: Routes = [
     {
         path: ROUTES_PARAM.LOGIN, component: AuthComponent
     },
+    {
+        path: ROUTES_PARAM.REGISTER, component: RegisterComponent
+    }
 ];

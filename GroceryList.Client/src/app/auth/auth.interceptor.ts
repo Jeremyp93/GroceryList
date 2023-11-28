@@ -10,6 +10,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     if (req.url.endsWith('/api/users/login')) {
         return next(req);
     }
+    if (req.url.endsWith('/api/users') && req.method === 'POST') {
+        return next(req);
+    }
 
     const authToken = ngxsStore.selectSnapshot(AuthState.token);
     const authReq = req.clone({

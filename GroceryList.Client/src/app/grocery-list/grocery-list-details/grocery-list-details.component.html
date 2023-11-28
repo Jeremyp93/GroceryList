@@ -29,7 +29,6 @@
       />
       }
     </app-button>
-    @if((ingredients$ | async)?.length){
     <app-button (click)="editGroceryList()">
       <img
         src="../../../assets/icons/icons8-edit-24.png"
@@ -51,7 +50,6 @@
         width="20"
       />
     </app-button>
-    }
   </div>
 </div>
 @if (isLoading) {

@@ -25,6 +25,21 @@ public class ClaimReader : IClaimReader
         }
 
         return Guid.Empty;
-   
+    }
+
+    public string GetUsernameFromClaim()
+    {
+        if (_httpContextAccessor.HttpContext is null)
+            return string.Empty;
+
+        if (_httpContextAccessor.HttpContext.User.Identity is ClaimsIdentity claimsIdentity)
+        {
+            // Accessing individual claims
+            var email = claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
+            return email ?? string.Empty;
+        }
+
+        return string.Empty;
+
     }
 }

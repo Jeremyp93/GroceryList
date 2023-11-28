@@ -1,29 +1,27 @@
-﻿using GroceryList.Domain.Aggregates.Stores;
+﻿using GroceryList.Application.Abstractions;
 using GroceryList.Domain.Helpers.Contracts;
 using GroceryList.Domain.SeedWork;
 using GroceryList.Infrastructure.Extension;
 using MediatR;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System;
 using System.Linq.Expressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GroceryList.Infrastructure.Repositories;
 
 public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregateRoot, TId> where TAggregateRoot : AggregateRoot
 {
+    private readonly string _username;
     private readonly IMongoCollection<TAggregateRoot> _collection;
     private readonly IMediator _mediator;
     private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IMongoDatabase _database;
+
     public MongoDbRepositoryBase(IMongoDatabase database, IMediator mediator,
-    IDateTimeProvider dateTimeProvider)
+    IDateTimeProvider dateTimeProvider, IClaimReader claimReader)
     {
         _collection = database.GetCollection<TAggregateRoot>(typeof(TAggregateRoot).Name);
         _mediator = mediator;
         _dateTimeProvider = dateTimeProvider;
-        _database = database;
+        _username = claimReader.GetUsernameFromClaim();
     }
 
     public async Task<IEnumerable<TAggregateRoot>> GetAllAsync(CancellationToken cancellationToken)
@@ -62,7 +60,7 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
 
     public async Task<TAggregateRoot> AddAsync(TAggregateRoot entity)
     {
-        entity.UpdateTrackingInformation("fake-auth-user-todo", _dateTimeProvider.UtcNow);
+        entity.UpdateTrackingInformation(_username, _dateTimeProvider.UtcNow);
 
         await _collection.InsertOneAsync(entity);
 
@@ -73,7 +71,7 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
 
     public async Task UpdateAsync(TAggregateRoot entity)
     {
-        entity.UpdateTrackingInformation("fake-auth-user-todo", _dateTimeProvider.UtcNow);
+        entity.UpdateTrackingInformation(_username, _dateTimeProvider.UtcNow);
 
         var filter = Builders<TAggregateRoot>.Filter.Eq("_id", entity.Id);
         await _collection.ReplaceOneAsync(filter, entity);
@@ -86,7 +84,7 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
     {
         foreach (var entity in entities)
         {
-            entity.UpdateTrackingInformation("fake-auth-user-todo", _dateTimeProvider.UtcNow);
+            entity.UpdateTrackingInformation(_username, _dateTimeProvider.UtcNow);
             await UpdateAsync(entity);
         }
 
