@@ -32,5 +32,6 @@ export const routes: Routes = [
     },
     {
         path: ROUTES_PARAM.REGISTER, component: RegisterComponent
-    }
+    },
+    { path: '**', redirectTo: ROUTES_PARAM.GROCERY_LIST }
 ];
