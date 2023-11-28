@@ -5,7 +5,6 @@ import { Store } from '@ngxs/store';
 import { Router, RouterModule } from '@angular/router';
 
 import { Login, Logout } from '../ngxs-store/auth.actions';
-import { AuthService } from '../auth.service';
 import { AlertComponent } from '../../shared/alert/alert.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ButtonComponent } from '../../shared/button/button.component';
@@ -16,7 +15,6 @@ import { AuthState } from '../ngxs-store/auth.state';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, AlertComponent, HeaderComponent, ButtonComponent, RouterModule],
-  providers: [AuthService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

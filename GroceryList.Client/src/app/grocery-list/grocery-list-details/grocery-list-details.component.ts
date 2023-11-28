@@ -25,11 +25,12 @@ import { ButtonStyle } from '../../shared/button/button-style.enum';
 import { ROUTES_PARAM, GROCERY_LIST_FORM } from '../../constants';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
+import { AlertComponent } from '../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-grocery-list-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, TileIngredientComponent, HeaderComponent, ButtonComponent, LoadingComponent, ReactiveFormsModule, ModalComponent, LoadingComponent],
+  imports: [CommonModule, RouterModule, TileIngredientComponent, HeaderComponent, ButtonComponent, LoadingComponent, ReactiveFormsModule, ModalComponent, LoadingComponent, AlertComponent],
   templateUrl: './grocery-list-details.component.html',
   styleUrl: './grocery-list-details.component.scss',
   animations: [
@@ -63,6 +64,8 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
   exportFormSubmitted: boolean = false;
   storeId: string | undefined;
   saveProcess: boolean = false;
+  errorMessage: string = '';
+  #routeSubscription: Subscription | null = null;
 
   get buttonStyles(): typeof ButtonStyle {
     return ButtonStyle;
@@ -75,8 +78,43 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.error = false;
+    this.errorMessage = '';
     this.isLoading = true;
-    this.route.params.subscribe(async (params: Params) => {
+    const selectedGroceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+    if (selectedGroceryList) {
+      this.id = selectedGroceryList.id;
+      this.storeId = selectedGroceryList.store?.id;
+      console.log(selectedGroceryList);
+      this.title = selectedGroceryList.name;
+      this.initForm();
+      this.isLoading = false;
+      return;
+    }
+
+    this.#routeSubscription = this.route.params.subscribe(async (params: Params) => {
+      this.id = params[ROUTES_PARAM.ID_PARAMETER];
+      try {
+        await lastValueFrom(this.ngStore.dispatch(new GetSelectedGroceryList(this.id)));
+      } catch (error: any) {
+        this.isLoading = false;
+        this.errorMessage = error.message;
+        this.error = true;
+        return;
+      }
+      const selectedGroceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+      if (!selectedGroceryList) {
+        this.isLoading = false;
+        return;
+      }
+      this.storeId = selectedGroceryList.store?.id;
+      console.log(selectedGroceryList);
+      this.title = selectedGroceryList.name;
+      this.initForm();
+      this.isLoading = false;
+    });
+
+    /* this.#routeSubscription = this.route.params.subscribe(async (params: Params) => {
       this.id = params[ROUTES_PARAM.ID_PARAMETER];
       let selectedGroceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
       if (!selectedGroceryList) {
@@ -88,10 +126,11 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
         }
       }
       this.storeId = selectedGroceryList.store?.id;
+      console.log(selectedGroceryList);
       this.title = selectedGroceryList.name;
       this.initForm();
       this.isLoading = false;
-    });
+    }); */
   }
 
   back = () => {
@@ -179,6 +218,9 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.#routeSubscription) {
+      this.#routeSubscription.unsubscribe();
+    }
     //this.ingredientService.setIngredients([]);
     if (this.itemAddedSubscription) {
       this.itemAddedSubscription.unsubscribe();

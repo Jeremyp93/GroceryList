@@ -1,4 +1,4 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import { tap } from 'rxjs';
 import { inject } from '@angular/core';
 import { v4 as UUID } from 'uuid';
@@ -7,6 +7,8 @@ import { Ingredient } from '../types/ingredient.type';
 import { AddIngredient, DeleteIngredient, ResetIngredients, SaveIngredients, SelectIngredient, SetIngredients, SetSections } from './ingredient.actions';
 import { GroceryListService } from '../grocery-list.service';
 import { Section } from '../../store/types/section.type';
+import { GroceryListState } from './grocery-list.state';
+import { SetSelectedGroceryList } from './grocery-list.actions';
 
 export interface IngredientStateModel {
     ingredients: Ingredient[];
@@ -22,6 +24,7 @@ export interface IngredientStateModel {
 })
 export class IngredientState {
     groceryListService = inject(GroceryListService);
+    ngxsStore = inject(Store);
 
     @Selector()
     static getIngredients(state: IngredientStateModel) {
@@ -97,12 +100,14 @@ export class IngredientState {
     }
 
     @Action(SaveIngredients)
-    saveIngredients({ getState, patchState }: StateContext<IngredientStateModel>, { groceryListId }: SaveIngredients) {
+    saveIngredients({ getState, patchState, dispatch }: StateContext<IngredientStateModel>, { groceryListId }: SaveIngredients) {
         const state = getState();
+        const selectedList = this.ngxsStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
         return this.groceryListService.updateIngredients(groceryListId, [...state.ingredients]).pipe(tap((savedIngredients) => {
-            patchState({
+            /* patchState({
                 ingredients: savedIngredients,
-            });
+            }); */
+            dispatch(new SetSelectedGroceryList({ ...selectedList!, ingredients: savedIngredients }));
         }));
     }
 }

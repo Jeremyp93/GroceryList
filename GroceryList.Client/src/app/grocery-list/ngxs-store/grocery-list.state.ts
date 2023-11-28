@@ -1,4 +1,4 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 import { inject } from '@angular/core';
 
@@ -7,12 +7,13 @@ import { GroceryListService } from '../grocery-list.service';
 import { AddGroceryList, DeleteGroceryList, GetGroceryLists, GetSelectedGroceryList, SetSelectedGroceryList, UpdateGroceryList } from './grocery-list.actions';
 import { Ingredient } from '../types/ingredient.type';
 import { SetIngredients, SetSections } from './ingredient.actions';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { IngredientState } from './ingredient.state';
 
 export interface GroceryListStateModel {
     groceryLists: GroceryList[];
     selectedGroceryList: GroceryList | null;
-    ingredients: Ingredient[]
+    lastUpdatedGroceryList: GroceryList | null;
 }
 
 @State<GroceryListStateModel>({
@@ -20,11 +21,12 @@ export interface GroceryListStateModel {
     defaults: {
         groceryLists: [],
         selectedGroceryList: null,
-        ingredients: []
+        lastUpdatedGroceryList: null
     }
 })
 export class GroceryListState {
     groceryListService = inject(GroceryListService);
+    ingredientState = inject(IngredientState);
 
     @Selector()
     static getGroceryLists(state: GroceryListStateModel) {
@@ -34,6 +36,11 @@ export class GroceryListState {
     @Selector()
     static getSelectedGroceryList(state: GroceryListStateModel) {
         return state.selectedGroceryList;
+    }
+
+    @Selector()
+    static getLastUpdatedGroceryList(state: GroceryListStateModel) {
+        return state.lastUpdatedGroceryList;
     }
 
     @Action(GetGroceryLists)
@@ -91,6 +98,7 @@ export class GroceryListState {
                 setState({
                     ...state,
                     groceryLists: groceryLists,
+                    lastUpdatedGroceryList: result
                 });
             }));
     }

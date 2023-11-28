@@ -16,15 +16,16 @@ import { GroceryListState } from '../ngxs-store/grocery-list.state';
 import { AddGroceryList, DeleteGroceryList, GetGroceryLists, SetSelectedGroceryList } from '../ngxs-store/grocery-list.actions';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
 import { AlertComponent } from '../../shared/alert/alert.component';
-import { GROCERY_LIST_FORM, ROUTES_PARAM, GOOGLE_MAPS_QUERY, GEO_MOBILE_QUERY } from '../../constants';
+import { GROCERY_LIST_FORM, ROUTES_PARAM } from '../../constants';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
+import { LinkMapsStorePipe } from './link-maps-store.pipe';
 
 @Component({
   selector: 'app-grocery-list-items',
   standalone: true,
-  imports: [CommonModule, AnchorButtonComponent, RouterModule, ButtonComponent, HeaderComponent, ModalComponent, ReactiveFormsModule, AlertComponent, LetDirective, LoadingComponent],
+  imports: [CommonModule, AnchorButtonComponent, RouterModule, ButtonComponent, HeaderComponent, ModalComponent, ReactiveFormsModule, AlertComponent, LetDirective, LoadingComponent, LinkMapsStorePipe],
   templateUrl: './grocery-list-items.component.html',
   styleUrl: './grocery-list-items.component.scss',
   animations: [
@@ -77,17 +78,6 @@ export class GroceryListItemsComponent implements OnInit {
       error: (err: Error) => { this.error = true; this.errorMessage = err.message; this.isLoading = false; }
     });
     this.#initForm();
-  }
-
-  getLinkMapsStore = (list: GroceryList): string | undefined => {
-    if (!list.store) return;
-
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
-      // Open the map with the specified address
-      return `${GEO_MOBILE_QUERY}${list.store.street}, ${list.store.city} ${list.store.zipCode}, ${list.store.country}`;
-    } else {
-      return `${GOOGLE_MAPS_QUERY}${list.store.street}, ${list.store.city} ${list.store.zipCode}, ${list.store.country}`;
-    }
   }
 
   displayCreatedAt = (createdAt: Date): string => {

@@ -81,7 +81,7 @@
         <div class="buttons">
           @if(groceryList.store) {
           <app-anchor-button
-            [href]="getLinkMapsStore(groceryList) || '#'"
+            [href]="(groceryList.store | linkMapsStore) || '#'"
             [newWindow]="true"
             (click)="preventPropagation($event)"
             ><img

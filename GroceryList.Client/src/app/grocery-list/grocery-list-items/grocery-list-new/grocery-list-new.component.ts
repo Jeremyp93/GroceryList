@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, lastValueFrom } from 'rxjs';
+import { Observable, Subscription, lastValueFrom } from 'rxjs';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { v4 as UUID } from 'uuid';
@@ -12,7 +12,7 @@ import { ButtonComponent } from '../../../shared/button/button.component';
 import { GroceryListService } from '../../grocery-list.service';
 import { Ingredient } from '../../types/ingredient.type';
 import { Store } from '../../../store/types/store.type';
-import { AddGroceryList, GetGroceryLists, GetSelectedGroceryList, UpdateGroceryList } from '../../ngxs-store/grocery-list.actions';
+import { AddGroceryList, GetSelectedGroceryList, SetSelectedGroceryList, UpdateGroceryList } from '../../ngxs-store/grocery-list.actions';
 import { ButtonStyle } from '../../../shared/button/button-style.enum';
 import { ROUTES_PARAM, GROCERY_LIST_FORM, INGREDIENT_FORM } from '../../../constants';
 import { GroceryListState } from '../../ngxs-store/grocery-list.state';
@@ -28,7 +28,7 @@ import { LoadingColor } from '../../../shared/loading/loading-color.enum';
   templateUrl: './grocery-list-new.component.html',
   styleUrl: './grocery-list-new.component.scss'
 })
-export class GroceryListNewComponent implements OnInit {
+export class GroceryListNewComponent implements OnInit, OnDestroy {
   storeService = inject(StoreService);
   groceryListService = inject(GroceryListService);
   router = inject(Router);
@@ -42,6 +42,7 @@ export class GroceryListNewComponent implements OnInit {
   submitted: boolean = false;
   isLoading: boolean = false;
   title: string = '';
+  #routeSubscription!: Subscription;
 
   @ViewChildren('inputFields') inputFields!: QueryList<ElementRef>;
 
@@ -62,7 +63,7 @@ export class GroceryListNewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(async (params: Params) => {
+    this.#routeSubscription = this.route.params.subscribe(async (params: Params) => {
       this.idToEdit = params[ROUTES_PARAM.ID_PARAMETER];
       if (this.idToEdit) {
         this.editMode = true;
@@ -99,7 +100,10 @@ export class GroceryListNewComponent implements OnInit {
     if (this.editMode) {
       if (!this.groceryListForm.pristine) {
         this.ngStore.dispatch(new UpdateGroceryList(this.groceryListForm.value, this.idToEdit!)).subscribe({
-          next: () => this.#back(),
+          next: () => {
+            const updatedList = this.ngStore.selectSnapshot(GroceryListState.getLastUpdatedGroceryList);
+            this.ngStore.dispatch(new SetSelectedGroceryList(updatedList)).subscribe(() => this.#back());
+          },
           error: () => this.isLoading = false
         });
       } else {
@@ -126,6 +130,10 @@ export class GroceryListNewComponent implements OnInit {
   onEnterPressed = (event: KeyboardEvent | Event) => {
     event.preventDefault();
     this.onAddIngredient();
+  }
+
+  ngOnDestroy(): void {
+    this.#routeSubscription.unsubscribe();
   }
 
   #initForm = async () => {
