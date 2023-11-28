@@ -85,7 +85,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
     if (selectedGroceryList) {
       this.id = selectedGroceryList.id;
       this.storeId = selectedGroceryList.store?.id;
-      console.log(selectedGroceryList);
       this.title = selectedGroceryList.name;
       this.initForm();
       this.isLoading = false;
@@ -108,7 +107,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
         return;
       }
       this.storeId = selectedGroceryList.store?.id;
-      console.log(selectedGroceryList);
       this.title = selectedGroceryList.name;
       this.initForm();
       this.isLoading = false;
@@ -126,7 +124,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
         }
       }
       this.storeId = selectedGroceryList.store?.id;
-      console.log(selectedGroceryList);
       this.title = selectedGroceryList.name;
       this.initForm();
       this.isLoading = false;
