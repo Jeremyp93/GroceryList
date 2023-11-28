@@ -1,3 +1,5 @@
+@import '_variables';
+
 .top-menu {
     position: fixed;
     top: 0;
@@ -18,7 +20,7 @@
 
     p,a {
         margin: 0;
-        color: #595959;
+        color: $secondary-color;
         font-size: medium;
 
         -webkit-user-select: none;
@@ -61,13 +63,13 @@
         align-items: stretch;
         margin: 0;
         padding: 0;
-        border-top: 1px solid #595959;
+        border-top: 1px solid $secondary-color;
 
         li {
             flex: 1;
 
             &.active {
-                background-color: #C8963E;
+                background-color: $primary-color;
 
                 a{
                     color: white;
@@ -80,7 +82,7 @@
 
             a {
                 text-decoration: none;
-                color: #595959;
+                color: $secondary-color;
                 font-size: small;
                 display: flex;
                 flex-direction: column;

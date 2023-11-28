@@ -9,19 +9,23 @@
       [formGroup]="duplicateForm"
       (ngSubmit)="onSubmitDuplicateForm()"
     >
-      <div class="group">
-        <input type="text" placeholder="Name" formControlName="name" />
-        @if(this.duplicateForm.controls["name"].invalid &&
-        duplicateFormSubmitted) {
-        <span class="error">Name is required</span>
-        }
+      <div class="content">
+        <div class="group">
+          <input type="text" placeholder="Name" formControlName="name" />
+          @if(this.duplicateForm.controls["name"].invalid &&
+          duplicateFormSubmitted) {
+          <span class="error">Name is required</span>
+          }
+        </div>
       </div>
-      <app-button type="submit" [loading]="isLoading"
-        ><img
-          src="../../../../assets/icons/icons8-check-24.png"
-          alt="submit-icon"
-          width="20"
-      /></app-button>
+      <div class="submit bottom">
+        <app-button type="submit" [loading]="isLoading"
+          ><img
+            src="../../../../assets/icons/icons8-check-24.png"
+            alt="submit-icon"
+            width="20"
+        /></app-button>
+      </div>
     </form>
   </div>
 </app-modal>

@@ -4,23 +4,23 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Store } from '@ngxs/store';
 import { Router, RouterModule } from '@angular/router';
 
-import { Login, Logout } from './ngxs-store/auth.actions';
-import { AuthService } from './auth.service';
-import { AlertComponent } from '../shared/alert/alert.component';
-import { HeaderComponent } from '../shared/header/header.component';
-import { ButtonComponent } from '../shared/button/button.component';
-import { LOGIN_FORM, ROUTES_PARAM } from '../constants';
-import { AuthState } from './ngxs-store/auth.state';
+import { Login, Logout } from '../ngxs-store/auth.actions';
+import { AuthService } from '../auth.service';
+import { AlertComponent } from '../../shared/alert/alert.component';
+import { HeaderComponent } from '../../shared/header/header.component';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { LOGIN_FORM, ROUTES_PARAM } from '../../constants';
+import { AuthState } from '../ngxs-store/auth.state';
 
 @Component({
-  selector: 'app-auth',
+  selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, AlertComponent, HeaderComponent, ButtonComponent, RouterModule],
   providers: [AuthService],
-  templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss'
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss'
 })
-export class AuthComponent implements OnInit {
+export class LoginComponent implements OnInit {
   ngxsStore = inject(Store);
   router = inject(Router);
   readonly registerRoute: string = '/' + ROUTES_PARAM.REGISTER;

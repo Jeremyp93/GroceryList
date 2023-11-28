@@ -1,12 +1,8 @@
+@import '_variables';
+@import '_mixins';
+
 .tile-add-container {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, .1);
-    background-color: white;
-    color: #595959;
+    @include tile;
 
     .form {
         width: 100%;
@@ -15,8 +11,7 @@
             display: flex;
     
             .group {
-                display: flex;
-                flex-direction: column;
+                @include flex-column;
 
                 &.full-width {
                     width: 100%;
@@ -37,7 +32,7 @@
     
                 span {
                     align-self: flex-start;
-                    color: #EB5E55;
+                    color: $danger-color;
                     font-size: small;
                     margin-top: 5px;
                 }
@@ -51,9 +46,7 @@
             div {
                 width: 30px;
                 margin-left: 5px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                @include flex-center;
             }
         }
     }

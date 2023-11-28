@@ -7,7 +7,7 @@ import { AuthState } from "./ngxs-store/auth.state";
 import { Logout } from "./ngxs-store/auth.actions";
 
 export const authGuard: CanActivateFn = () => {
-    const router = inject(Router);
+    //const router = inject(Router);
     const store = inject(Store);
     const jwtHelper = inject(JwtHelperService);
 

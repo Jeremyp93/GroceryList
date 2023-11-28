@@ -93,8 +93,9 @@ export class GroceryListNewComponent implements OnInit {
   }
 
   onSubmit = () => {
-    this.submitted = this.isLoading = true;
+    this.submitted = true;
     if (this.groceryListForm.invalid) return;
+    this.isLoading = true;
     if (this.editMode) {
       if (!this.groceryListForm.pristine) {
         this.ngStore.dispatch(new UpdateGroceryList(this.groceryListForm.value, this.idToEdit!)).subscribe({

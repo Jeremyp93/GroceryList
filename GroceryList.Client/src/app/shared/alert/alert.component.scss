@@ -1,3 +1,5 @@
+@import '_variables';
+
 .alert {
     background-color: hsl(4, 79%, 63%, 50%);
     margin-bottom: 15px;
@@ -5,7 +7,7 @@
     padding: 10px;
 
     .message {
-        color: #595959;
+        color: $secondary-color;
         text-align: initial;
         font-size: small;
 

@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 ul {
     list-style: none;
     padding: 0;
@@ -29,23 +32,19 @@ ul {
             position: absolute;
             height: 100%;
             width: 100%;
-            background-color: #EB5E55;
+            background-color: $danger-color;
             cursor: pointer;
 
             .delete {
-                display: flex;
+                @include flex-center;
                 flex: 1;
-                justify-content: center;
-                align-items: center;
                 img {
                     animation: wiggle 2s linear infinite;
                 }
             }
 
             .cancel {
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                @include flex-center;
                 width: 20%;
                 background-color: #B3B6B7;
             }
@@ -93,7 +92,7 @@ ul {
             justify-content: space-between;
             padding: 10px;
             cursor: pointer;
-            color: #C8963E;
+            color: $primary-color;
             font-weight: 500;
         }
 
@@ -111,7 +110,7 @@ ul {
                 padding: 20px;
                 flex: 1;
                 cursor: pointer;
-                color: #595959;
+                color: $secondary-color;
                 font-size: medium;
                 font-weight: bold;
 
@@ -125,9 +124,7 @@ ul {
         
             .buttons {
                 padding: 10px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                @include flex-center;
 
                 @media screen and (max-width: 991px) {
                     cursor: pointer;
@@ -151,9 +148,7 @@ ul {
 
 .header {
     .menu {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include flex-center;
         margin-bottom: 10px;
 
         &>* {
@@ -162,37 +157,6 @@ ul {
     
         &>*:last-child {
             margin-right: 0;
-        }
-    }
-}
-
-.form-modal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 10px 20px 10px;
-
-    .group {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-
-        span {
-            color: #EB5E55;
-            font-size: small;
-            margin-top: 5px;
-            ;
-        }
-
-        label {
-            font-size: large;
-            font-weight: bold;
-            color: #595959;
-        }
-
-        &:not(:last-child) {
-            margin-bottom: 20px;
         }
     }
 }

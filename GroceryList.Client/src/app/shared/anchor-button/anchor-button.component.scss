@@ -1,12 +1,13 @@
+@import '_variables';
+@import '_mixins';
+
 a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-center;
     padding: 5px;
     width: 20px;
     height: 20px;
     text-decoration: none;
-    background-color: #C8963E;
+    background-color: $primary-color;
     color: #fff;
     border-radius: 50%;
     cursor: pointer;
@@ -15,5 +16,5 @@ a {
 
 /* Hover effect */
 a:hover {
-    background-color: #595959;
+    background-color: $secondary-color;
 }

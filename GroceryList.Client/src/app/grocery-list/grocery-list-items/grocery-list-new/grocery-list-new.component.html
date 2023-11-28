@@ -1,6 +1,11 @@
 <app-header [title]="title" [backButton]="true"></app-header>
 @if (groceryListForm) {
-<form [formGroup]="groceryListForm" (ngSubmit)="onSubmit()" autocomplete="off">
+<form
+  [formGroup]="groceryListForm"
+  (ngSubmit)="onSubmit()"
+  autocomplete="off"
+  class="form"
+>
   <div class="submit top">
     <app-button type="submit" class="button-submit" [loading]="isLoading"
       ><img
@@ -9,7 +14,7 @@
         width="20"
     /></app-button>
   </div>
-  <div class="form">
+  <div class="content">
     <div class="group">
       <label for="name">Name</label>
       <input

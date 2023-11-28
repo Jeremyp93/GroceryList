@@ -1,0 +1,74 @@
+@import '_mixins';
+@import '_variables';
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-modal,
+.form {
+    @include flex-column;
+
+    .content {
+        @include flex-column;
+        align-items: center;
+
+        .group {
+            @include flex-column;
+            align-items: flex-start;
+            width: 100%;
+
+            span {
+                color: $danger-color;
+                font-size: small;
+                margin-top: 5px;
+            }
+        
+            label {
+                font-size: large;
+                font-weight: bold;
+                color: $secondary-color;
+            }
+        
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+        }
+    }
+    .submit {
+        display: flex;
+        align-self: center;
+    
+        &.top {
+            margin-bottom: 10px;
+        }
+    
+        &.bottom {
+            margin-top: 10px;
+        }
+    }
+}
+
+.form {
+    .content {
+        background-color: white;
+        padding: 20px 10px;
+        box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, .1);
+    }
+}
+
+.form-modal {
+    .content {
+        padding: 0 10px 20px 10px;
+    }
+
+    .submit.bottom {
+        margin-bottom: 10px;
+    }
+}

@@ -1,12 +1,13 @@
+@import '_variables';
+@import '_mixins';
+
 .header {
     h3 {
-        color: #595959;
+        color: $secondary-color;
     }
 
     .menu {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include flex-center;
         margin-bottom: 10px;
 
         &>* {
@@ -33,42 +34,12 @@ ul {
 
 .content-modal {
     h4 {
+        color: $secondary-color;
         margin-bottom: 10px;
     }
 
     > span {
-        color: #595959;
+        color: $secondary-color;
         font-size: small;
-    }
-
-    .form-modal {
-        margin-top: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 0 10px 20px 10px;
-
-        .group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-
-            span {
-                color: #EB5E55;
-                font-size: small;
-                margin-top: 5px;
-            }
-
-            label {
-                font-size: large;
-                font-weight: bold;
-                color: #595959;
-            }
-
-            &:not(:last-child) {
-                margin-bottom: 20px;
-            }
-        }
     }
 }

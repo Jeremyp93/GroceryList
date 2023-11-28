@@ -9,7 +9,7 @@ import { StoreComponent } from './store/store.component';
 import { StoreListComponent } from './store/store-list/store-list.component';
 import { ROUTES_PARAM } from './constants';
 import { authGuard } from './auth/auth.guard';
-import { AuthComponent } from './auth/auth.component';
+import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 
 export const routes: Routes = [
@@ -28,7 +28,7 @@ export const routes: Routes = [
         ]
     },
     {
-        path: ROUTES_PARAM.LOGIN, component: AuthComponent
+        path: ROUTES_PARAM.LOGIN, component: LoginComponent
     },
     {
         path: ROUTES_PARAM.REGISTER, component: RegisterComponent
