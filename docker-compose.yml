@@ -35,7 +35,7 @@ services:
     ports:
         - "8023:8081"
     links:
-        - mongo
+        - mongodb
     networks:
       - internal
       - traefik_web
