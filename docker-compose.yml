@@ -64,6 +64,8 @@ services:
       - traefik.http.routers.web.rule=Host(`grocery-list.scotex.tech`)
       - traefik.http.routers.web.tls=true
       - traefik.http.routers.web.tls.certresolver=lets-encrypt
+    expose:
+      - 80
     networks:
       - internal
       - traefik_web
