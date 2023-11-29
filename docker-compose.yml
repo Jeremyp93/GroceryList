@@ -1,7 +1,7 @@
 version: "3.8"
 
 networks:
-  web:
+  traefik_web:
     external: true
   internal:
     external: false
@@ -31,7 +31,7 @@ services:
       - traefik.port=8080
     networks:
       - internal
-      - web
+      - traefik_web
     env_file:
       - mongo-express.env
     depends_on:
@@ -63,6 +63,6 @@ services:
       - traefik.port=80
     networks:
       - internal
-      - web
+      - traefik_web
     depends_on:
       - api
