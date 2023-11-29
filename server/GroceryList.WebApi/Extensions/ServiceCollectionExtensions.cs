@@ -56,8 +56,6 @@ public static class ServiceCollectionExtensions
             IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
             var mongoDbSettings = configuration.GetSection("MongoDb");
             var connectionString = string.Format(configuration.GetConnectionString("MongoDBConnection") ?? "", mongoDbSettings.GetValue<string>("Username"), mongoDbSettings.GetValue<string>("Password"));
-            //BsonSerializer.TryRegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
-            //StoreMap.Map();
             MongoClient mongoClient = new MongoClient(connectionString);
             IMongoDatabase mongoDatabase = mongoClient.GetDatabase("grocery_list");
 

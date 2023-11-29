@@ -1,6 +1,4 @@
-using GroceryList.Infrastructure.DataBase;
 using GroceryList.WebApi.Extensions;
-using GroceryList.WebApi.Helpers;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -50,6 +50,8 @@ Thumbs.db
 # Database
 database
 
+!/server/GroceryList.Infrastructure/DataBase
+
 **/.vs/
 
 /traefik/acme.json
