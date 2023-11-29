@@ -26,5 +26,3 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy the built Angular app from the builder stage to the nginx directory
 COPY --from=builder /app/dist/grocery-list-client/browser/ /usr/share/nginx/html
-
-EXPOSE 80
