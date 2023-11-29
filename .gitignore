@@ -51,3 +51,5 @@ Thumbs.db
 database
 
 **/.vs/
+
+/traefik/acme.json
