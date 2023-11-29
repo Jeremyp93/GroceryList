@@ -1,5 +1,11 @@
 version: "3.8"
 
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+
 services:
   mongodb:
     container_name: mongodb
@@ -7,18 +13,25 @@ services:
     restart: unless-stopped
     env_file:
       - mongo.env
-    ports:
-      - 27017:27017
     volumes:
       - ./database/db:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
   mongo-express:
     container_name: mongo-express
     image: mongo-express
     restart: unless-stopped
-    ports:
-      - 8081:8081
+    labels:
+      - traefik.http.routers.adminer.rule=Host(`mongo-express.scotex.tech`)
+      - traefik.http.routers.adminer.tls=true
+      - traefik.http.routers.adminer.tls.certresolver=lets-encrypt
+      - traefik.port=8080
+    networks:
+      - internal
+      - web
     env_file:
       - mongo-express.env
     depends_on:
@@ -28,10 +41,12 @@ services:
     restart: unless-stopped
     build:
       context: server
-    ports:
-      - 6578:8800
+    networks:
+      - internal
     env_file:
       - api.env
+    labels:
+      - traefik.enable=false
     depends_on:
       - mongodb
   web:
@@ -39,7 +54,15 @@ services:
     restart: unless-stopped
     build:
      context: GroceryList.Client
-    ports:
-      - 8095:80
+    env_file:
+      - web.env
+    labels:
+      - traefik.http.routers.blog.rule=Host(`grocery-list.scotex.tech`)
+      - traefik.http.routers.blog.tls=true
+      - traefik.http.routers.blog.tls.certresolver=lets-encrypt
+      - traefik.port=80
+    networks:
+      - internal
+      - web
     depends_on:
       - api
