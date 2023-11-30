@@ -22,6 +22,8 @@ services:
     volumes:
       - ./database/db:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - test_default
   mongo-express:
     container_name: mongo-express
     image: mongo-express
@@ -33,6 +35,7 @@ services:
       - "traefik.http.routers.mongo-express.tls.certresolver=lets-encrypt"
     networks:
       - traefik_traefik
+      - test_default
     env_file:
       - mongo-express.env
     depends_on:
