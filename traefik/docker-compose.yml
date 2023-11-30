@@ -12,9 +12,10 @@ services:
       - ./traefik.toml:/traefik.toml
       - ./traefik_dynamic.toml:/traefik_dynamic.toml
       - ./acme.json:/acme.json
+      - ./logs/logfile.log:/logs/logfile.log
     networks:
       - traefik
-      
+
 networks:
   traefik:
     external: true
