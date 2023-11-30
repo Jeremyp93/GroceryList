@@ -1,7 +1,7 @@
 networks:
-  traefik_traefik:
+  traefik_web:
     external: true
-  default:
+  internal:
     external: false
 
 services:
@@ -14,8 +14,8 @@ services:
       - "traefik.http.routers.whoami.entrypoints=websecure"
       - "traefik.http.routers.whoami.tls.certresolver=lets-encrypt"
     networks:
-      - traefik_traefik
-      - default
+      - traefik_web
+      - internal
   mongodb:
     container_name: "mongodb"
     image: "mongo"
@@ -26,7 +26,7 @@ services:
       - ./database/db:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
-      - default
+      - internal
   mongo-express:
     container_name: mongo-express
     image: mongo-express
@@ -38,8 +38,8 @@ services:
       - "traefik.http.routers.mongo-express.tls.certresolver=lets-encrypt"
       - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
     networks:
-      - traefik_traefik
-      - default
+      - traefik_web
+      - internal
     env_file:
       - mongo-express.env
     depends_on:
