@@ -1,0 +1,10 @@
+ssh key error solution:
+ssh-keygen -R <host>
+
+Docker commands
+docker compose up -d
+docker compose stop <name>
+docker compose rm <name>
+docker network prune
+docker ps
+docker logs -f <name>

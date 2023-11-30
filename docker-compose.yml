@@ -20,17 +20,20 @@ services:
       - internal
     labels:
       - traefik.enable=false
+
   mongo-express:
     container_name: mongo-express
     image: mongo-express
     restart: unless-stopped
     labels:
+      - traefik.enable=true
       - traefik.http.routers.mongo-express.rule=Host(`mongo-express.scotex.tech`)
       - traefik.http.routers.mongo-express.tls=true
       - traefik.http.routers.mongo-express.tls.certresolver=lets-encrypt
+      - traefik.http.routers.mongo-express.entrypoints=web
       - traefik.port=8090
     expose:
-      - '8090'
+      - 8090
     links:
         - mongodb
     networks:
@@ -40,19 +43,33 @@ services:
       - mongo-express.env
     depends_on:
       - mongodb
+
   api:
     container_name: api
     restart: unless-stopped
     build:
       context: server
+    expose:
+      - 8000
     networks:
       - internal
+      - traefik_web
     env_file:
       - api.env
     labels:
-      - traefik.enable=false
+      - traefik.enable=true
+      - traefik.http.routers.grocery-list-api.rule=Host(`api.grocery-list.scotex.tech`)
+      - traefik.http.routers.grocery-list-api.entrypoints=websecure
+      - traefik.http.routers.grocery-list-api.tls.certresolver=lets-encrypt
+      - 'traefik.http.middlewares.https-redirectscheme.redirectscheme.scheme=https'
+      - 'traefik.http.middlewares.https-redirectscheme.redirectscheme.permanent=true'
+      - 'traefik.http.middlewares.cors-response-bridge.headers.accesscontrolallowmethods=GET,OPTIONS,HEAD,POST,PUT'
+      - 'traefik.http.middlewares.cors-response-bridge.headers.accesscontrolallowheaders=*'
+      - 'traefik.http.middlewares.cors-response-bridge.headers.accesscontrolalloworiginlist=https://grocery-list.scotex.tech'
+      - 'traefik.http.routers.grocery-list-api.middlewares=cors-response-bridge'
     depends_on:
       - mongodb
+      
   web:
     container_name: web
     restart: unless-stopped
@@ -61,9 +78,12 @@ services:
     env_file:
       - web.env
     labels:
-      - traefik.http.routers.web.rule=Host(`grocery-list.scotex.tech`)
-      - traefik.http.routers.web.tls=true
-      - traefik.http.routers.web.tls.certresolver=lets-encrypt
+      - traefik.enable=true
+      - traefik.http.routers.grocery-list.rule=Host(`grocery-list.scotex.tech`)
+      - traefik.http.routers.grocery-list.entrypoints=websecure
+      - traefik.http.routers.grocery-list.tls.certresolver=lets-encrypt
+      - traefik.http.middlewares.https-redirectscheme.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirectscheme.redirectscheme.permanent=true
     expose:
       - 80
     networks:
