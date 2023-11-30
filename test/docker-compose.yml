@@ -5,4 +5,5 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`grocery-list.scotex.tech`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.routers.whoami.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
