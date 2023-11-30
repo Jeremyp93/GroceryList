@@ -22,3 +22,6 @@
 
 [providers.file]
   filename = "traefik_dynamic.toml"
+
+[log]
+  filePath = "/logs/traefik.log"
