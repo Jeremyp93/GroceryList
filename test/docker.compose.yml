@@ -1,0 +1,7 @@
+whoami:
+  image: "traefik/whoami"
+  container_name: "simple-service"
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.whoami.rule=Host(`grocery-list.scotex.tech`)"
+    - "traefik.http.routers.whoami.entrypoints=web"
