@@ -52,8 +52,8 @@ services:
     restart: unless-stopped
     build:
       context: ../server
-    #expose:
-    #  - 8000
+    expose:
+      - 8000
     networks:
       - internal
       - traefik
@@ -64,6 +64,6 @@ services:
       - "traefik.http.routers.grocery-list-api.rule=Host(`api.grocery-list.scotex.tech`)"
       - "traefik.http.routers.grocery-list-api.entrypoints=websecure"
       - "traefik.http.routers.grocery-list-api.tls.certresolver=lets-encrypt"
-      - "traefik.http.services.mongo-express.loadbalancer.server.port=8000"
+      #- "traefik.http.services.mongo-express.loadbalancer.server.port=8000"
     depends_on:
       - mongodb
