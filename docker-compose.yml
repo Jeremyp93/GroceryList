@@ -31,7 +31,6 @@ services:
       - traefik.http.middlewares.https-redirectscheme.redirectscheme.scheme=https
       - traefik.http.middlewares.https-redirectscheme.redirectscheme.permanent=true
       - traefik.http.routers.mongo-express.rule=Host(`mongo-express.scotex.tech`)
-      - traefik.http.routers.mongo-express.tls=true
       - traefik.http.routers.mongo-express.tls.certresolver=lets-encrypt
       - traefik.http.routers.mongo-express.entrypoints=web
       - traefik.port=8090
