@@ -28,6 +28,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.mongo-express.entrypoints=websecure
+      - traefik.http.middlewares.https-redirectscheme.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirectscheme.redirectscheme.permanent=true
       - traefik.http.routers.mongo-express.rule=Host(`mongo-express.scotex.tech`)
       - traefik.http.routers.mongo-express.tls=true
       - traefik.http.routers.mongo-express.tls.certresolver=lets-encrypt
@@ -62,12 +64,12 @@ services:
       - traefik.http.routers.grocery-list-api.rule=Host(`api.grocery-list.scotex.tech`)
       - traefik.http.routers.grocery-list-api.entrypoints=websecure
       - traefik.http.routers.grocery-list-api.tls.certresolver=lets-encrypt
-      - 'traefik.http.middlewares.https-redirectscheme.redirectscheme.scheme=https'
-      - 'traefik.http.middlewares.https-redirectscheme.redirectscheme.permanent=true'
-      - 'traefik.http.middlewares.cors-response-bridge.headers.accesscontrolallowmethods=GET,OPTIONS,HEAD,POST,PUT'
-      - 'traefik.http.middlewares.cors-response-bridge.headers.accesscontrolallowheaders=*'
-      - 'traefik.http.middlewares.cors-response-bridge.headers.accesscontrolalloworiginlist=https://grocery-list.scotex.tech'
-      - 'traefik.http.routers.grocery-list-api.middlewares=cors-response-bridge'
+      - traefik.http.middlewares.https-redirectscheme.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirectscheme.redirectscheme.permanent=true
+      - traefik.http.middlewares.cors-response-bridge.headers.accesscontrolallowmethods=GET,OPTIONS,HEAD,POST,PUT
+      - traefik.http.middlewares.cors-response-bridge.headers.accesscontrolallowheaders=*
+      - traefik.http.middlewares.cors-response-bridge.headers.accesscontrolalloworiginlist=https://grocery-list.scotex.tech
+      - traefik.http.routers.grocery-list-api.middlewares=cors-response-bridge
     depends_on:
       - mongodb
       
