@@ -36,9 +36,7 @@ services:
       - "traefik.http.routers.mongo-express.entrypoints=websecure"
       - "traefik.http.routers.mongo-express.rule=Host(`mongo-express.scotex.tech`)"
       - "traefik.http.routers.mongo-express.tls.certresolver=lets-encrypt"
-      #- "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
-    expose:
-      - 8081
+      - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
     networks:
       - traefik
       - internal
