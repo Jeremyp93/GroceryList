@@ -9,6 +9,5 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`grocery-list.scotex.tech`)"
-      - "traefik.http.services.whoami.loadbalancer.server.port=80"
     networks:
       - traefik_web
