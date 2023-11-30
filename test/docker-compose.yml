@@ -60,7 +60,7 @@ services:
       - "traefik.http.routers.api.rule=Host(`api-grocery-list.scotex.tech`)"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=lets-encrypt"
-      - "traefik.http.services.api.loadbalancer.server.port=8095:8080"
+      - "traefik.http.services.api.loadbalancer.server.port=8082"
     depends_on:
       - mongodb
 
@@ -76,7 +76,7 @@ services:
       - "traefik.http.routers.web.rule=Host(`grocery-list.scotex.tech`)"
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls.certresolver=lets-encrypt"
-      - "traefik.http.services.mongo-express.loadbalancer.server.port=80"
+      - "traefik.http.services.mongo-express.loadbalancer.server.port=443"
     networks:
       - internal
       - traefik
