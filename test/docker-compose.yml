@@ -51,8 +51,8 @@ services:
     build:
       context: ../server
     networks:
-      - internal
       - traefik
+      - internal
     env_file:
       - api.env
     labels:
