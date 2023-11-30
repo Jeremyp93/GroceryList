@@ -22,3 +22,8 @@
 
 [providers.file]
   filename = "traefik_dynamic.toml"
+
+[log]
+  filePath = "logs/logfile.log"  # Change this to the path where you want the log file
+  format = "json"  # Choose the log format (common, json, etc.)
+  level = "DEBUG"  # Set the log level (DEBUG, INFO, WARN, ERROR)
