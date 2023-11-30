@@ -33,8 +33,5 @@ COPY --from=builder /app/dist/* /usr/share/nginx/html/
 RUN mkdir /usr/share/nginx/html/assets
 RUN mv /usr/share/nginx/html/i18n /usr/share/nginx/html/assets
 
-# Copy the built Angular app from the builder stage to the nginx directory
-COPY --from=builder /app/dist/grocery-list-client/browser/ /usr/share/nginx/html
-
 # Start NgInx service
 CMD ["nginx", "-g", "daemon off;"]
