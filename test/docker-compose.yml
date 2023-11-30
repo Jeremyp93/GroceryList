@@ -5,17 +5,17 @@ networks:
     external: false
 
 services:
-  whoami:
-    image: "traefik/whoami"
-    container_name: "whoami"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`grocery-list.scotex.tech`)"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls.certresolver=lets-encrypt"
-    networks:
-      - traefik
-      - internal
+  #whoami:
+  #  image: "traefik/whoami"
+  #  container_name: "whoami"
+  #  labels:
+  #    - "traefik.enable=true"
+  #    - "traefik.http.routers.whoami.rule=Host(`grocery-list.scotex.tech`)"
+  #    - "traefik.http.routers.whoami.entrypoints=websecure"
+  #    - "traefik.http.routers.whoami.tls.certresolver=lets-encrypt"
+  #  networks:
+  #    - traefik
+  #    - internal
   mongodb:
     container_name: "mongodb"
     image: "mongo"
@@ -63,3 +63,21 @@ services:
       - "traefik.http.services.grocery-list-api.loadbalancer.server.port=8000"
     depends_on:
       - mongodb
+
+  web:
+    container_name: web
+    restart: unless-stopped
+    build:
+     context: ../GroceryList.Client
+    env_file:
+      - web.env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grocery-list.rule=Host(`grocery-list.scotex.tech`)
+      - traefik.http.routers.grocery-list.entrypoints=websecure
+      - traefik.http.routers.grocery-list.tls.certresolver=lets-encrypt
+    networks:
+      - internal
+      - traefik
+    depends_on:
+      - api
