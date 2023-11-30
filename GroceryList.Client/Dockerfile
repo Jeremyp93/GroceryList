@@ -21,13 +21,7 @@ RUN npm run build --  --output-path=dist --output-hashing=all
 # Use Nginx as the production server
 FROM nginx:stable-alpine
 
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
-
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy dist folder fro build stage to nginx public folder
 COPY --from=builder /app/dist/* /usr/share/nginx/html/
-
-# Start NgInx service
-CMD ["nginx", "-g", "daemon off;"]

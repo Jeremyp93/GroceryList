@@ -60,6 +60,6 @@ services:
       - "traefik.http.routers.grocery-list-api.rule=Host(`api-grocery-list.scotex.tech`)"
       - "traefik.http.routers.grocery-list-api.entrypoints=websecure"
       - "traefik.http.routers.grocery-list-api.tls.certresolver=lets-encrypt"
-      - "traefik.http.services.grocery-list-api.loadbalancer.server.port=8080"
+      - "traefik.http.services.grocery-list-api.loadbalancer.server.port=8000"
     depends_on:
       - mongodb
