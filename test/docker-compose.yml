@@ -1,6 +1,8 @@
 networks:
   traefik_traefik:
     external: true
+  test_default:
+    external: internal
 
 services:
   whoami:
