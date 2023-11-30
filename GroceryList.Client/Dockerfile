@@ -30,8 +30,6 @@ COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist/* /usr/share/nginx/html/
 
 # fix folder structure
-RUN rm /usr/share/nginx/html/assets
-RUN mkdir /usr/share/nginx/html/assets
 RUN mv /usr/share/nginx/html/i18n /usr/share/nginx/html/assets
 
 # Start NgInx service
