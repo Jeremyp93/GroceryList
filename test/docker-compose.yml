@@ -46,3 +46,23 @@ services:
       - mongo-express.env
     depends_on:
       - mongodb
+
+  api:
+    container_name: api
+    restart: unless-stopped
+    build:
+      context: ../server
+    expose:
+      - 8000
+    networks:
+      - internal
+      - traefik
+    env_file:
+      - api.env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grocery-list-api.rule=Host(`api.grocery-list.scotex.tech`)
+      - traefik.http.routers.grocery-list-api.entrypoints=websecure
+      - traefik.http.routers.grocery-list-api.tls.certresolver=lets-encrypt
+    depends_on:
+      - mongodb
