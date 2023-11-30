@@ -60,9 +60,10 @@ services:
     env_file:
       - api.env
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.grocery-list-api.rule=Host(`api.grocery-list.scotex.tech`)
-      - traefik.http.routers.grocery-list-api.entrypoints=websecure
-      - traefik.http.routers.grocery-list-api.tls.certresolver=lets-encrypt
+      - "traefik.enable=true"
+      - "traefik.http.routers.grocery-list-api.rule=Host(`api.grocery-list.scotex.tech`)"
+      - "traefik.http.routers.grocery-list-api.entrypoints=websecure"
+      - "traefik.http.routers.grocery-list-api.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.mongo-express.loadbalancer.server.port=8000"
     depends_on:
       - mongodb
