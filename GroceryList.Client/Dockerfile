@@ -24,7 +24,7 @@ FROM nginx:stable-alpine
 # Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy dist folder fro build stage to nginx public folder
 COPY --from=builder /app/dist/* /usr/share/nginx/html/
