@@ -1,3 +1,7 @@
+networks:
+  traefik_web:
+    external: true
+
 services:
   whoami:
     image: "traefik/whoami"
