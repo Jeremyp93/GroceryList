@@ -13,7 +13,6 @@ services:
       - "traefik.http.routers.whoami.tls.certresolver=lets-encrypt"
     networks:
       - traefik_traefik
-      - internal
   mongodb:
     container_name: "mongodb"
     image: "mongo"
