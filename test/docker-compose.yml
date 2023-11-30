@@ -5,7 +5,7 @@ networks:
 services:
   whoami:
     image: "traefik/whoami"
-    container_name: "simple-service"
+    container_name: "whoami"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`grocery-list.scotex.tech`)"
