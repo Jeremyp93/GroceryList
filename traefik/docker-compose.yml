@@ -13,8 +13,8 @@ services:
       - ./traefik_dynamic.toml:/traefik_dynamic.toml
       - ./acme.json:/acme.json
     networks:
-      - web
+      - traefik
 
 networks:
-  web:
+  traefik:
     driver: bridge

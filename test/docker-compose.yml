@@ -1,5 +1,5 @@
 networks:
-  traefik_web:
+  traefik:
     external: true
   internal:
     external: false
@@ -14,7 +14,7 @@ services:
       - "traefik.http.routers.whoami.entrypoints=websecure"
       - "traefik.http.routers.whoami.tls.certresolver=lets-encrypt"
     networks:
-      - traefik_web
+      - traefik
       - internal
   mongodb:
     container_name: "mongodb"
@@ -38,7 +38,7 @@ services:
       - "traefik.http.routers.mongo-express.tls.certresolver=lets-encrypt"
       - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
     networks:
-      - traefik_web
+      - traefik
       - internal
     env_file:
       - mongo-express.env
