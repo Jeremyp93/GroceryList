@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GroceryList.Application;
 using GroceryList.Application.Commands.Login;
 using GroceryList.Application.Commands.Users.AddUser;
 using GroceryList.Application.Queries.Users.GetUserById;
@@ -36,6 +37,7 @@ public class UsersController : BaseController
         return ReturnOk<IEnumerable<UserResponse>, IEnumerable<User>>(result.Data);
     }
 
+    [Authorize]
     [HttpGet("{id:Guid}", Name = "GetUserById")]
     public async Task<IActionResult> GetUserById([FromRoute] Guid id)
     {
@@ -69,6 +71,12 @@ public class UsersController : BaseController
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] UserRequest userRequest)
     {
+        var allowedEmails = new string[] { "test@test.ca", "jeremy.proot@outlook.com", "fany.panichelli5@hotmail.com" };
+        if (!allowedEmails.Contains(userRequest.Email))
+        {
+            return ErrorResponse(Result<User>.Failure(ResultStatusCode.ValidationError, "Email is not allowed."));
+        }
+
         var result = await _mediator.Send(new AddUserCommand()
         {
             Email = userRequest.Email,

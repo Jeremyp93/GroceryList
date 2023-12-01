@@ -5,10 +5,12 @@ using GroceryList.Application.Queries.Stores.GetStores;
 using GroceryList.Domain.Aggregates.Stores;
 using GroceryList.WebApi.Models.Stores;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroceryList.WebApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class StoresController : BaseController

@@ -26,7 +26,7 @@ export class ResetIngredients {
 export class SelectIngredient {
     static readonly type = '[Ingredient] Select';
 
-    constructor(public index: number) {
+    constructor(public id: string) {
     }
 }
 

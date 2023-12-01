@@ -33,7 +33,7 @@ public class UpdateGroceryListHandler : IRequestHandler<UpdateGroceryListCommand
         {
             var ingredients = command
               .Ingredients?
-              .Select(x => Ingredient.Create(x.Name, x.Amount, Category.Create(x.Category)))
+              .Select(x => Ingredient.Create(x.Name, x.Amount, Category.Create(x.Category), x.Selected))
             .ToList();
 
             var userId = _claimReader.GetUserIdFromClaim();

@@ -86,61 +86,73 @@ db.GroceryList.insert([
         name: "Gravier litiere",
         amount: 1,
         category: { name: "Pet" },
+        selected: false
       },
       {
         name: "Poivron",
         amount: 4,
         category: { name: "Vegetables" },
+        selected: false
       },
       {
         name: "Baguette",
         amount: 1,
         category: { name: "Bread" },
+        selected: false
       },
       {
         name: "Lait",
         amount: 3,
         category: { name: "Dairy" },
+        selected: false
       },
       {
         name: "Blanc de poulet",
         amount: 2,
         category: { name: "Meat" },
+        selected: false
       },
       {
         name: "Crevettes",
         amount: 1,
         category: { name: "Fish" },
+        selected: false
       },
       {
         name: "Tomate",
         amount: 2,
         category: { name: "Vegetables" },
+        selected: false
       },
       {
         name: "Banane",
         amount: 3,
         category: { name: "Fruits" },
+        selected: false
       },
       {
         name: "Spaghetti",
         amount: 1,
         category: { name: "Dry" },
+        selected: false
       },
       {
         name: "Pizza 4 fromage",
         amount: 2,
         category: { name: "Frozen" },
+        selected: false
       },
       {
         name: "Courgette",
         amount: 1,
         category: { name: "Vegetables" },
+        selected: false
       },
       {
         name: "Chips bbq",
         amount: 2,
         category: { name: "Candy" },
+        selected: false
       },
     ],
     createdAt: ISODate("2023-11-26T22:40:26.417Z"),
@@ -158,26 +170,31 @@ db.GroceryList.insert([
         name: "Noix de cajou",
         amount: 1,
         category: { name: "Nuts" },
+        selected: false
       },
       {
         name: "Fromage raclette",
         amount: 1,
         category: { name: "Cheese" },
+        selected: true
       },
       {
         name: "Pain de campagne",
         amount: 1,
         category: { name: "Bread" },
+        selected: false
       },
       {
         name: "Pommes de terre",
         amount: 3,
         category: { name: "Vegetables" },
+        selected: false
       },
       {
         name: "Raisin blanc",
         amount: 2,
         category: { name: "Fruits" },
+        selected: false
       },
     ],
     createdAt: ISODate("2023-11-27T22:40:26.417Z"),

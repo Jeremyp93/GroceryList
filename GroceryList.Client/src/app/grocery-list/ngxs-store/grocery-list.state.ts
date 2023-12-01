@@ -144,7 +144,7 @@ export class GroceryListState {
                     ...state,
                     selectedGroceryList: result
                 });
-
+                
                 dispatch(new SetIngredients(result?.ingredients ?? []));
                 dispatch(new SetSections(result?.store?.sections ?? []));
             }));

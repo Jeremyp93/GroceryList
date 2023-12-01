@@ -9,10 +9,11 @@ public record Ingredient
     public string Name { get; private set; } = string.Empty;
     public int Amount { get; private set; } = 0;
     public Category Category { get; private set; }
+    public bool Selected { get; set; }
 
     private Ingredient() { }
 
-    public static Ingredient Create(string name, int amount, Category category)
+    public static Ingredient Create(string name, int amount, Category category, bool selected)
     {
         var errors = new List<string>();
 
@@ -30,7 +31,8 @@ public record Ingredient
         {
             Name = name,
             Amount = amount,
-            Category = category
+            Category = category,
+            Selected = selected
         };
     }
 }

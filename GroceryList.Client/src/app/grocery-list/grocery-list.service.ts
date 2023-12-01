@@ -62,7 +62,7 @@ export class GroceryListService {
             id: dto.id,
             name: dto.name,
             store: dto.store,
-            ingredients: dto.ingredients.map(i => ({ id: '', name: i.name, amount: i.amount, category: i.category, selected: false })),
+            ingredients: dto.ingredients.map(i => ({ id: '', name: i.name, amount: i.amount, category: i.category, selected: i.selected })),
             createdAt: dto.createdAt,
             showDelete: false
         };
@@ -74,7 +74,7 @@ export class GroceryListService {
             name: dto.name,
             amount: dto.amount,
             category: dto.category,
-            selected: false
+            selected: dto.selected
         };
     }
 

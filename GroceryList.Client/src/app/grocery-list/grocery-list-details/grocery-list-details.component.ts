@@ -134,8 +134,8 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-  putInBasket = (index: number) => {
-    this.ngStore.dispatch(new SelectIngredient(index));
+  putInBasket = (id: string) => {
+    this.ngStore.dispatch(new SelectIngredient(id));
   }
 
   resetIngredients = () => {

@@ -87,11 +87,12 @@ export class IngredientState {
     }
 
     @Action(SelectIngredient)
-    selectIngredient({ getState, setState }: StateContext<IngredientStateModel>, { index }: SelectIngredient) {
+    selectIngredient({ getState, setState }: StateContext<IngredientStateModel>, { id }: SelectIngredient) {
         const state = getState();
         const ingredients = [...state.ingredients];
-        if (ingredients[index].selected) return;
-        const movedIngredient = ingredients.splice(index, 1)[0];
+        const selectedIngredientIndex = ingredients.findIndex(i => i.id === id);
+        if (ingredients[selectedIngredientIndex].selected) return;
+        const movedIngredient = ingredients.splice(selectedIngredientIndex, 1)[0];
         ingredients.push({ ...movedIngredient, selected: true });
         setState({
             ...state,
@@ -116,10 +117,15 @@ const sortIngredientsByPriority = (ingredients: Ingredient[], sections: Section[
     if (sections.length === 0) {
         return ingredients;
     }
-    ingredients.sort((a, b) => {
+
+    // Separate selected and unselected ingredients
+    const selectedIngredients = ingredients.filter(ingredient => ingredient.selected);
+    const unselectedIngredients = ingredients.filter(ingredient => !ingredient.selected);
+
+    unselectedIngredients.sort((a, b) => {
         const priorityA = getSectionPriority(a.category, sections);
         const priorityB = getSectionPriority(b.category, sections);
-        if (b.selected) return -1;
+
         if (priorityA === 0 && priorityB === 0) {
             return 0; // Maintain original order for both null categories
         } else if (priorityA === 0) {
@@ -127,10 +133,13 @@ const sortIngredientsByPriority = (ingredients: Ingredient[], sections: Section[
         } else if (priorityB === 0) {
             return -1; // Place items with null category at the end
         }
+
         return priorityA - priorityB;
     });
-    return ingredients;
-}
+
+    // Concatenate unselected ingredients and selected ingredients
+    return unselectedIngredients.concat(selectedIngredients);
+};
 
 const getSectionPriority = (category: string | null, sections: Section[]): number => {
     const section = sections.find((s) => s.name === category);

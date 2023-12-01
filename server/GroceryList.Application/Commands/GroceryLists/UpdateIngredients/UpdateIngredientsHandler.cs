@@ -35,7 +35,7 @@ public class UpdateIngredientsHandler : IRequestHandler<UpdateIngredientsCommand
 
             var ingredients = command
               .Ingredients?
-              .Select(x => Ingredient.Create(x.Name, x.Amount, Category.Create(x.Category)))
+              .Select(x => Ingredient.Create(x.Name, x.Amount, Category.Create(x.Category), x.Selected))
               .ToList();
 
             list.UpdateIngredients(ingredients);
