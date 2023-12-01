@@ -57,7 +57,7 @@ services:
       - api.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`api-grocery-list.scotex.tech`)"
+      - "traefik.http.routers.api.rule=Host(`api.grocery-list.scotex.tech`)"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=lets-encrypt"
       - "traefik.http.services.api.loadbalancer.server.port=8800"
