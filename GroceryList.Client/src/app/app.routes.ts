@@ -15,23 +15,23 @@ import { RegisterComponent } from './auth/register/register.component';
 export const routes: Routes = [
     { path: '', redirectTo: ROUTES_PARAM.GROCERY_LIST, pathMatch: 'full' },
     {
-        path: ROUTES_PARAM.GROCERY_LIST, component: GroceryListComponent, canActivate: [authGuard], canActivateChild: [authGuard], children: [
+        path: ROUTES_PARAM.GROCERY_LIST, component: GroceryListComponent, canActivate: [authGuard], canActivateChild: [authGuard], title: 'Grocery List - Lists', children: [
             { path: '', component: GroceryListItemsComponent, pathMatch: 'full' },
-            { path: ROUTES_PARAM.NEW, component: GroceryListNewComponent },
-            { path: `:${ROUTES_PARAM.ID_PARAMETER}`, component: GroceryListDetailsComponent, canActivate: [validIdGuard] },
-            { path: `:${ROUTES_PARAM.ID_PARAMETER}/${ROUTES_PARAM.EDIT}`, component: GroceryListNewComponent, canActivate: [validIdGuard] },
+            { path: ROUTES_PARAM.NEW, component: GroceryListNewComponent, title: 'Grocery List - Create' },
+            { path: `:${ROUTES_PARAM.ID_PARAMETER}`, component: GroceryListDetailsComponent, canActivate: [validIdGuard], title: 'Grocery List - List' },
+            { path: `:${ROUTES_PARAM.ID_PARAMETER}/${ROUTES_PARAM.EDIT}`, component: GroceryListNewComponent, canActivate: [validIdGuard], title: 'Grocery List - Edit' },
         ]
     },
     {
-        path: ROUTES_PARAM.STORE, component: StoreComponent, canActivate: [authGuard], canActivateChild: [authGuard], children: [
+        path: ROUTES_PARAM.STORE, component: StoreComponent, canActivate: [authGuard], canActivateChild: [authGuard], title: 'Stores', children: [
             { path: '', component: StoreListComponent, pathMatch: 'full' },
         ]
     },
     {
-        path: ROUTES_PARAM.LOGIN, component: LoginComponent
+        path: ROUTES_PARAM.LOGIN, component: LoginComponent, title: 'Grocery List - Login'
     },
     {
-        path: ROUTES_PARAM.REGISTER, component: RegisterComponent
+        path: ROUTES_PARAM.REGISTER, component: RegisterComponent, title: 'Grocery List - Register'
     },
     { path: '**', redirectTo: ROUTES_PARAM.GROCERY_LIST }
 ];
