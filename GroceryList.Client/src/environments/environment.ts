@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    groceryListApiUrl: 'https://api-grocery-list.scotex.tech/api/grocerylists',
-    storeApiUrl: 'https://api-grocery-list.scotex.tech/api/stores',
-    userApiUrl: 'https://api-grocery-list.scotex.tech/api/users'
+    groceryListApiUrl: process.env["GROCERY_LIST_API"] || '',
+    storeApiUrl: process.env["STORE_API"] || '',
+    userApiUrl: process.env["USER_API"] || ''
 };
