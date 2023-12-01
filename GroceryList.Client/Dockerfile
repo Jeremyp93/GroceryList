@@ -10,7 +10,7 @@ COPY package.json package-lock.json ./
 RUN npm install -g npm@latest
 
 # Install dependencies
-RUN npm install --legacy-peer-deeps
+RUN npm install --legacy-peer-deps
 
 # Copy the entire Angular app to the working directory
 COPY . .
