@@ -2,7 +2,7 @@
   <form [formGroup]="addForm" class="form">
     <div class="line1">
       <div class="group">
-        <input type="number" formControlName="amount" />
+        <input type="number" formControlName="amount" (keydown.enter)="onEnterPressed()" />
         @if(addForm.get("amount")?.invalid && formSubmitted) {
         <span class="error">Amount is required</span>
         }

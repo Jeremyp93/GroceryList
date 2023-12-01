@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, lastValueFrom, take } from 'rxjs';
@@ -19,13 +19,14 @@ import { Store } from '../../store/types/store.type';
 import { Section } from '../../store/types/section.type';
 import { IngredientState } from '../ngxs-store/ingredient.state';
 import { AddIngredient, DeleteIngredient, ResetIngredients, SaveIngredients, SelectIngredient } from '../ngxs-store/ingredient.actions';
-import { AddGroceryList, GetSelectedGroceryList, SetSelectedGroceryList } from '../ngxs-store/grocery-list.actions';
+import { AddGroceryList, GetSelectedGroceryList } from '../ngxs-store/grocery-list.actions';
 import { GroceryListState } from '../ngxs-store/grocery-list.state';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
 import { ROUTES_PARAM, GROCERY_LIST_FORM } from '../../constants';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
 import { AlertComponent } from '../../shared/alert/alert.component';
+import { ComponentCanDeactivate } from '../../guards/pending-changes-guard.service';
 
 @Component({
   selector: 'app-grocery-list-details',
@@ -41,7 +42,7 @@ import { AlertComponent } from '../../shared/alert/alert.component';
     ])
   ]
 })
-export class GroceryListDetailsComponent implements OnInit, OnDestroy {
+export class GroceryListDetailsComponent implements OnInit, OnDestroy, ComponentCanDeactivate  {
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -66,6 +67,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
   saveProcess: boolean = false;
   errorMessage: string = '';
   #routeSubscription: Subscription | null = null;
+  #pendingChanges: boolean = false;
 
   get buttonStyles(): typeof ButtonStyle {
     return ButtonStyle;
@@ -75,6 +77,11 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
   }
   get loadingColors(): typeof LoadingColor {
     return LoadingColor;
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.#pendingChanges;
   }
 
   ngOnInit(): void {
@@ -135,11 +142,11 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
   }
 
   putInBasket = (id: string) => {
-    this.ngStore.dispatch(new SelectIngredient(id));
+    this.ngStore.dispatch(new SelectIngredient(id)).subscribe(() => this.#pendingChanges = true);
   }
 
   resetIngredients = () => {
-    this.ngStore.dispatch(new ResetIngredients());
+    this.ngStore.dispatch(new ResetIngredients()).subscribe(() => this.#pendingChanges = true);
   }
 
   newIngredient = () => {
@@ -147,9 +154,11 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
     this.sections$.pipe(take(1)).subscribe(sections => {
       componentRef.setInput('sections', sections);
       this.itemAddedSubscription = componentRef.instance.itemAdded.subscribe(ingredient => {
-        this.ngStore.dispatch(new AddIngredient(ingredient));
-        this.itemAddedSubscription?.unsubscribe();
-        this.dynamicComponentContainer.clear();
+        this.ngStore.dispatch(new AddIngredient(ingredient)).subscribe(() => {
+          this.#pendingChanges = true
+          this.itemAddedSubscription?.unsubscribe();
+          this.dynamicComponentContainer.clear();
+        });
       });
       setTimeout(() => {
         this.addFormClosedSubscription = componentRef.instance.onClickOutside.subscribe(_ => {
@@ -161,7 +170,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
   }
 
   deleteIngredient = (id: string) => {
-    this.ngStore.dispatch(new DeleteIngredient(id));
+    this.ngStore.dispatch(new DeleteIngredient(id)).subscribe(() => this.#pendingChanges = true);
   }
 
   editGroceryList = () => {
@@ -172,7 +181,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy {
     this.saveProcess = true;
     this.ngStore.dispatch(new SaveIngredients(this.id)).subscribe({
       next: () => {
-        this.saveProcess = false;
+        this.saveProcess = this.#pendingChanges = false;
         this.saved = true;
         setTimeout(() => {
           this.saved = false;

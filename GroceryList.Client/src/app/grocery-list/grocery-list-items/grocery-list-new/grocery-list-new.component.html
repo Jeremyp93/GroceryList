@@ -64,7 +64,7 @@
       ingredientControl.value.id) {
       <div class="ingredient-section" [formGroupName]="$index">
         <div class="ingredient-amount">
-          <input type="number" formControlName="amount" placeholder="1" />
+          <input type="number" formControlName="amount" placeholder="1" (keydown.enter)="onEnterPressed($event)" />
           @if(ingredientControl.get("amount")?.invalid &&
           ingredientControl.get("amount")?.touched) {
           <span class="error">Amount is required</span>

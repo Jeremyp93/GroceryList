@@ -11,6 +11,7 @@ import { ROUTES_PARAM } from './constants';
 import { authGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { canDeactivateFormComponent } from './guards/pending-changes-guard.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: ROUTES_PARAM.GROCERY_LIST, pathMatch: 'full' },
@@ -18,8 +19,8 @@ export const routes: Routes = [
         path: ROUTES_PARAM.GROCERY_LIST, component: GroceryListComponent, canActivate: [authGuard], canActivateChild: [authGuard], title: 'Grocery List - Lists', children: [
             { path: '', component: GroceryListItemsComponent, pathMatch: 'full' },
             { path: ROUTES_PARAM.NEW, component: GroceryListNewComponent, title: 'Grocery List - Create' },
-            { path: `:${ROUTES_PARAM.ID_PARAMETER}`, component: GroceryListDetailsComponent, canActivate: [validIdGuard], title: 'Grocery List - List' },
-            { path: `:${ROUTES_PARAM.ID_PARAMETER}/${ROUTES_PARAM.EDIT}`, component: GroceryListNewComponent, canActivate: [validIdGuard], title: 'Grocery List - Edit' },
+            { path: `:${ROUTES_PARAM.ID_PARAMETER}`, component: GroceryListDetailsComponent, canActivate: [validIdGuard], title: 'Grocery List - List', canDeactivate: [canDeactivateFormComponent] },
+            { path: `:${ROUTES_PARAM.ID_PARAMETER}/${ROUTES_PARAM.EDIT}`, component: GroceryListNewComponent, canActivate: [validIdGuard], title: 'Grocery List - Edit', },
         ]
     },
     {
