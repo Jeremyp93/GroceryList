@@ -1,7 +1,6 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 
@@ -14,7 +13,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { authInterceptor } from './auth/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideAnimations(), provideHttpClient(withInterceptors([authInterceptor])), importProvidersFrom(NgxsModule.forRoot([GroceryListState, IngredientState, AuthState]), NgxsReduxDevtoolsPluginModule.forRoot(), NgxsStoragePluginModule.forRoot({ key: AuthState }), JwtModule.forRoot({
+  providers: [provideRouter(routes), provideAnimations(), provideHttpClient(withInterceptors([authInterceptor])), importProvidersFrom(NgxsModule.forRoot([GroceryListState, IngredientState, AuthState]), NgxsStoragePluginModule.forRoot({ key: AuthState }), JwtModule.forRoot({
     config: {
       tokenGetter: undefined
     },
