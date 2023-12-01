@@ -30,10 +30,10 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddHttpsRedirection(options =>
+/* builder.Services.AddHttpsRedirection(options =>
 {
     options.HttpsPort = 443; // Set the HTTPS port
-});
+}); */
 
 var app = builder.Build();
 
@@ -49,7 +49,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAnyOrigin");
 
-app.UseHttpsRedirection();
+/* app.UseHttpsRedirection(); */
 
 app.UseAuthentication();
 
