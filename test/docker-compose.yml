@@ -78,6 +78,6 @@ services:
       - "traefik.http.services.api.loadbalancer.server.port=80"
     networks:
       - internal
-      - traefik_web
+      - traefik
     depends_on:
       - api
