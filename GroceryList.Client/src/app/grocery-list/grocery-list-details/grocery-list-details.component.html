@@ -1,6 +1,5 @@
 <div class="header">
   <app-header title="Items" [backButton]="true"></app-header>
-  @if(!error) {
   <h3>{{ title }}</h3>
   <div class="menu">
     <app-button (click)="newIngredient()">
@@ -52,9 +51,8 @@
       />
     </app-button>
   </div>
-  }
 </div>
-@if(!error) { @if (isLoading) {
+@if (isLoading) {
 <div class="flex-center mt-20">
   <app-loading
     [color]="loadingColors.app"
@@ -77,7 +75,6 @@
   </li>
   }
 </ul>
-}
 
 <app-modal [isOpen]="modalOpen" (closeModalEvent)="modalOpen = false"
   ><div class="content-modal">
