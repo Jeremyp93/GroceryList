@@ -22,8 +22,6 @@ import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
 import { LinkMapsStorePipe } from './link-maps-store.pipe';
 import { ButtonHover } from '../../shared/button/button-hover.enum';
-import { AlertService } from '../../shared/alert/alert.service';
-import { Alert, AlertType } from '../../shared/alert/alert.model';
 
 @Component({
   selector: 'app-grocery-list-items',
@@ -52,7 +50,6 @@ export class GroceryListItemsComponent implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   ngStore = inject(Store);
-  alertService = inject(AlertService);
   @Select(GroceryListState.getGroceryLists) groceryLists$!: Observable<GroceryList[]>;
   modalOpen: boolean = false;
   duplicateForm!: FormGroup;
@@ -140,7 +137,7 @@ export class GroceryListItemsComponent implements OnInit {
     this.errorMessage = null;
     this.modalError = false;
     this.duplicateFormSubmitted = true;
-    //if (this.duplicateForm.invalid) return;
+    if (this.duplicateForm.invalid) return;
     if (!this.#selectedList) return;
     this.isLoading = true;
     const name = this.duplicateForm.get(GROCERY_LIST_FORM.NAME)?.value;
@@ -151,7 +148,7 @@ export class GroceryListItemsComponent implements OnInit {
         this.ngStore.dispatch(new SetSelectedGroceryList(null));
         this.duplicateFormSubmitted = this.isLoading = this.modalOpen = false;
       },
-      error: (error: Error) => {
+      error: () => {
         this.duplicateFormSubmitted = this.isLoading = false;
       }
     });
