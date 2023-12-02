@@ -54,7 +54,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors("AllowAnyOrigin");
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowAnyOrigin");
+}
+else
+{
+    app.UseCors("AllowScotexTech");
+}
 
 /* app.UseHttpsRedirection(); */
 

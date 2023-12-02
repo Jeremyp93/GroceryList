@@ -85,6 +85,15 @@ public static class ServiceCollectionExtensions
                     .AllowAnyMethod());
         });
 
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowScotexTech",
+                builder => builder
+                    .WithOrigins("https://grocery-list123.scotex.tech")
+                    .AllowAnyHeader()
+                    .WithMethods("GET", "POST", "PUT", "DELETE"));
+        });
+
         return services;
     }
 
