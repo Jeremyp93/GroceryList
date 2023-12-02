@@ -42,7 +42,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureMongoDb(this IServiceCollection services)
+    public static IServiceCollection ConfigureMongoDb(this IServiceCollection services, ILogger logger)
     {
         var pack = new ConventionPack
         {
@@ -56,6 +56,7 @@ public static class ServiceCollectionExtensions
             IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
             var mongoDbSettings = configuration.GetSection("MongoDb");
             var connectionString = string.Format(configuration.GetConnectionString("MongoDBConnection") ?? "", mongoDbSettings.GetValue<string>("Username"), mongoDbSettings.GetValue<string>("Password"));
+            logger.LogInformation(connectionString);
             MongoClient mongoClient = new MongoClient(connectionString);
             IMongoDatabase mongoDatabase = mongoClient.GetDatabase("grocery_list");
 

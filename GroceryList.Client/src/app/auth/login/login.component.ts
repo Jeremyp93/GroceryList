@@ -10,6 +10,8 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { LOGIN_FORM, ROUTES_PARAM } from '../../constants';
 import { AuthState } from '../ngxs-store/auth.state';
+import { AlertService } from '../../shared/alert/alert.service';
+import { Alert, AlertType } from '../../shared/alert/alert.model';
 
 @Component({
   selector: 'app-login',
@@ -21,11 +23,11 @@ import { AuthState } from '../ngxs-store/auth.state';
 export class LoginComponent implements OnInit {
   ngxsStore = inject(Store);
   router = inject(Router);
+  alertService = inject(AlertService);
   readonly registerRoute: string = '/' + ROUTES_PARAM.REGISTER;
   readonly loginFormUsername: string = LOGIN_FORM.USERNAME;
   readonly loginFormPassword: string = LOGIN_FORM.PASSWORD;
   loginForm!: FormGroup;
-  errorMessage: string = '';
   isLoading: boolean = false;
   isSubmitted: boolean = false;
 
@@ -38,17 +40,15 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit = () => {
-    this.errorMessage = '';
     this.isSubmitted = true;
-    this.isLoading = true;
     if (this.loginForm.invalid) return;
+    this.isLoading = true;
     this.ngxsStore.dispatch(new Login(this.loginForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
         this.router.navigate([`/${ROUTES_PARAM.GROCERY_LIST}`]);
       },
-      error: (error: Error) => {
-        this.errorMessage = error.message;
+      error: () => {
         this.isLoading = this.isSubmitted = false;
       }
     });

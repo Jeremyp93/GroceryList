@@ -1,6 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { catchError, tap, throwError } from "rxjs";
+import { tap } from "rxjs";
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { Login, Logout, Register } from "./auth.actions";
@@ -46,9 +46,6 @@ export class AuthState {
     @Action(Login)
     login(ctx: StateContext<AuthStateModel>, action: Login) {
         return this.authService.login(action.payload).pipe(
-            catchError((error: Error) => {
-                return throwError(() => new Error(`Login was not succesful. (${error.message})`));
-            }),
             tap((result: TokenResponseDto) => {
                 const tokenDecoded = this.jwtHelper.decodeToken(result.token);
                 ctx.patchState({
@@ -62,11 +59,7 @@ export class AuthState {
 
     @Action(Register)
     register(_: StateContext<AuthStateModel>, action: Register) {
-        return this.authService.register(action.payload).pipe(
-            catchError((error: Error) => {
-                return throwError(() => new Error(`Signing up was not succesful. (${error.message})`));
-            })
-        );
+        return this.authService.register(action.payload);
     }
 
     @Action(Logout)

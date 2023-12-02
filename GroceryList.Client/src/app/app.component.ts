@@ -6,11 +6,12 @@ import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
 import { Logout } from './auth/ngxs-store/auth.actions';
 import { AuthState } from './auth/ngxs-store/auth.state';
 import { Observable } from 'rxjs';
+import { AlertComponent } from './shared/alert/alert.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AlertComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

@@ -1,10 +1,5 @@
-@if(visible) {
+@if(showAlert) {
 <div class="alert">
-  <div class="message">
-    <h3>Errors:</h3>
-    <ul>
-      <li>{{ message }}</li>
-    </ul>
-  </div>
+  <b class="message">{{alert.message}}</b>
 </div>
 }

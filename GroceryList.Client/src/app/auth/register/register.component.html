@@ -2,10 +2,6 @@
 <div class="background">
   <div class="login">
     <app-header title="Sign Up"></app-header>
-    <app-alert
-      [message]="errorMessage"
-      [visible]="errorMessage !== ''"
-    ></app-alert>
     <form
       [formGroup]="signupForm"
       (ngSubmit)="onSubmit()"

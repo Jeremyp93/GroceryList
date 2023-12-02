@@ -1,6 +1,6 @@
 import { Injectable, inject } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Observable, catchError, throwError } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 import { Login as LoginType } from "./types/login.type";
 import { Register as RegisterType } from "./types/register.type";
@@ -13,20 +13,10 @@ export class AuthService {
     httpClient = inject(HttpClient);
 
     login = (login: LoginType): Observable<TokenResponseDto> => {
-        return this.httpClient.post<TokenResponseDto>(`${environment.userApiUrl}/${ROUTES_PARAM.LOGIN}`, { email: login.username, password: login.password }).pipe(catchError(this.#handleError));
+        return this.httpClient.post<TokenResponseDto>(`${environment.userApiUrl}/${ROUTES_PARAM.LOGIN}`, { email: login.username, password: login.password });
     }
 
     register = (registerModel: RegisterType): Observable<void> => {
-        return this.httpClient.post<void>(`${environment.userApiUrl}`, registerModel).pipe(catchError(this.#handleError));
-    }
-
-    #handleError = (errorResponse: HttpErrorResponse) => {
-        let errorMessage = 'An unknown error occured.';
-        if (!Array.isArray(errorResponse.error)) {
-            return throwError(() => new Error(errorMessage));
-        }
-
-        errorMessage = errorResponse.error[0];
-        return throwError(() => new Error(errorMessage));
+        return this.httpClient.post<void>(`${environment.userApiUrl}`, registerModel);
     }
 }

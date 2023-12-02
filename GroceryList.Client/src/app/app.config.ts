@@ -11,9 +11,10 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthState } from './auth/ngxs-store/auth.state';
 import { JwtModule } from '@auth0/angular-jwt';
 import { authInterceptor } from './auth/auth.interceptor';
+import { errorInterceptor } from './interceptors/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideAnimations(), provideHttpClient(withInterceptors([authInterceptor])), importProvidersFrom(NgxsModule.forRoot([GroceryListState, IngredientState, AuthState]), NgxsStoragePluginModule.forRoot({ key: AuthState }), JwtModule.forRoot({
+  providers: [provideRouter(routes), provideAnimations(), provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])), importProvidersFrom(NgxsModule.forRoot([GroceryListState, IngredientState, AuthState]), NgxsStoragePluginModule.forRoot({ key: AuthState }), JwtModule.forRoot({
     config: {
       tokenGetter: undefined
     },

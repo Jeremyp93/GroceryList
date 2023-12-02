@@ -12,12 +12,19 @@ builder.Logging
 
 builder.Services.AddControllersWithViews();
 
+using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+    .SetMinimumLevel(LogLevel.Trace)
+    .AddConsole());
+
+ILogger logger = loggerFactory.CreateLogger<Program>();
+logger.LogInformation("Example log message");
+
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureMediatR();
 builder.Services.ConfigureHelpers();
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureCors();
-builder.Services.ConfigureMongoDb();
+builder.Services.ConfigureMongoDb(logger);
 builder.Services.SetupAuthentication();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

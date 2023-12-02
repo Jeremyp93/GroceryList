@@ -1,5 +1,9 @@
-import { Component, Input, inject, Signal, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+
+import { Alert, AlertType } from './alert.model';
+import { AlertService } from './alert.service';
 
 
 @Component({
@@ -9,7 +13,27 @@ import { CommonModule } from '@angular/common';
   templateUrl: './alert.component.html',
   styleUrl: './alert.component.scss'
 })
-export class AlertComponent {
-  @Input() visible: boolean = false;
-  @Input() message: string = '';
+export class AlertComponent implements OnInit, OnDestroy {
+  alertService = inject(AlertService);
+  cd= inject(ChangeDetectorRef)
+  alert!: Alert;
+  showAlert: boolean = false;
+  alertServiceSubscription!: Subscription;
+
+  ngOnInit(): void {
+    this.alertServiceSubscription = this.alertService.alert$.subscribe(alert => {
+      this.alert = alert;
+      if (alert.type !== AlertType.NoAlert) {
+        this.showAlert = true;
+        console.log(this.showAlert);
+        setTimeout(() => {this.showAlert = false; this.cd.detectChanges();}, 5000)
+        return;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.alertServiceSubscription.unsubscribe();
+  }
+  
 }

@@ -1,13 +1,11 @@
 import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
-import { catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { inject } from '@angular/core';
 
 import { GroceryList } from '../types/grocery-list.type';
 import { GroceryListService } from '../grocery-list.service';
 import { AddGroceryList, DeleteGroceryList, GetGroceryLists, GetSelectedGroceryList, SetSelectedGroceryList, UpdateGroceryList } from './grocery-list.actions';
-import { Ingredient } from '../types/ingredient.type';
 import { SetIngredients, SetSections } from './ingredient.actions';
-import { Observable, throwError } from 'rxjs';
 import { IngredientState } from './ingredient.state';
 
 export interface GroceryListStateModel {
@@ -46,9 +44,6 @@ export class GroceryListState {
     @Action(GetGroceryLists)
     getGroceryLists({ getState, setState }: StateContext<GroceryListStateModel>) {
         return this.groceryListService.getAllGroceryLists().pipe(
-            catchError((error: Error) => {
-                return throwError(() => new Error(`Gorcery Lists could not been retrieved. (${error.message})`));
-            }),
             tap((result) => {
                 const state = getState();
                 setState({
@@ -67,9 +62,6 @@ export class GroceryListState {
             list = { id: '', name: payload.name, storeId: payload.store?.id ?? '', ingredients: payload.ingredients };
         }
         return this.groceryListService.addGroceryList(list).pipe(
-            catchError((error: Error) => {
-                return throwError(() => new Error(`Gorcery List could not been added. (${error.message})`));
-            }),
             tap((result) => {
                 const state = getState();
                 patchState({
@@ -87,9 +79,6 @@ export class GroceryListState {
             list = { id: id, name: payload.name, storeId: payload.store?.id ?? '', ingredients: payload.ingredients };
         }
         return this.groceryListService.updateGroceryList(id, list).pipe(
-            catchError((error: Error) => {
-                return throwError(() => new Error(`Gorcery List could not been updated. (${error.message})`));
-            }),
             tap((result) => {
                 const state = getState();
                 const groceryLists = [...state.groceryLists];
@@ -107,9 +96,6 @@ export class GroceryListState {
     @Action(DeleteGroceryList)
     deleteGroceryList({ getState, setState }: StateContext<GroceryListStateModel>, { id }: DeleteGroceryList) {
         return this.groceryListService.deleteGroceryList(id).pipe(
-            catchError((error: Error) => {
-                return throwError(() => new Error(`Gorcery List could not been deleted. (${error.message})`));
-            }),
             tap(() => {
                 const state = getState();
                 const filteredArray = state.groceryLists.filter(item => item.id !== id);
@@ -135,9 +121,6 @@ export class GroceryListState {
     @Action(GetSelectedGroceryList)
     getSelectedGroceryList({ getState, setState, dispatch }: StateContext<GroceryListStateModel>, { id }: GetSelectedGroceryList) {
         return this.groceryListService.getGroceryList(id).pipe(
-            catchError((error: Error) => {
-                return throwError(() => new Error(`Gorcery List could not been retrieved. (${error.message})`));
-            }),
             tap((result) => {
                 const state = getState();
                 setState({

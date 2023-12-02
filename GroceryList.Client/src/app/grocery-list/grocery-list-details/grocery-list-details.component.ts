@@ -102,10 +102,8 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
       this.id = params[ROUTES_PARAM.ID_PARAMETER];
       try {
         await lastValueFrom(this.ngStore.dispatch(new GetSelectedGroceryList(this.id)));
-      } catch (error: any) {
+      } catch {
         this.isLoading = false;
-        this.errorMessage = error.message;
-        this.error = true;
         return;
       }
       const selectedGroceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
@@ -187,7 +185,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
           this.saved = false;
         }, 1000);
       },
-      error: (error: Error) => {
+      error: () => {
         this.saveProcess = false;
       }
     });

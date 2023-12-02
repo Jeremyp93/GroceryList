@@ -8,18 +8,29 @@ services:
     env_file:
       - mongo.env
     ports:
-      - 27018:27017
+      - 27017:27017
     volumes:
       - ./database/db:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
-  mongo-express:
+  mongo-express-dev:
     container_name: mongo-express-dev
     image: mongo-express
     restart: unless-stopped
     ports:
-      - 8082:8081
+      - 8081:8081
     env_file:
       - mongo-express.env
     depends_on:
       - mongodb-dev
+
+  #api-dev:
+  #  container_name: api
+  #  build:
+  #    context: ../server
+  #  env_file:
+  #    - api.env
+  #  ports:
+  #    - 5058:8800
+  #  depends_on:
+  #    - mongodb-dev

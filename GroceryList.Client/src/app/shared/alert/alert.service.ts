@@ -1,18 +1,22 @@
-import { Injectable, signal, computed } from "@angular/core";
-import { AlertMessage } from "./alert.type";
-import { AlertType } from "./alert.enum";
-import { BehaviorSubject } from "rxjs";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+import { Alert, AlertType } from "./alert.model";
 
-@Injectable({ providedIn: 'root' })
-export class AlertService {
-    #alertMessages = new BehaviorSubject<AlertMessage[]>([]);
-    alertMessages$ = this.#alertMessages.asObservable();
-
-    sendMessage(type: AlertType, message: string): void {
-        this.#alertMessages.next([...this.#alertMessages.getValue(), { type, message }]);
+@Injectable({
+    providedIn: 'root'
+  })
+  export class AlertService {
+    private alertSubject: BehaviorSubject<Alert>;
+    get alert$(): Observable<Alert> {
+        return this.alertSubject.asObservable();
     }
-
-    clearMessages(): void {
-        this.#alertMessages.next([]);
+  
+    constructor() {
+        const initialAlert: Alert = new Alert(AlertType.NoAlert);
+        this.alertSubject = new BehaviorSubject<Alert>(initialAlert);
+    }
+  
+    setAlertObs(alert: Alert) {
+        this.alertSubject.next(alert);
     }
 }

@@ -50,8 +50,7 @@ export class RegisterComponent implements OnInit {
         this.isLoading = this.isSubmitted = false;
         this.router.navigate([`/${ROUTES_PARAM.LOGIN}`]);
       },
-      error: (error: Error) => {
-        this.errorMessage = error.message;
+      error: () => {
         this.isLoading = this.isSubmitted = false;
       }
     });
