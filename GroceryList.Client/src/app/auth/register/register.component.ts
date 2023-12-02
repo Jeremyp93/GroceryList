@@ -4,8 +4,7 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validator
 import { Store } from '@ngxs/store';
 import { Router, RouterModule } from '@angular/router';
 
-import { Login, Logout, Register } from '../ngxs-store/auth.actions';
-import { AlertComponent } from '../../shared/alert/alert.component';
+import { Logout, Register } from '../ngxs-store/auth.actions';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { SIGNUP_FORM, ROUTES_PARAM } from '../../constants';
@@ -14,7 +13,7 @@ import { AuthState } from '../ngxs-store/auth.state';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AlertComponent, HeaderComponent, ButtonComponent, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, ButtonComponent, RouterModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -28,7 +27,6 @@ export class RegisterComponent implements OnInit {
   readonly signupFormPassword: string = SIGNUP_FORM.PASSWORD;
   readonly signupFormConfirmPassword: string = SIGNUP_FORM.CONFIRM_PASSWORD;
   signupForm!: FormGroup;
-  errorMessage: string = '';
   isLoading: boolean = false;
   isSubmitted: boolean = false;
 
@@ -41,7 +39,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit = () => {
-    this.errorMessage = '';
     this.isSubmitted = true;
     this.isLoading = true;
     if (this.signupForm.invalid) return;

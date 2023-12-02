@@ -89,7 +89,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     }));
     setTimeout(() => {
       this.#focusOnControl(0);
-    }, 50);
+    }, 100);
   }
 
   onDeleteIngredient = (id: string) => {

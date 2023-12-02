@@ -1,11 +1,12 @@
 import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { ROUTES_PARAM } from './constants';
 import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
-import { Logout } from './auth/ngxs-store/auth.actions';
-import { AuthState } from './auth/ngxs-store/auth.state';
 import { Observable } from 'rxjs';
+
+import { ROUTES_PARAM } from './constants';
+import { AuthState } from './auth/ngxs-store/auth.state';
+import { Logout } from './auth/ngxs-store/auth.actions';
 import { AlertComponent } from './shared/alert/alert.component';
 
 @Component({
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit {
     const currentHeight = window.innerHeight;
     const heightDifference = Math.abs(currentHeight - this.previousHeight);
 
-    const threshold = 100;
+    const threshold = 300;
 
     if (heightDifference > threshold) {
       if (currentHeight < this.previousHeight) {

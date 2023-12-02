@@ -46,6 +46,7 @@
     width: 50%;
     height: 66px;
     background-color: white;
+    z-index: 1;
 
     @media screen and (max-width: 991px) {
         width: 100%;

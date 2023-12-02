@@ -15,7 +15,6 @@ import { Select, Store } from '@ngxs/store';
 import { GroceryListState } from '../ngxs-store/grocery-list.state';
 import { AddGroceryList, DeleteGroceryList, GetGroceryLists, SetSelectedGroceryList } from '../ngxs-store/grocery-list.actions';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
-import { AlertComponent } from '../../shared/alert/alert.component';
 import { GROCERY_LIST_FORM, ROUTES_PARAM } from '../../constants';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
@@ -26,7 +25,7 @@ import { ButtonHover } from '../../shared/button/button-hover.enum';
 @Component({
   selector: 'app-grocery-list-items',
   standalone: true,
-  imports: [CommonModule, AnchorButtonComponent, RouterModule, ButtonComponent, HeaderComponent, ModalComponent, ReactiveFormsModule, AlertComponent, LetDirective, LoadingComponent, LinkMapsStorePipe],
+  imports: [CommonModule, AnchorButtonComponent, RouterModule, ButtonComponent, HeaderComponent, ModalComponent, ReactiveFormsModule, LetDirective, LoadingComponent, LinkMapsStorePipe],
   templateUrl: './grocery-list-items.component.html',
   styleUrl: './grocery-list-items.component.scss',
   animations: [
@@ -56,9 +55,6 @@ export class GroceryListItemsComponent implements OnInit {
   duplicateFormSubmitted = false;
   isLoading: boolean = false;
   #selectedList: GroceryList | null = null;
-  modalError: boolean = false;
-  error: boolean = false;
-  errorMessage: string | null = null;
 
   get buttonStyles(): typeof ButtonStyle {
     return ButtonStyle;
@@ -134,8 +130,6 @@ export class GroceryListItemsComponent implements OnInit {
   }
 
   onSubmitDuplicateForm = async () => {
-    this.errorMessage = null;
-    this.modalError = false;
     this.duplicateFormSubmitted = true;
     if (this.duplicateForm.invalid) return;
     if (!this.#selectedList) return;

@@ -1,7 +1,8 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { tap } from 'rxjs';
-import { AlertService } from '../shared/alert/alert.service';
 import { inject } from '@angular/core';
+
+import { AlertService } from '../shared/alert/alert.service';
 import { Alert, AlertType } from '../shared/alert/alert.model';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {

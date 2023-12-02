@@ -25,13 +25,12 @@ import { ButtonStyle } from '../../shared/button/button-style.enum';
 import { ROUTES_PARAM, GROCERY_LIST_FORM } from '../../constants';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
-import { AlertComponent } from '../../shared/alert/alert.component';
 import { ComponentCanDeactivate } from '../../guards/pending-changes-guard.service';
 
 @Component({
   selector: 'app-grocery-list-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, TileIngredientComponent, HeaderComponent, ButtonComponent, LoadingComponent, ReactiveFormsModule, ModalComponent, LoadingComponent, AlertComponent],
+  imports: [CommonModule, RouterModule, TileIngredientComponent, HeaderComponent, ButtonComponent, LoadingComponent, ReactiveFormsModule, ModalComponent, LoadingComponent],
   templateUrl: './grocery-list-details.component.html',
   styleUrl: './grocery-list-details.component.scss',
   animations: [
@@ -54,7 +53,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   stores$!: Observable<Store[]>;
   id = '';
   sections: Section[] = [];
-  error: boolean = false;
   title: string = 'Ingredients to buy';
   saved: boolean = false;
   isLoading: boolean = false;
@@ -65,7 +63,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   exportFormSubmitted: boolean = false;
   storeId: string | undefined;
   saveProcess: boolean = false;
-  errorMessage: string = '';
   #routeSubscription: Subscription | null = null;
   #pendingChanges: boolean = false;
 
@@ -85,8 +82,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   }
 
   ngOnInit(): void {
-    this.error = false;
-    this.errorMessage = '';
     this.isLoading = true;
     const selectedGroceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
     if (selectedGroceryList) {

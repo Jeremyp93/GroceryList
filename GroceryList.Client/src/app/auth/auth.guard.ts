@@ -1,5 +1,5 @@
 import { inject } from "@angular/core";
-import { CanActivateFn, Router } from "@angular/router";
+import { CanActivateFn } from "@angular/router";
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { Store } from "@ngxs/store";
