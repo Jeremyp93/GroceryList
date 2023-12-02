@@ -89,7 +89,7 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("AllowScotexTech",
                 builder => builder
-                    .WithOrigins("https://grocery-list123.scotex.tech")
+                    .WithOrigins("https://grocery-list.scotex.tech")
                     .AllowAnyHeader()
                     .WithMethods("GET", "POST", "PUT", "DELETE"));
         });
