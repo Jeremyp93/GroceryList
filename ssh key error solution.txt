@@ -8,3 +8,7 @@ docker compose rm <name>
 docker network prune
 docker ps
 docker logs -f <name>
+
+traefik acme file
+touch acme.json
+chmod 600 acme.json
