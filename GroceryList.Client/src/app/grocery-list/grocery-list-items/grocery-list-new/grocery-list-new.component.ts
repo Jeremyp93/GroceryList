@@ -73,7 +73,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       if (this.idToEdit) {
         this.editMode = true;
       }
-      this.title = `${this.editMode ? 'Edit' : 'Add'} Grocery List`;
+      this.title = `${this.editMode ? 'Edit' : 'Add'} Grocery List 456`;
       await this.#initForm();
       this.stores$ = this.storeService.getAllStores();
     });
