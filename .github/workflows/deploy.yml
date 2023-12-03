@@ -10,18 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.0
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          
-      - name: Connect to VPS and pull code
-        run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP_ADDRESS }} 'cd ../shared/src/GroceryList && git pull origin master'
-
-      - name: Docker Compose up
-        run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP_ADDRESS }} 'cd ../shared/src/GroceryList/deploy && docker compose up -d --build'
+          host: ${{ secrets.VPS_IP_ADDRESS }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ../shared/src/GroceryList && git pull origin main
+            docker compose up -d --build
