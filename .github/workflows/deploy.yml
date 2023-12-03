@@ -14,9 +14,9 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP_ADDRESS }}
+          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          port: 22
           script: |
-            cd ../shared/src/GroceryList && git pull origin main
+            cd src/GroceryList && git pull origin main
             docker compose up -d --build
