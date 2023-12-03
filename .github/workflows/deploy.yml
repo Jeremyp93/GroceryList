@@ -1,0 +1,28 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          
+      - name: Connect to VPS and pull code
+        run: |
+          ssh deploy_user@178.16.141.131 'cd ../shared/src/GroceryList && git pull origin master'
+
+      - name: Docker Compose up
+        run: |
+          ssh deploy_user@178.16.141.131 'cd ../shared/src/GroceryList/deploy && docker compose up -d --build'

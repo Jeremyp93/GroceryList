@@ -8,8 +8,6 @@ on:
 jobs:
   build-dotnet-api:
     runs-on: ubuntu-latest
-    outputs:
-      success: ${{ steps.check-dotnet-api.outputs.success }}
     
     steps:
       - name: Checkout code
@@ -29,8 +27,6 @@ jobs:
 
   build-angular-app:
     runs-on: ubuntu-latest
-    outputs:
-      success: ${{ steps.check-angular-app.outputs.success }}
     
     steps:
       - name: Checkout code
