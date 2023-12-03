@@ -20,3 +20,4 @@ jobs:
           script: |
             cd src/GroceryList && git pull origin main
             cd deploy && docker compose up -d --build
+
