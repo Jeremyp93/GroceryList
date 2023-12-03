@@ -21,8 +21,8 @@ jobs:
           
       - name: Connect to VPS and pull code
         run: |
-          ssh deploy_user@178.16.141.131 'cd ../shared/src/GroceryList && git pull origin master'
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP_ADDRESS }} 'cd ../shared/src/GroceryList && git pull origin master'
 
       - name: Docker Compose up
         run: |
-          ssh deploy_user@178.16.141.131 'cd ../shared/src/GroceryList/deploy && docker compose up -d --build'
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP_ADDRESS }} 'cd ../shared/src/GroceryList/deploy && docker compose up -d --build'
