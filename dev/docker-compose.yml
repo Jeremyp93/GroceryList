@@ -12,6 +12,8 @@ services:
     volumes:
       - ./database/db:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - grocery-list
 
   mongo-express-dev:
     container_name: mongo-express-dev
@@ -23,14 +25,22 @@ services:
       - mongo-express.env
     depends_on:
       - mongodb-dev
+    networks:
+      - grocery-list
 
-  #api-dev:
-  #  container_name: api
-  #  build:
-  #    context: ../server
-  #  env_file:
-  #    - api.env
-  #  ports:
-  #    - 5058:8800
-  #  depends_on:
-  #    - mongodb-dev
+  api-dev:
+    container_name: api-dev
+    build:
+      context: ../server
+    env_file:
+      - api.env
+    ports:
+      - 5058:8800
+    depends_on:
+      - mongodb-dev
+    networks:
+      - grocery-list
+
+networks:
+  grocery-list:
+    driver: bridge
