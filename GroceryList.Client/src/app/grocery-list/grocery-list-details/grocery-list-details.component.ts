@@ -13,7 +13,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { TileAddIngredientComponent } from './tile-add-ingredient/tile-add-ingredient.component';
 import { ModalComponent } from '../../shared/modal/modal.component';
-import { StoreService } from '../../store/store.service';
 import { Ingredient } from '../types/ingredient.type';
 import { Store } from '../../store/types/store.type';
 import { Section } from '../../store/types/section.type';
@@ -26,6 +25,8 @@ import { ROUTES_PARAM, GROCERY_LIST_FORM } from '../../constants';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
 import { ComponentCanDeactivate } from '../../guards/pending-changes-guard.service';
+import { GetStores } from '../../store/ngxs-store/store.actions';
+import { StoreState } from '../../store/ngxs-store/store.state';
 
 @Component({
   selector: 'app-grocery-list-details',
@@ -45,12 +46,11 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   route = inject(ActivatedRoute);
   router = inject(Router);
-  storeService = inject(StoreService);
   groceryListService = inject(GroceryListService);
   ngStore = inject(NgxsStore);
   @Select(IngredientState.getIngredients) ingredients$!: Observable<Ingredient[]>;
   @Select(IngredientState.getSections) sections$!: Observable<Section[]>;
-  stores$!: Observable<Store[]>;
+  @Select(StoreState.getStores) stores$!: Observable<Store[]>;
   id = '';
   sections: Section[] = [];
   title: string = 'Ingredients to buy';
@@ -188,8 +188,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
 
   exportToNewList = async (event: Event) => {
     event.stopPropagation();
-    this.stores$ = this.storeService.getAllStores();
-    this.modalOpen = true;
+    this.ngStore.dispatch(new GetStores()).subscribe(() => {this.modalOpen = true});
   }
 
   onSubmitExportForm = async () => {

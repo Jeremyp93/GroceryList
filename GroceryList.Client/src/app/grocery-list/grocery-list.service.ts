@@ -3,7 +3,6 @@ import { Injectable, inject } from "@angular/core";
 import { Observable, map } from "rxjs";
 import { NIL as NIL_UUID } from 'uuid';
 
-import { StoreService } from "../store/store.service";
 import { GroceryListRequestDto, GroceryListResponseDto } from "./dtos/grocery-list-dto.type";
 import { GroceryList } from "./types/grocery-list.type";
 import { IngredientDto } from "./dtos/ingredient-dto.type";
@@ -13,7 +12,6 @@ import { environment } from "../../../src/environments/environment";
 @Injectable({ providedIn: 'root' })
 export class GroceryListService {
     httpClient = inject(HttpClient);
-    storeService = inject(StoreService);
 
     getAllGroceryLists = (): Observable<GroceryList[]> => {
         return this.httpClient.get<GroceryListResponseDto[]>(environment.groceryListApiUrl)
