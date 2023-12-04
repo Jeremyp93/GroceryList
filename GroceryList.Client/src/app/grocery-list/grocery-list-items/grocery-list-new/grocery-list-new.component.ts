@@ -4,7 +4,7 @@ import { Observable, Subscription, lastValueFrom } from 'rxjs';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { v4 as UUID } from 'uuid';
-import { Store as NgxsStore } from '@ngxs/store';
+import { Store as NgxsStore, Select } from '@ngxs/store';
 
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { StoreService } from '../../../store/store.service';
@@ -21,6 +21,8 @@ import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { LoadingSize } from '../../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../../shared/loading/loading-color.enum';
 import { ButtonHover } from '../../../shared/button/button-hover.enum';
+import { GetStores } from '../../../store/ngxs-store/store.actions';
+import { StoreState } from '../../../store/ngxs-store/store.state';
 
 @Component({
   selector: 'app-grocery-list-new',
@@ -35,7 +37,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   router = inject(Router);
   route = inject(ActivatedRoute);
   ngStore = inject(NgxsStore);
-  stores$!: Observable<Store[]>;
+  @Select(StoreState.getStores) stores$!: Observable<Store[]>;
   groceryListForm!: FormGroup;
   categories: string[] = [];
   editMode: boolean = false;
@@ -73,9 +75,9 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       if (this.idToEdit) {
         this.editMode = true;
       }
-      this.title = `${this.editMode ? 'Edit' : 'Add'} Grocery List 456`;
+      this.title = `${this.editMode ? 'Edit' : 'Add'} Grocery List`;
+      this.ngStore.dispatch(new GetStores());
       await this.#initForm();
-      this.stores$ = this.storeService.getAllStores();
     });
   }
 
