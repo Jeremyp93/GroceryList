@@ -2,13 +2,20 @@ export const GOOGLE_MAPS_QUERY: string = 'https://www.google.com/maps?q=';
 export const GEO_MOBILE_QUERY: string = 'geo:0,0?q=';
 
 export const ROUTES_PARAM = {
+    GROCERY_LIST: {
+        GROCERY_LIST: 'grocery-lists',
+        EDIT: 'edit',
+        NEW: 'new',
+    },
+    STORE: {
+        STORE: 'stores',
+        NEW: 'new',
+    },
+    AUTHENTICATION: {
+        LOGIN: 'login',
+        REGISTER: 'register'
+    },
     ID_PARAMETER: 'id',
-    GROCERY_LIST: 'grocery-lists',
-    STORE: 'stores',
-    EDIT: 'edit',
-    NEW: 'new',
-    LOGIN: 'login',
-    REGISTER: 'register'
 }
 
 export const INGREDIENT_FORM = {
@@ -35,4 +42,15 @@ export const SIGNUP_FORM = {
     EMAIL: 'email',
     PASSWORD: 'password',
     CONFIRM_PASSWORD: 'confirmPassword'
+};
+
+export const STORE_FORM = {
+    NAME: 'name',
+    SECTIONS: 'sections'
+};
+
+export const SECTION_FORM = {
+    ID: 'id',
+    PRIORITY: 'priority',
+    NAME: 'name'
 };

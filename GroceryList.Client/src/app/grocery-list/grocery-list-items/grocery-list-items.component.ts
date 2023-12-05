@@ -21,6 +21,7 @@ import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
 import { LinkMapsStorePipe } from './link-maps-store.pipe';
 import { ButtonHover } from '../../shared/button/button-hover.enum';
+import { displayDateAsHuman } from '../../helpers/date.helper';
 
 @Component({
   selector: 'app-grocery-list-items',
@@ -82,26 +83,20 @@ export class GroceryListItemsComponent implements OnInit {
   }
 
   displayCreatedAt = (createdAt: Date): string => {
-    const date = new Date(createdAt);
-
-    if (isNaN(date.getTime())) {
-      return "Invalid Date";
-    }
-
-    return date.toLocaleDateString();
+    return displayDateAsHuman(createdAt);
   }
 
   selectList = (list: GroceryList) => {
-    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.router.navigate([ROUTES_PARAM.GROCERY_LIST, list.id]));
+    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, list.id]));
   }
 
   newList = () => {
-    this.router.navigate([ROUTES_PARAM.GROCERY_LIST, ROUTES_PARAM.NEW]);
+    this.router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, ROUTES_PARAM.GROCERY_LIST.NEW]);
   }
 
   editList = (event: Event, list: GroceryList) => {
     this.preventPropagation(event);
-    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.router.navigate([ROUTES_PARAM.GROCERY_LIST, list.id, ROUTES_PARAM.EDIT]));
+    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, list.id, ROUTES_PARAM.GROCERY_LIST.EDIT]));
   }
 
   showDeleteList = (event: Event, list: GroceryList) => {

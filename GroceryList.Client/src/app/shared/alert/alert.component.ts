@@ -25,7 +25,6 @@ export class AlertComponent implements OnInit, OnDestroy {
       this.alert = alert;
       if (alert.type !== AlertType.NoAlert) {
         this.showAlert = true;
-        console.log(this.showAlert);
         setTimeout(() => {this.showAlert = false; this.cd.detectChanges();}, 5000)
         return;
       }

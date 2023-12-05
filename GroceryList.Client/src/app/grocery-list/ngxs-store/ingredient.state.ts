@@ -9,31 +9,26 @@ import { GroceryListService } from '../grocery-list.service';
 import { Section } from '../../store/types/section.type';
 import { GroceryListState } from './grocery-list.state';
 import { SetSelectedGroceryList } from './grocery-list.actions';
+import { StoreState, StoreStateModel } from '../../store/ngxs-store/store.state';
 
 export interface IngredientStateModel {
     ingredients: Ingredient[];
-    sections: Section[]
 }
 
 @State<IngredientStateModel>({
     name: 'ingredients',
     defaults: {
-        ingredients: [],
-        sections: []
+        ingredients: []
     },
 })
 export class IngredientState {
     groceryListService = inject(GroceryListService);
     ngxsStore = inject(Store);
 
-    @Selector()
-    static getIngredients(state: IngredientStateModel) {
-        return sortIngredientsByPriority(state.ingredients, state.sections);
-    }
-
-    @Selector()
-    static getSections(state: IngredientStateModel) {
-        return state.sections;
+    @Selector([StoreState])
+    static getIngredients(state: IngredientStateModel, storeState: StoreStateModel) {
+        const sections = StoreState.getSections(storeState);
+        return sortIngredientsByPriority(state.ingredients, sections);
     }
 
     @Action(SetIngredients)
@@ -42,15 +37,6 @@ export class IngredientState {
         setState({
             ...state,
             ingredients: ingredients.map(i => ({ ...i, id: UUID() })),
-        });
-    }
-
-    @Action(SetSections)
-    setSections({ getState, setState }: StateContext<IngredientStateModel>, { sections }: SetSections) {
-        const state = getState();
-        setState({
-            ...state,
-            sections: sections,
         });
     }
 

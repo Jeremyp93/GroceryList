@@ -13,7 +13,7 @@ export class AuthService {
     httpClient = inject(HttpClient);
 
     login = (login: LoginType): Observable<TokenResponseDto> => {
-        return this.httpClient.post<TokenResponseDto>(`${environment.userApiUrl}/${ROUTES_PARAM.LOGIN}`, { email: login.username, password: login.password });
+        return this.httpClient.post<TokenResponseDto>(`${environment.userApiUrl}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`, { email: login.username, password: login.password });
     }
 
     register = (registerModel: RegisterType): Observable<void> => {

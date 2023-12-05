@@ -23,8 +23,8 @@ export class AppComponent implements OnInit {
   @Select(AuthState.getName) name$!: Observable<string>;
   isKeyboardOpen = false;
   previousHeight: number = 0;
-  groceryListRoute: string = '/' + ROUTES_PARAM.GROCERY_LIST;
-  storeRoute: string = '/' + ROUTES_PARAM.STORE;
+  groceryListRoute: string = '/' + ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST;
+  storeRoute: string = '/' + ROUTES_PARAM.STORE.STORE;
   showMenu: boolean = false;
 
   @HostListener('window:resize')
@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.actions.pipe(ofActionDispatched(Logout)).subscribe(() => {
-      this.router.navigate([`/${ROUTES_PARAM.LOGIN}`]);
+      this.router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
     });
 
     this.ngxsStore.select(AuthState.isAuthenticated).subscribe(value => this.showMenu = value);

@@ -183,9 +183,9 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
 
   #setupForm = (name: string, storeId: string, ingredients: FormArray) => {
     this.groceryListForm = new FormGroup({
-      name: new FormControl(name, Validators.required),
-      storeId: new FormControl(storeId),
-      ingredients: ingredients,
+      [GROCERY_LIST_FORM.NAME]: new FormControl(name, Validators.required),
+      [GROCERY_LIST_FORM.STORE_ID]: new FormControl(storeId),
+      [GROCERY_LIST_FORM.INGREDIENTS]: ingredients,
     });
   }
 

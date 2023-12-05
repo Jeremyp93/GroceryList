@@ -20,7 +20,7 @@ import { AuthState } from '../ngxs-store/auth.state';
 export class RegisterComponent implements OnInit {
   ngxsStore = inject(Store);
   router = inject(Router);
-  readonly loginRoute: string = '/' + ROUTES_PARAM.LOGIN;
+  readonly loginRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.LOGIN;
   readonly signupFormFirstName: string = SIGNUP_FORM.FIRST_NAME;
   readonly signupFormLastName: string = SIGNUP_FORM.LAST_NAME;
   readonly signupFormEmail: string = SIGNUP_FORM.EMAIL;
@@ -45,7 +45,7 @@ export class RegisterComponent implements OnInit {
     this.ngxsStore.dispatch(new Register(this.signupForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
-        this.router.navigate([`/${ROUTES_PARAM.LOGIN}`]);
+        this.router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
       },
       error: () => {
         this.isLoading = this.isSubmitted = false;

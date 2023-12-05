@@ -7,6 +7,7 @@ import { GroceryListService } from '../grocery-list.service';
 import { AddGroceryList, DeleteGroceryList, GetGroceryLists, GetSelectedGroceryList, SetSelectedGroceryList, UpdateGroceryList } from './grocery-list.actions';
 import { SetIngredients, SetSections } from './ingredient.actions';
 import { IngredientState } from './ingredient.state';
+import { SetSelectedStore } from '../../store/ngxs-store/store.actions';
 
 export interface GroceryListStateModel {
     groceryLists: GroceryList[];
@@ -115,7 +116,7 @@ export class GroceryListState {
         });
 
         dispatch(new SetIngredients(payload?.ingredients ?? []));
-        dispatch(new SetSections(payload?.store?.sections ?? []));
+        dispatch(new SetSelectedStore(payload?.store ?? null));
     }
 
     @Action(GetSelectedGroceryList)

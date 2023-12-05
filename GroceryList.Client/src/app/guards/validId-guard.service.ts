@@ -12,7 +12,11 @@ export const validIdGuard: CanActivateFn = (route, _) => {
     const isValid = uuidValidate(id);
 
     if (!isValid) {
-        return router.createUrlTree([`/${ROUTES_PARAM.GROCERY_LIST}`]);
+        const routeContainsStore = route.url.some(segment => segment.path.includes(ROUTES_PARAM.STORE.STORE));
+        if (routeContainsStore) {
+            return router.createUrlTree([`/${ROUTES_PARAM.STORE.STORE}`]);
+        }
+        return router.createUrlTree([`/${ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST}`]);
     }
 
     return true;

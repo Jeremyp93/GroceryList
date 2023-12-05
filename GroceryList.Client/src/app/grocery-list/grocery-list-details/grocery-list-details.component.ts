@@ -49,7 +49,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   groceryListService = inject(GroceryListService);
   ngStore = inject(NgxsStore);
   @Select(IngredientState.getIngredients) ingredients$!: Observable<Ingredient[]>;
-  @Select(IngredientState.getSections) sections$!: Observable<Section[]>;
+  @Select(StoreState.getSections) sections$!: Observable<Section[]>;
   @Select(StoreState.getStores) stores$!: Observable<Store[]>;
   id = '';
   sections: Section[] = [];
