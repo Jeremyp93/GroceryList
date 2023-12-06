@@ -9,6 +9,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { SIGNUP_FORM, ROUTES_PARAM } from '../../constants';
 import { AuthState } from '../ngxs-store/auth.state';
+import { AddressAutocompleteComponent } from '../../shared/address-autocomplete/address-autocomplete.component';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,7 @@ import { AuthState } from '../ngxs-store/auth.state';
 export class RegisterComponent implements OnInit {
   ngxsStore = inject(Store);
   router = inject(Router);
-  readonly loginRoute: string = '/' + ROUTES_PARAM.LOGIN;
+  readonly loginRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.LOGIN;
   readonly signupFormFirstName: string = SIGNUP_FORM.FIRST_NAME;
   readonly signupFormLastName: string = SIGNUP_FORM.LAST_NAME;
   readonly signupFormEmail: string = SIGNUP_FORM.EMAIL;
@@ -40,12 +41,12 @@ export class RegisterComponent implements OnInit {
 
   onSubmit = () => {
     this.isSubmitted = true;
-    this.isLoading = true;
     if (this.signupForm.invalid) return;
+    this.isLoading = true;
     this.ngxsStore.dispatch(new Register(this.signupForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
-        this.router.navigate([`/${ROUTES_PARAM.LOGIN}`]);
+        this.router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
       },
       error: () => {
         this.isLoading = this.isSubmitted = false;

@@ -1,0 +1,117 @@
+<app-header [title]="title" [backButton]="true"></app-header>
+@if (storeForm) {
+<form
+  [formGroup]="storeForm"
+  (ngSubmit)="onSubmit()"
+  autocomplete="off"
+  class="form"
+>
+  <div class="submit top">
+    <app-button
+      type="submit"
+      class="button-submit"
+      [loading]="isLoading"
+      [buttonHover]="hoverChoices.invert"
+      ><img
+        src="../../../../assets/icons/icons8-check-24.png"
+        alt="submit-icon"
+        width="20"
+    /></app-button>
+  </div>
+  <div class="content">
+    <div class="group">
+      <label for="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        placeholder="Name of the list"
+        formControlName="name"
+      />
+      @if(this.storeForm.controls["name"].invalid && submitted) {
+      <span class="error">Name is required</span>
+      }
+    </div>
+    <div class="group">
+      <app-address-autocomplete (addressSelected)="addAddressToForm($event)"></app-address-autocomplete>
+      <input type="text" placeholder="Street" formControlName="street">
+      <input type="text" placeholder="Zip Code" formControlName="zipcode">
+      <input type="text" placeholder="City" formControlName="city">
+      <input type="text" placeholder="Country" formControlName="country">
+    </div>
+    <div class="group" formArrayName="sections">
+      <div class="section-title">
+        <label>Sections</label>
+        <app-button
+          type="button"
+          (click)="onAddSection()"
+          [buttonHover]="hoverChoices.invert"
+          ><img
+            src="../../../../assets/icons/icons8-plus-24.png"
+            alt="add-icon"
+            width="20"
+        /></app-button>
+      </div>
+      @if(sectionControls.length === 0) {
+      <p>No sections added yet.</p>
+      } @else { @for (sectionControl of sectionControls; track
+        sectionControl.value.id) {
+      <div class="section-container" [formGroupName]="$index">
+        <div class="priority">
+          <input class="number-naked" type="number" formControlName="priority" (keydown.enter)="onEnterPressed($event)" />
+        </div>
+        <div class="name">
+          <input
+            #inputFields
+            [id]="'name_' + sectionControl.value.id"
+            type="text"
+            formControlName="name"
+            placeholder="Name of Section"
+            (keydown.enter)="onEnterPressed($event)"
+          />
+        </div>
+        <div class="delete">
+          <app-button
+            [buttonStyle]="buttonStyles.danger"
+            (click)="onDeleteSection(sectionControl.value.id)"
+            [buttonHover]="hoverChoices.invert"
+            ><img
+              src="../../../assets/icons/icons8-delete-24.png"
+              alt="delete-icon"
+              width="20"
+            />
+          </app-button>
+        </div>
+      </div>
+      <div class="section-errors">
+        @if(sectionControl.get("priority")?.invalid &&
+        sectionControl.get("priority")?.touched) {
+        <span class="error">The priority is not set correctly</span>
+        }
+        @if(sectionControl.get("name")?.invalid && submitted) {
+          <span class="error">Name is required</span>
+          }
+      </div>
+      <hr />
+      } }
+    </div>
+  </div>
+  <div class="submit bottom">
+    <app-button
+      type="submit"
+      [loading]="isLoading"
+      [buttonHover]="hoverChoices.invert"
+      ><img
+        src="../../../../assets/icons/icons8-check-24.png"
+        alt="submit-icon"
+        width="20"
+    /></app-button>
+  </div>
+</form>
+} @else {
+<div class="flex-center mt-20">
+  <app-loading
+    [size]="loadingSizes.large"
+    [color]="loadingColors.app"
+  ></app-loading>
+</div>
+}

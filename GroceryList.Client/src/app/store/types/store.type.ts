@@ -9,4 +9,6 @@ export type Store = {
     country: string;
     zipCode: string;
     sections: Section[];
+    showDelete: boolean;
+    createdAt: Date;
 }

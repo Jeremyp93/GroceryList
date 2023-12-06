@@ -4,7 +4,8 @@ import { tap } from "rxjs";
 
 import { StoreService } from "../store.service";
 import { Store } from "../types/store.type";
-import { GetStores } from "./store.actions";
+import { DeleteStore, GetStores, SetSelectedStore } from "./store.actions";
+import { Section } from "../types/section.type";
 
 export interface StoreStateModel {
     stores: Store[];
@@ -12,7 +13,7 @@ export interface StoreStateModel {
 }
 
 @State<StoreStateModel>({
-    name: 'groceryLists',
+    name: 'stores',
     defaults: {
         stores: [],
         selectedStore: null,
@@ -31,6 +32,11 @@ export class StoreState {
         return state.selectedStore;
     }
 
+    @Selector()
+    static getSections(state: StoreStateModel): Section[] {
+        return state.selectedStore?.sections ?? [];
+    }
+
     @Action(GetStores)
     getStores({ getState, setState }: StateContext<StoreStateModel>) {
         return this.storeService.getAllStores().pipe(
@@ -42,5 +48,27 @@ export class StoreState {
                 });
             })
         );
+    }
+
+    @Action(DeleteStore)
+    deleteStore({ getState, setState }: StateContext<StoreStateModel>, { id }: DeleteStore) {
+        return this.storeService.deleteStore(id).pipe(
+            tap(() => {
+                const state = getState();
+                const filteredArray = state.stores.filter(item => item.id !== id);
+                setState({
+                    ...state,
+                    stores: filteredArray,
+                });
+            }));
+    }
+
+    @Action(SetSelectedStore)
+    setSelectedStore({ getState, setState, dispatch }: StateContext<StoreStateModel>, { payload }: SetSelectedStore) {
+        const state = getState();
+        setState({
+            ...state,
+            selectedStore: payload
+        });
     }
 }

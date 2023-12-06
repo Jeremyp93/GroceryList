@@ -26,6 +26,7 @@ builder.Services.ConfigureRepositories();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureMongoDb(logger);
 builder.Services.SetupAuthentication();
+builder.Services.ConfigureServices();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

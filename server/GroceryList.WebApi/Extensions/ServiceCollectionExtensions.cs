@@ -7,6 +7,7 @@ using GroceryList.Domain.Repositories;
 using GroceryList.Infrastructure.Authentication;
 using GroceryList.Infrastructure.DataBase;
 using GroceryList.Infrastructure.Repositories;
+using GroceryList.Infrastructure.Services;
 using GroceryList.WebApi.OptionsSetup;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MongoDB.Bson;
@@ -108,6 +109,17 @@ public static class ServiceCollectionExtensions
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();
+        return services;
+    }
+
+    public static IServiceCollection ConfigureServices(this IServiceCollection services)
+    {
+        // Add HttpClient and configure its base address
+        services.AddHttpClient<IAutoCompleteClient, GeoapifyClient>(client =>
+        {
+            client.BaseAddress = new Uri("https://api.geoapify.com/v1/geocode/");
+        });
+
         return services;
     }
 }

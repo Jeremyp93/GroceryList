@@ -20,7 +20,7 @@ import { AuthState } from '../ngxs-store/auth.state';
 export class LoginComponent implements OnInit {
   ngxsStore = inject(Store);
   router = inject(Router);
-  readonly registerRoute: string = '/' + ROUTES_PARAM.REGISTER;
+  readonly registerRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.REGISTER;
   readonly loginFormUsername: string = LOGIN_FORM.USERNAME;
   readonly loginFormPassword: string = LOGIN_FORM.PASSWORD;
   loginForm!: FormGroup;
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     this.ngxsStore.dispatch(new Login(this.loginForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
-        this.router.navigate([`/${ROUTES_PARAM.GROCERY_LIST}`]);
+        this.router.navigate([`/${ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST}`]);
       },
       error: () => {
         this.isLoading = this.isSubmitted = false;
