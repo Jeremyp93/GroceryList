@@ -9,6 +9,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { SIGNUP_FORM, ROUTES_PARAM } from '../../constants';
 import { AuthState } from '../ngxs-store/auth.state';
+import { AddressAutocompleteComponent } from '../../shared/address-autocomplete/address-autocomplete.component';
 
 @Component({
   selector: 'app-register',
@@ -40,8 +41,8 @@ export class RegisterComponent implements OnInit {
 
   onSubmit = () => {
     this.isSubmitted = true;
-    this.isLoading = true;
     if (this.signupForm.invalid) return;
+    this.isLoading = true;
     this.ngxsStore.dispatch(new Register(this.signupForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;

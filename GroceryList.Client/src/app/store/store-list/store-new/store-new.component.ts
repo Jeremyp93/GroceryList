@@ -15,11 +15,13 @@ import { LoadingColor } from '../../../shared/loading/loading-color.enum';
 import { ButtonStyle } from '../../../shared/button/button-style.enum';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { Alert, AlertType } from '../../../shared/alert/alert.model';
+import { AddressAutocompleteComponent } from '../../../shared/address-autocomplete/address-autocomplete.component';
+import { AutocompleteAddress } from '../../../shared/address-autocomplete/autocomplete.type';
 
 @Component({
   selector: 'app-store-new',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent],
+  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent, AddressAutocompleteComponent],
   templateUrl: './store-new.component.html',
   styleUrl: './store-new.component.scss'
 })
@@ -98,6 +100,15 @@ export class StoreNewComponent implements OnInit, OnDestroy {
     sections.removeAt(index);
   }
 
+  addAddressToForm = (address: AutocompleteAddress) => {
+    this.storeForm.patchValue({
+      [STORE_FORM.STREET]: address.street,
+      [STORE_FORM.ZIPCODE]: address.zipCode,
+      [STORE_FORM.CITY]: address.city,
+      [STORE_FORM.COUNTRY]: address.country,
+    })
+  }
+
   ngOnDestroy(): void {
     this.#routeSubscription.unsubscribe();
   }
@@ -105,6 +116,10 @@ export class StoreNewComponent implements OnInit, OnDestroy {
   #initForm = () => {
     this.storeForm = new FormGroup({
       [STORE_FORM.NAME]: new FormControl('', Validators.required),
+      [STORE_FORM.STREET]: new FormControl(''),
+      [STORE_FORM.ZIPCODE]: new FormControl(''),
+      [STORE_FORM.CITY]: new FormControl(''),
+      [STORE_FORM.COUNTRY]: new FormControl(''),
       [STORE_FORM.SECTIONS]: new FormArray<any>([]),
     });
   }

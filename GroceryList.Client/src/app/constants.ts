@@ -46,6 +46,10 @@ export const SIGNUP_FORM = {
 
 export const STORE_FORM = {
     NAME: 'name',
+    STREET: 'street',
+    ZIPCODE: 'zipcode',
+    CITY: 'city',
+    COUNTRY: 'country',
     SECTIONS: 'sections'
 };
 

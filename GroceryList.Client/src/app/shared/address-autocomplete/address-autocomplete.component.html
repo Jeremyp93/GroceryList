@@ -1,0 +1,7 @@
+<label>Address</label>
+<input type="text" placeholder="Address" (input)="onInputChange($event)" [value]="searchText">
+<ul>
+    <li *ngFor="let address of filteredAddresses" (click)="selectAddress(address)">
+        {{ address.formatted }}
+    </li>
+</ul>
