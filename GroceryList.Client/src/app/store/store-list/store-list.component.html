@@ -29,6 +29,13 @@
           {{ store.name }}
         </div>
         <div class="buttons">
+          <app-button (click)="editStore($event, store)"
+            ><img
+              src="../../../assets/icons/icons8-edit-24.png"
+              alt="edit-icon"
+              width="20"
+            />
+          </app-button>
           <app-button [buttonStyle]="buttonStyles.danger" (click)="showDelete($event, store)"><img
               src="../../../assets/icons/icons8-delete-24.png" alt="delete-icon" width="20" />
           </app-button>

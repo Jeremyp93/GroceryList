@@ -170,10 +170,10 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     if (groceryList.ingredients.length > 0) {
       groceryList.ingredients.forEach((ingredient: Ingredient) => {
         ingredients.push(new FormGroup({
-          id: new FormControl(ingredient.id),
-          name: new FormControl(ingredient.name, Validators.required),
-          amount: new FormControl(ingredient.amount, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
-          category: new FormControl(ingredient.category)
+          [INGREDIENT_FORM.ID]: new FormControl(UUID()),
+          [INGREDIENT_FORM.NAME]: new FormControl(ingredient.name, Validators.required),
+          [INGREDIENT_FORM.AMOUNT]: new FormControl(ingredient.amount, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
+          [INGREDIENT_FORM.CATEGORY]: new FormControl(ingredient.category)
         }));
       });
     }

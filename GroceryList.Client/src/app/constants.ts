@@ -10,6 +10,7 @@ export const ROUTES_PARAM = {
     STORE: {
         STORE: 'stores',
         NEW: 'new',
+        EDIT: 'edit'
     },
     AUTHENTICATION: {
         LOGIN: 'login',

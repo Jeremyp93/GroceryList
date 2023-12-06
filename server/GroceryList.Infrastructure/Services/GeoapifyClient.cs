@@ -38,6 +38,7 @@ namespace GroceryList.Infrastructure.Services
                     var address = new AutocompleteResponse
                     {
                         Formatted = properties?.Formatted ?? "",
+                        HouseNumber = properties?.HouseNumber ?? "",
                         Street = properties?.Street ?? "",
                         ZipCode = properties?.Postcode ?? "",
                         City = properties?.City ?? "",
@@ -89,6 +90,9 @@ namespace GroceryList.Infrastructure.Services
 
             [JsonPropertyName("street")]
             public string Street { get; set; }
+
+            [JsonPropertyName("housenumber")]
+            public string HouseNumber { get; set; }
         }
 
         public class Root

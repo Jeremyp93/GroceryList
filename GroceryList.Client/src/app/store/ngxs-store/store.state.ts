@@ -4,12 +4,13 @@ import { tap } from "rxjs";
 
 import { StoreService } from "../store.service";
 import { Store } from "../types/store.type";
-import { DeleteStore, GetStores, SetSelectedStore } from "./store.actions";
+import { AddStore, DeleteStore, GetSelectedStore, GetStores, SetSelectedStore, UpdateStore } from "./store.actions";
 import { Section } from "../types/section.type";
 
 export interface StoreStateModel {
     stores: Store[];
     selectedStore: Store | null;
+    lastUpdatedStore: Store | null;
 }
 
 @State<StoreStateModel>({
@@ -17,6 +18,7 @@ export interface StoreStateModel {
     defaults: {
         stores: [],
         selectedStore: null,
+        lastUpdatedStore: null
     }
 })
 export class StoreState {
@@ -30,6 +32,11 @@ export class StoreState {
     @Selector()
     static getSelectedStore(state: StoreStateModel) {
         return state.selectedStore;
+    }
+
+    @Selector()
+    static getLastUpdatedStore(state: StoreStateModel) {
+        return state.lastUpdatedStore;
     }
 
     @Selector()
@@ -70,5 +77,44 @@ export class StoreState {
             ...state,
             selectedStore: payload
         });
+    }
+
+    @Action(AddStore)
+    addStore({ getState, patchState }: StateContext<StoreStateModel>, { payload }: AddStore) {
+        return this.storeService.addStore(payload).pipe(
+            tap((result) => {
+                const state = getState();
+                patchState({
+                    stores: [...state.stores, result]
+                });
+            }));
+    }
+
+    @Action(GetSelectedStore)
+    getSelectedStore({ getState, setState, dispatch }: StateContext<StoreStateModel>, { id }: GetSelectedStore) {
+        return this.storeService.getStoreById(id).pipe(
+            tap((result) => {
+                const state = getState();
+                setState({
+                    ...state,
+                    selectedStore: result
+                });
+            }));
+    }
+
+    @Action(UpdateStore)
+    updateStore({ getState, setState }: StateContext<StoreStateModel>, { payload, id }: UpdateStore) {
+        return this.storeService.updateStore(id, payload).pipe(
+            tap((result) => {
+                const state = getState();
+                const stores = [...state.stores];
+                const updatedStoreIndex = stores.findIndex(item => item.id === id);
+                stores[updatedStoreIndex] = result;
+                setState({
+                    ...state,
+                    stores: stores,
+                    lastUpdatedStore: result
+                });
+            }));
     }
 }

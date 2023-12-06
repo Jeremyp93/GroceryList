@@ -30,11 +30,11 @@ db.Store.insert([
   {
     _id: BinData(3, "5YhRP31jMk2zT4mg//NOFQ=="),
     name: "Maxi",
+    userId: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
     address: {
       street: "375 Rue Jean-Talon O",
       city: "Montreal",
       zipCode: "H3N 2Y8",
-      state: "QC",
       country: "Canada",
     },
     sections: [
@@ -56,11 +56,11 @@ db.Store.insert([
   {
     _id: BinData(3, "vh8kTF6uOEibqmhIn7kCMg=="),
     name: "Marché Jean-Talon",
+    userId: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
     address: {
       street: "7070 Av. Henri-Julien",
       city: "Montreal",
       zipCode: "H2S 3S3",
-      state: "QC",
       country: "Canada",
     },
     sections: [

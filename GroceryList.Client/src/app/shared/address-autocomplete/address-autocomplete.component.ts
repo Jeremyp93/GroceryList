@@ -1,28 +1,37 @@
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AutocompleteService } from './autocomplete.service';
-import { Subject, debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
+import { Subject, Subscription, debounceTime, switchMap } from 'rxjs';
 import { AutocompleteAddress } from './autocomplete.type';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-address-autocomplete',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './address-autocomplete.component.html',
   styleUrl: './address-autocomplete.component.scss',
 })
-export class AddressAutocompleteComponent implements OnInit {
+export class AddressAutocompleteComponent implements OnInit, OnDestroy {
   @Output() addressSelected = new EventEmitter<AutocompleteAddress>();
   autocompleteService = inject(AutocompleteService);
+  elementRef = inject(ElementRef);
   searchText = '';
   filteredAddresses: AutocompleteAddress[] = [];
   #searchTerms = new Subject<string>();
+  #searchSubscription!: Subscription;
+
+  @HostListener('document:click', ['$event.target'])
+  onClick(target: EventTarget | null): void {
+    const clickedInside = this.elementRef.nativeElement.contains(target);
+    if (!clickedInside) {
+      this.filteredAddresses = [];
+    }
+  }
 
   ngOnInit(): void {
-    this.#searchTerms.pipe(
-      debounceTime(500), // Adjust delay time in milliseconds (e.g., 300ms)
-      distinctUntilChanged(),
+    this.#searchSubscription = this.#searchTerms.pipe(
+      debounceTime(500),
       switchMap((term: string) => this.autocompleteService.autocomplete(term))
     ).subscribe((addresses: any[]) => {
       this.filteredAddresses = addresses;
@@ -33,14 +42,24 @@ export class AddressAutocompleteComponent implements OnInit {
     this.#searchTerms.next((event.target as HTMLInputElement).value);
   }
 
-  /* searchAddresses = async () => {
-    this.filteredAddresses = await lastValueFrom(this.autocompleteService.autocomplete(this.searchText));
-  } */
+  onFocus = (event: Event) => {
+    console.log((event.target as HTMLInputElement).value);
+    this.#searchTerms.next((event.target as HTMLInputElement).value);
+  }
+
+  clearInput = () => {
+    this.searchText = '';
+    this.filteredAddresses = [];
+  }
 
   selectAddress(address: AutocompleteAddress) {
     // Handle selection of the address, e.g., fill form fields
     this.searchText = address.formatted;
     this.filteredAddresses = []; // Clear the suggestions
     this.addressSelected.emit(address);
+  }
+
+  ngOnDestroy(): void {
+    this.#searchSubscription.unsubscribe();
   }
 }

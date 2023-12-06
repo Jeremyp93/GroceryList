@@ -14,7 +14,6 @@ public class StoreProfile : Profile
         .ForMember(d => d.ZipCode, opt => opt.MapFrom(src => src.Address.ZipCode))
         .ForMember(d => d.Street, opt => opt.MapFrom(src => src.Address.Street))
         .ForMember(d => d.City, opt => opt.MapFrom(src => src.Address.City))
-        .ForMember(d => d.State, opt => opt.MapFrom(src => src.Address.State))
         .ForMember(d => d.Country, opt => opt.MapFrom(src => src.Address.Country));
     }
 }

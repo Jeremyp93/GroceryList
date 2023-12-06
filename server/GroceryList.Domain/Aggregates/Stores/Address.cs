@@ -6,17 +6,20 @@ public record Address
 {
     private const int MaxStreetLength = 50;
     private const int MaxCityLength = 15;
-    private const int MaxStateLength = 15;
     public string Street { get; private set; }
     public string City { get; private set; }
-    public string State { get; private set; }
     public string Country { get; private set; }
     public string ZipCode { get; private set; }
 
     private Address() { }
 
-    public static Address Create(string street, string city, string state, string country, string zipCode)
+    public static Address? Create(string? street, string? city, string? country, string? zipCode)
     {
+        if (string.IsNullOrEmpty(street) && string.IsNullOrEmpty(city) && string.IsNullOrEmpty(country) && string.IsNullOrEmpty(zipCode))
+        {
+            return null;
+        }
+
         var errors = new List<string>();
 
         if (street?.Length >= MaxStreetLength)
@@ -27,11 +30,6 @@ public record Address
         if (city?.Length >= MaxCityLength)
         {
             errors.Add($"City length is higher than the limit ({city.Length} - MAX: {MaxCityLength})");
-        }
-
-        if (state?.Length >= MaxStateLength)
-        {
-            errors.Add($"State length is higher than the limit ({state?.Length} - MAX: {MaxStateLength})");
         }
 
         if (zipCode?.Length < 2 || zipCode?.Length > 7)
@@ -48,7 +46,6 @@ public record Address
         {
             Street = street,
             City = city,
-            State = state,
             Country = country,
             ZipCode = zipCode
         };

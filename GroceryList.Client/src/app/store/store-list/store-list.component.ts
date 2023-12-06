@@ -81,4 +81,9 @@ export class StoreListComponent implements OnInit {
   selectStore = (store: Store) => {
     this.ngxsStore.dispatch(new SetSelectedStore(store)).subscribe(() => this.router.navigate([ROUTES_PARAM.STORE.STORE, store.id]));
   }
+
+  editStore = (event: Event, store: Store) => {
+    event.stopPropagation();
+    this.ngxsStore.dispatch(new SetSelectedStore(store)).subscribe(() => this.router.navigate([ROUTES_PARAM.STORE.STORE, store.id, ROUTES_PARAM.STORE.EDIT]));
+  }
 }
