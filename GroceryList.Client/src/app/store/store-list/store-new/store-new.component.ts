@@ -126,6 +126,7 @@ export class StoreNewComponent implements OnInit, OnDestroy {
     const sections = this.storeForm.get(STORE_FORM.SECTIONS) as FormArray;
     const index = sections.controls.findIndex(c => c.get(SECTION_FORM.ID)?.value === id);
     sections.removeAt(index);
+    this.storeForm.markAsDirty();
   }
 
   addAddressToForm = (address: AutocompleteAddress) => {

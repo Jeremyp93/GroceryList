@@ -20,7 +20,7 @@ public class UpdateStoreHandler : IRequestHandler<UpdateStoreCommand, Result<Sto
 
     public UpdateStoreHandler(IStoreRepository repository, IClaimReader claimReader)
     {
-        repository = _repository;
+        _repository = repository;
         _claimReader = claimReader;
     }
 

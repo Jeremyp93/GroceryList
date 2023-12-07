@@ -98,6 +98,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
     const index = ingredients.controls.findIndex(c => c.get(INGREDIENT_FORM.ID)?.value === id);
     ingredients.removeAt(index);
+    this.groceryListForm.markAsDirty();
   }
 
   onSubmit = () => {
