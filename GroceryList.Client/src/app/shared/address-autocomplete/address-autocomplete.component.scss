@@ -1,19 +1,49 @@
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  li {
-    cursor: pointer;
-    padding: 8px;
-  }
-  
-  li:hover {
-    background-color: #f0f0f0;
-  }
+@import '_variables';
 
+.address-wrapper {
+  position: relative;
   label {
     display: flex;
     align-self: flex-start;
   }
+
+  .input-wrapper {
+    position: relative;
+
+    input[type='text'] {
+      padding-right: 20px;
+      width: calc(100% - 30px);
+    }
+
+    .clear-icon {
+      position: absolute;
+      top: 40%;
+      right: 5px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-weight: bold;
+      color: #999;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    background-color: #f0f0f0;
+    width: 100%;
+    text-align: start;
+    color: $secondary-color;
+
+    li {
+      cursor: pointer;
+      padding: 8px;
+
+      &:hover {
+        background-color: white;
+      }
+    }
+  }
+}

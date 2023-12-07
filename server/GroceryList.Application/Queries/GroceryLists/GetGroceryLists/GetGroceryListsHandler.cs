@@ -23,7 +23,6 @@ public class GetGroceryListsHandler : IRequestHandler<GetGroceryListsQuery, Resu
         var userId = _claimReader.GetUserIdFromClaim();
         //var result = await _repository.GetAllAsync(cancellationToken);
         var result = await _repository.WhereAsync(l => l.UserId == userId);
-        var stores = await _storeRepository.GetAllAsync(cancellationToken);
         var lists = new List<GroceryListResponseDto>();
         foreach (var list in result)
         {
@@ -31,7 +30,7 @@ public class GetGroceryListsHandler : IRequestHandler<GetGroceryListsQuery, Resu
             
             if (list.StoreId.HasValue)
             {
-                newList.Store = stores.SingleOrDefault(s => s.Id == list.StoreId);
+                newList.Store = await _storeRepository.GetByIdAsync((Guid)list.StoreId);
             }
             lists.Add(newList);
         }

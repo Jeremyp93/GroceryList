@@ -1,8 +1,14 @@
 ﻿using AutoMapper;
+using GroceryList.Application.Commands.GroceryLists.RemoveGroceryList;
+using GroceryList.Application.Commands.GroceryLists.UpdateGroceryList;
 using GroceryList.Application.Commands.Stores.AddStores;
+using GroceryList.Application.Commands.Stores.RemoveStore;
+using GroceryList.Application.Commands.Stores.UpdateStore;
+using GroceryList.Application.Queries.GroceryLists;
 using GroceryList.Application.Queries.Stores.GetStoreById;
 using GroceryList.Application.Queries.Stores.GetStores;
 using GroceryList.Domain.Aggregates.Stores;
+using GroceryList.WebApi.Models.GroceryLists;
 using GroceryList.WebApi.Models.Stores;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -57,7 +63,41 @@ public class StoresController : BaseController
             Street = storeRequest.Street,
             ZipCode = storeRequest.ZipCode,
             City = storeRequest.City,
-            State = storeRequest.State,
+            Country = storeRequest.Country,
+            Sections = storeRequest.Sections
+        });
+
+        if (!result.IsSuccessful)
+        {
+            return ErrorResponse(result);
+        }
+
+        return ReturnOk<StoreResponse, Store>(result.Data);
+    }
+
+    [HttpDelete("{id:Guid}", Name = "RemoveStore")]
+    public async Task<IActionResult> RemoveStore([FromRoute] Guid id)
+    {
+        var result = await _mediator.Send(new RemoveStoreCommand(id));
+
+        if (!result.IsSuccessful)
+        {
+            return ErrorResponse(result);
+        }
+
+        return Ok();
+    }
+
+    [HttpPut("{id:Guid}", Name = "UpdateStore")]
+    public async Task<IActionResult> UpdateStore([FromRoute] Guid id, [FromBody] StoreRequest storeRequest)
+    {
+        var result = await _mediator.Send(new UpdateStoreCommand()
+        {
+            Id = id,
+            Name = storeRequest.Name,
+            Street = storeRequest.Street,
+            ZipCode = storeRequest.ZipCode,
+            City = storeRequest.City,
             Country = storeRequest.Country,
             Sections = storeRequest.Sections
         });

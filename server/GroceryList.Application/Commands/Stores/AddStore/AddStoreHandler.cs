@@ -1,4 +1,5 @@
-﻿using GroceryList.Domain.Aggregates.GroceryLists;
+﻿using GroceryList.Application.Abstractions;
+using GroceryList.Domain.Aggregates.GroceryLists;
 using GroceryList.Domain.Aggregates.Stores;
 using GroceryList.Domain.Exceptions;
 using GroceryList.Domain.Repositories;
@@ -9,10 +10,12 @@ namespace GroceryList.Application.Commands.Stores.AddStores;
 public class AddStoreHandler : IRequestHandler<AddStoreCommand, Result<Store>>
 {
     private readonly IStoreRepository _repository;
+    private readonly IClaimReader _claimReader;
 
-    public AddStoreHandler(IStoreRepository repository)
+    public AddStoreHandler(IStoreRepository repository, IClaimReader claimReader)
     {
         _repository = repository;
+        _claimReader = claimReader;
     }
 
     public async Task<Result<Store>> Handle(AddStoreCommand command, CancellationToken cancellationToken)
@@ -24,8 +27,9 @@ public class AddStoreHandler : IRequestHandler<AddStoreCommand, Result<Store>>
               .Select(x => Section.Create(x.Name, x.Priority))
               .ToList();
 
-            var address = Address.Create(command.Street, command.City, command.State, command.Country, command.ZipCode);
-            var newStore = Store.Create(command.Name, sections, address);
+            var userId = _claimReader.GetUserIdFromClaim();
+            var address = Address.Create(command.Street, command.City, command.Country, command.ZipCode);
+            var newStore = Store.Create(Guid.NewGuid(), command.Name, userId, sections, address);
 
             var result = await _repository.AddAsync(newStore);
 

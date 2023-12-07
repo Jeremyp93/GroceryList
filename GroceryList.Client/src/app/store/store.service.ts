@@ -4,7 +4,7 @@ import { Observable, map } from "rxjs";
 
 import { Store } from "./types/store.type";
 import { environment } from "../../../src/environments/environment";
-import { StoreResponseDto } from "./dtos/store.dto";
+import { StoreRequestDto, StoreResponseDto } from "./dtos/store.dto";
 
 @Injectable({ providedIn: 'root' })
 export class StoreService {
@@ -24,18 +24,40 @@ export class StoreService {
         return this.httpClient.delete<void>(`${environment.storeApiUrl}/${id}`);
     }
 
+    addStore = (store: Store): Observable<Store> => {
+        return this.httpClient.post<StoreResponseDto>(environment.storeApiUrl, this.#toStoreDto(store)).pipe(map((createdStoreDto: StoreResponseDto) => {
+            return this.#fromStoreDto(createdStoreDto);
+        }));
+    }
+
+    updateStore = (id: string, store: Store): Observable<Store> => {
+        return this.httpClient.put<StoreResponseDto>(`${environment.storeApiUrl}/${id}`, this.#toStoreDto(store)).pipe(map((updatedStoreDto: StoreResponseDto) => {
+            return this.#fromStoreDto(updatedStoreDto);
+        }));
+    }
+
     #fromStoreDto = (dto: StoreResponseDto): Store => {
         return {
             id: dto.id,
             name: dto.name,
             street: dto.street,
             city: dto.city,
-            state: dto.state,
             country: dto.country,
             zipCode: dto.zipCode,
             sections: dto.sections,
             createdAt: dto.createdAt,
             showDelete: false
+        }
+    }
+
+    #toStoreDto = (store: Store): StoreRequestDto => {
+        return {
+            name: store.name,
+            street: store.street,
+            city: store.city,
+            country: store.country,
+            zipCode: store.zipCode,
+            sections: store.sections
         }
     }
 }

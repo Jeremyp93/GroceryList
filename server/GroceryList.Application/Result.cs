@@ -7,7 +7,7 @@ public class Result<T>
     public List<string> ErrorMessages { get; }
     public T Data { get; }
 
-    private Result(bool isSuccessful, ResultStatusCode statusCode, List<string> errorMessages, T data)
+    internal Result(bool isSuccessful, ResultStatusCode statusCode, List<string> errorMessages, T data)
     {
         IsSuccessful = isSuccessful;
         StatusCode = statusCode;
@@ -28,5 +28,28 @@ public class Result<T>
     public static Result<T> Failure(ResultStatusCode statusCode, List<string> errorMessages)
     {
         return new Result<T>(false, statusCode, errorMessages, default);
+    }
+}
+
+public class Result : Result<object>
+{
+    private Result(bool isSuccessful, ResultStatusCode statusCode, List<string> errorMessages)
+        : base(isSuccessful, statusCode, errorMessages, null)
+    {
+    }
+
+    public static new Result Success()
+    {
+        return new Result(true, ResultStatusCode.None, new List<string>());
+    }
+
+    public static new Result Failure(ResultStatusCode statusCode, string errorMessage)
+    {
+        return new Result(false, statusCode, new List<string> { errorMessage });
+    }
+
+    public static new Result Failure(ResultStatusCode statusCode, List<string> errorMessages)
+    {
+        return new Result(false, statusCode, errorMessages);
     }
 }

@@ -30,6 +30,7 @@ export const routes: Routes = [
             { path: '', component: StoreListComponent, pathMatch: 'full' },
             { path: ROUTES_PARAM.STORE.NEW, component: StoreNewComponent, title: 'Store - Create' },
             { path: `:${ROUTES_PARAM.ID_PARAMETER}`, component: StoreDetailComponent, title: 'Store - Sections' },
+            { path: `:${ROUTES_PARAM.ID_PARAMETER}/${ROUTES_PARAM.STORE.EDIT}`, component: StoreNewComponent, canActivate: [validIdGuard], title: 'Store - Edit', },
         ]
     },
     {

@@ -33,11 +33,21 @@
     </div>
     <div class="group">
       <app-address-autocomplete (addressSelected)="addAddressToForm($event)"></app-address-autocomplete>
-      <input type="text" placeholder="Street" formControlName="street">
-      <input type="text" placeholder="Zip Code" formControlName="zipcode">
-      <input type="text" placeholder="City" formControlName="city">
-      <input type="text" placeholder="Country" formControlName="country">
     </div>
+    @if(showAddressFields) {
+      <div class="group">
+        <input type="text" placeholder="Street" formControlName="street">
+      </div>
+      <div class="group">
+        <input type="text" placeholder="Zip Code" formControlName="zipcode">
+      </div>
+      <div class="group">
+        <input type="text" placeholder="City" formControlName="city">
+      </div>
+      <div class="group">
+        <input type="text" placeholder="Country" formControlName="country">
+      </div>
+    }
     <div class="group" formArrayName="sections">
       <div class="section-title">
         <label>Sections</label>

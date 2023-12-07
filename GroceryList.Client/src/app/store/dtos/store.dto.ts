@@ -13,11 +13,9 @@ export type StoreResponseDto =  {
 }
 
 export type StoreRequestDto = {
-    id: string;
     name: string;
     street: string;
     city: string;
-    state: string;
     country: string;
     zipCode: string;
     sections: Section[];
