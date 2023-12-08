@@ -17,7 +17,7 @@ export class LinkMapsStorePipe implements PipeTransform {
             if (this.deviceService.isAndroid()) {
                 return `${GOOGLE_MAPS_QUERY_ANDROID}${store.street},${store.city},${store.zipCode},${store.country}`;
             } else {
-                return `${MAPS_QUERY_IPHONE}${store.street},${store.city},${store.zipCode},${store.country}`
+                return `${MAPS_QUERY_IPHONE}${store.street},${store.city},${store.zipCode},${store.country}`;
             }
         } else {
             return `${GOOGLE_MAPS_QUERY}${store.street},${store.city},${store.zipCode},${store.country}`;
