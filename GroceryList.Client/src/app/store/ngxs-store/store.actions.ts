@@ -38,3 +38,10 @@ export class UpdateStore {
     constructor(public payload: Store, public id: string) {
     }
 }
+
+export class DropSection {
+    static readonly type = '[Store] Drop Section';
+
+    constructor(public prevIndex: number, public currentIndex: number) {
+    }
+}

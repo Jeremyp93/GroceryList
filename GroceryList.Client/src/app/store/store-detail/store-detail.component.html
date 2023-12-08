@@ -1,1 +1,57 @@
-<p>store-detail works!</p>
+<div class="header">
+    <app-header title="Sections" [backButton]="true"></app-header>
+    <h3>{{ title }}</h3>
+    <div class="menu">
+      <app-button (click)="newSection()">
+        <img
+          src="../../../assets/icons/icons8-plus-24.png"
+          alt="add-icon"
+          width="20"
+        />
+      </app-button>
+      <app-button
+        (click)="saveSections()"
+        [buttonStyle]="saved ? buttonStyles.success : buttonStyles.normal"
+        [disabled]="saved"
+        [loading]="saveProcess"
+      >
+        @if (saved) {
+        <img
+          src="../../../../assets/icons/icons8-check-24.png"
+          alt="submit-icon"
+          width="20"
+        />
+        } @else {
+        <img
+          src="../../../assets/icons/icons8-save-24.png"
+          alt="save-icon"
+          width="20"
+        />
+        }
+      </app-button>
+      <app-button (click)="editStore()">
+        <img
+          src="../../../assets/icons/icons8-edit-24.png"
+          alt="edit-icon"
+          width="20"
+        />
+      </app-button>
+    </div>
+  </div>
+  @if (isLoading) {
+  <div class="flex-center mt-20">
+    <app-loading
+      [color]="loadingColors.app"
+      [size]="loadingSizes.large"
+    ></app-loading>
+  </div>
+  }
+<div cdkDropListGroup>
+    <ng-container *ngrxLet="sections$ as sections">
+        <ul cdkDropList [cdkDropListData]="sections" (cdkDropListDropped)="drop($event)">
+            @for(section of sections; track section.id) {
+                <li cdkDrag class="tile-container">{{section.name}} - {{section.priority}}</li>
+            }
+        </ul>
+    </ng-container>
+</div>

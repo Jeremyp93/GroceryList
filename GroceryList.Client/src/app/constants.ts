@@ -1,4 +1,6 @@
 export const GOOGLE_MAPS_QUERY: string = 'https://www.google.com/maps?q=';
+export const GOOGLE_MAPS_QUERY_ANDROID: string = 'https://maps.google.com/?q=';
+export const MAPS_QUERY_IPHONE: string = 'http://maps.apple.com/?q=';
 export const GEO_MOBILE_QUERY: string = 'geo:0,0?q=';
 
 export const ROUTES_PARAM = {
@@ -48,7 +50,7 @@ export const SIGNUP_FORM = {
 export const STORE_FORM = {
     NAME: 'name',
     STREET: 'street',
-    ZIPCODE: 'zipcode',
+    ZIPCODE: 'zipCode',
     CITY: 'city',
     COUNTRY: 'country',
     SECTIONS: 'sections'

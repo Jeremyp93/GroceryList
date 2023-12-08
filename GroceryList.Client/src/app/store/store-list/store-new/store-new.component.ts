@@ -13,8 +13,6 @@ import { ROUTES_PARAM, SECTION_FORM, STORE_FORM } from '../../../constants';
 import { LoadingSize } from '../../../shared/loading/loading-size.enum';
 import { LoadingColor } from '../../../shared/loading/loading-color.enum';
 import { ButtonStyle } from '../../../shared/button/button-style.enum';
-import { AlertService } from '../../../shared/alert/alert.service';
-import { Alert, AlertType } from '../../../shared/alert/alert.model';
 import { AddressAutocompleteComponent } from '../../../shared/address-autocomplete/address-autocomplete.component';
 import { AutocompleteAddress } from '../../../shared/address-autocomplete/autocomplete.type';
 import { Store as NgxsStore } from '@ngxs/store';
@@ -32,7 +30,6 @@ import { Section } from '../../types/section.type';
 })
 export class StoreNewComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
-  alertService = inject(AlertService);
   ngxsStore = inject(NgxsStore);
   router = inject(Router);
   title: string = 'Add Store';
@@ -78,15 +75,10 @@ export class StoreNewComponent implements OnInit, OnDestroy {
   onSubmit = () => {
     this.submitted = true;
     if (this.storeForm.invalid) return;
-    if (this.#duplicatePrioritiesValidator()) {
-      this.alertService.setAlertObs(new Alert(AlertType.Error, 'Duplicate priorities detected. Please correct the form.' ));
-      return;
-    }
     this.isLoading = true;
     if (this.editMode) {
-      console.log(this.editMode);
       if (!this.storeForm.pristine) {
-        console.log('pristine no');
+        this.#setPriorities();
         this.ngxsStore.dispatch(new UpdateStore(this.storeForm.value, this.idToEdit!)).subscribe({
           next: () => {
             const updatedStore = this.ngxsStore.selectSnapshot(StoreState.getLastUpdatedStore);
@@ -98,6 +90,7 @@ export class StoreNewComponent implements OnInit, OnDestroy {
         this.#back();
       }
     } else {
+      this.#setPriorities();
       this.ngxsStore.dispatch(new AddStore(this.storeForm.value)).subscribe({
         next: () => this.#back(),
         error: () => this.isLoading = false
@@ -106,11 +99,11 @@ export class StoreNewComponent implements OnInit, OnDestroy {
   }
 
   onAddSection = () => {
-    const ingredients = this.storeForm.get(STORE_FORM.SECTIONS) as FormArray;
-    ingredients.insert(0, new FormGroup({
+    const sections = this.storeForm.get(STORE_FORM.SECTIONS) as FormArray;
+    sections.insert(0, new FormGroup({
       [SECTION_FORM.ID]: new FormControl(UUID()),
       [SECTION_FORM.NAME]: new FormControl(null, Validators.required),
-      [SECTION_FORM.PRIORITY]: new FormControl(this.#getNextPriority(), [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
+      [SECTION_FORM.PRIORITY]: new FormControl(0),
     }));
     setTimeout(() => {
       this.#focusOnControl(0);
@@ -137,6 +130,7 @@ export class StoreNewComponent implements OnInit, OnDestroy {
       [STORE_FORM.COUNTRY]: address.country
     });
     this.showAddressFields = true;
+    this.storeForm.markAsDirty();
   }
 
   ngOnDestroy(): void {
@@ -195,24 +189,12 @@ export class StoreNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  #getNextPriority = () => {
+  #setPriorities = () => {
     const sections = this.storeForm.get(STORE_FORM.SECTIONS) as FormArray;
-    const priorities = sections.controls.map((s) => s.get(SECTION_FORM.PRIORITY)?.value);
-    if (priorities.length === 0) return 1;
-    const nextPriority = +priorities[0]+1;
-    if ((priorities as number[]).includes(nextPriority)) {
-      return NaN;
+    for (let index = 0; index < sections.controls.length; index++) {
+      const sectionControl = sections.controls[index];
+      sectionControl.get(SECTION_FORM.PRIORITY)?.setValue(index+1);
     }
-    return nextPriority;
-  }
-
-  #duplicatePrioritiesValidator = () => {
-      const priorities = (this.storeForm.get(STORE_FORM.SECTIONS) as FormArray)?.controls.map((s) => s.get(SECTION_FORM.PRIORITY)?.value);
-      return this.#hasDuplicates(priorities);
-  }
-
-  #hasDuplicates = (list: any[]) => {
-    return new Set(list).size !== list.length;
   }
 
   #back = () => {
