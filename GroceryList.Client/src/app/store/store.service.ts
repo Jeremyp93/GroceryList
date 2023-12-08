@@ -5,6 +5,8 @@ import { Observable, map } from "rxjs";
 import { Store } from "./types/store.type";
 import { environment } from "../../../src/environments/environment";
 import { StoreRequestDto, StoreResponseDto } from "./dtos/store.dto";
+import { Section } from "./types/section.type";
+import { SectionDto } from "./dtos/section.dto";
 
 @Injectable({ providedIn: 'root' })
 export class StoreService {
@@ -36,6 +38,12 @@ export class StoreService {
         }));
     }
 
+    updateSections = (id: string, sections: Section[]): Observable<Section[]> => {
+        return this.httpClient.put<SectionDto[]>(`${environment.storeApiUrl}/${id}/sections`, sections).pipe(map((sectionsDto: SectionDto[]) => {
+            return sectionsDto.map((dto: SectionDto) => (this.#fromSectionDto(dto)));
+        }));
+    }
+
     #fromStoreDto = (dto: StoreResponseDto): Store => {
         return {
             id: dto.id,
@@ -59,5 +67,13 @@ export class StoreService {
             zipCode: store.zipCode,
             sections: store.sections
         }
+    }
+
+    #fromSectionDto = (dto: SectionDto): Section => {
+        return {
+            id: '',
+            name: dto.name,
+            priority: dto.priority
+        };
     }
 }

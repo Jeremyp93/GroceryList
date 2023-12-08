@@ -90,4 +90,15 @@ public class Store : AggregateRoot
             Address = null;
         }
     }
+
+    public void UpdateSections(List<Section>? updatedSections)
+    {
+        _sections.Clear();
+        if (updatedSections != null)
+        {
+            _sections.AddRange(updatedSections);
+        }
+
+        //AddDomainEvent(new IngredientAssignedEvent(Id, updatedIngredient));
+    }
 }

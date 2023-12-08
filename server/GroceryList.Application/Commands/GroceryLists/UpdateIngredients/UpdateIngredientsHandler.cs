@@ -2,7 +2,6 @@
 using GroceryList.Domain.Aggregates.GroceryLists;
 using GroceryList.Domain.Repositories;
 using MediatR;
-using System.Collections.Generic;
 
 namespace GroceryList.Application.Commands.GroceryLists.UpdateIngredients;
 public class UpdateIngredientsHandler : IRequestHandler<UpdateIngredientsCommand, Result<List<Ingredient>>>

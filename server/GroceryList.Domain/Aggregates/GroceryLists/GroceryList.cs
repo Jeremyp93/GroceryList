@@ -11,7 +11,7 @@ public class GroceryList : AggregateRoot
     public Guid UserId { get; private set; }
     public Guid? StoreId { get; private set; }
 
-    private List<Ingredient> _ingredients = new List<Ingredient>();
+    private List<Ingredient> _ingredients = new();
 
     public IReadOnlyCollection<Ingredient> Ingredients
     {

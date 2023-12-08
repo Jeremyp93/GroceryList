@@ -1,12 +1,17 @@
 ﻿using AutoMapper;
+using GroceryList.Application.Commands.GroceryLists;
 using GroceryList.Application.Commands.GroceryLists.RemoveGroceryList;
 using GroceryList.Application.Commands.GroceryLists.UpdateGroceryList;
+using GroceryList.Application.Commands.GroceryLists.UpdateIngredients;
+using GroceryList.Application.Commands.Stores;
 using GroceryList.Application.Commands.Stores.AddStores;
 using GroceryList.Application.Commands.Stores.RemoveStore;
+using GroceryList.Application.Commands.Stores.UpdateSections;
 using GroceryList.Application.Commands.Stores.UpdateStore;
 using GroceryList.Application.Queries.GroceryLists;
 using GroceryList.Application.Queries.Stores.GetStoreById;
 using GroceryList.Application.Queries.Stores.GetStores;
+using GroceryList.Domain.Aggregates.GroceryLists;
 using GroceryList.Domain.Aggregates.Stores;
 using GroceryList.WebApi.Models.GroceryLists;
 using GroceryList.WebApi.Models.Stores;
@@ -108,5 +113,22 @@ public class StoresController : BaseController
         }
 
         return ReturnOk<StoreResponse, Store>(result.Data);
+    }
+
+    [HttpPut("{id:Guid}/sections", Name = "UpdateSections")]
+    public async Task<IActionResult> UpdateIngredients([FromRoute] Guid id, [FromBody] List<SectionDto> sections)
+    {
+        var result = await _mediator.Send(new UpdateSectionsCommand()
+        {
+            StoreId = id,
+            Sections = sections
+        });
+
+        if (!result.IsSuccessful)
+        {
+            return ErrorResponse(result);
+        }
+
+        return ReturnOk<List<SectionResponse>, List<Section>>(result.Data);
     }
 }

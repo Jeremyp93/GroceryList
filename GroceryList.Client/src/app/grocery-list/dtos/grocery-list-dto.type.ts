@@ -12,6 +12,6 @@ export type GroceryListResponseDto = {
 export type GroceryListRequestDto = {
     id: string;
     name: string;
-    storeId: string;
+    storeId: string | null | undefined;
     ingredients: IngredientDto[];
 }

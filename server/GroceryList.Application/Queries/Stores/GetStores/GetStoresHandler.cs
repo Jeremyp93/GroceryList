@@ -19,7 +19,7 @@ public class GetStoresHandler : IRequestHandler<GetStoresQuery, Result<IEnumerab
     public async Task<Result<IEnumerable<Store>>> Handle(GetStoresQuery request, CancellationToken cancellationToken)
     {
         var userId = _claimReader.GetUserIdFromClaim();
-        var result = await _repository.WhereAsync(l => l.UserId == userId);
+        var result = await _repository.WhereAsync(l => l.UserId == userId, null, cancellationToken);
 
         return Result<IEnumerable<Store>>.Success(result);
     }

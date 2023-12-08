@@ -45,3 +45,7 @@ export class DropSection {
     constructor(public prevIndex: number, public currentIndex: number) {
     }
 }
+
+export class UpdateSections {
+    static readonly type = '[Store] Update Sections';
+}

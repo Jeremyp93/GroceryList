@@ -60,7 +60,7 @@ export class GroceryListState {
         if ('storeId' in payload) {
             list = { id: '', name: payload.name, storeId: payload.storeId, ingredients: payload.ingredients };
         } else {
-            list = { id: '', name: payload.name, storeId: payload.store?.id ?? '', ingredients: payload.ingredients };
+            list = { id: '', name: payload.name, storeId: payload.store?.id, ingredients: payload.ingredients };
         }
         return this.groceryListService.addGroceryList(list).pipe(
             tap((result) => {
@@ -77,7 +77,7 @@ export class GroceryListState {
         if ('storeId' in payload) {
             list = { id: id, name: payload.name, storeId: payload.storeId, ingredients: payload.ingredients };
         } else {
-            list = { id: id, name: payload.name, storeId: payload.store?.id ?? '', ingredients: payload.ingredients };
+            list = { id: id, name: payload.name, storeId: payload.store?.id, ingredients: payload.ingredients };
         }
         return this.groceryListService.updateGroceryList(id, list).pipe(
             tap((result) => {
