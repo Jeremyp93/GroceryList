@@ -22,7 +22,7 @@ public class GetGroceryListsHandler : IRequestHandler<GetGroceryListsQuery, Resu
     {
         var userId = _claimReader.GetUserIdFromClaim();
         //var result = await _repository.GetAllAsync(cancellationToken);
-        var result = await _repository.WhereAsync(l => l.UserId == userId);
+        var result = await _repository.WhereAsync(l => l.UserId == userId, null, cancellationToken);
         var lists = new List<GroceryListResponseDto>();
         foreach (var list in result)
         {

@@ -12,6 +12,6 @@ export type GroceryList = {
 
 export type GroceryListForm = {
     name: string;
-    storeId: string;
+    storeId: string | null;
     ingredients: Ingredient[];
 }

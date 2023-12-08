@@ -7,7 +7,7 @@ import { Section } from '../types/section.type';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ROUTES_PARAM } from '../../constants';
-import { DropSection, GetSelectedStore } from '../ngxs-store/store.actions';
+import { DropSection, GetSelectedStore, UpdateSections } from '../ngxs-store/store.actions';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
@@ -33,6 +33,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
   #routeSubscription!: Subscription;
   saved: boolean = false;
   saveProcess: boolean = false;
+  #pendingChanges: boolean = false;
 
   get loadingColors(): typeof LoadingColor {
     return LoadingColor;
@@ -81,7 +82,19 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
   }
 
   saveSections = () => {
-
+    this.saveProcess = true;
+    this.ngxsStore.dispatch(new UpdateSections()).subscribe({
+      next: () => {
+        this.saveProcess = this.#pendingChanges = false;
+        this.saved = true;
+        setTimeout(() => {
+          this.saved = false;
+        }, 1000);
+      },
+      error: () => {
+        this.saveProcess = false;
+      }
+    });
   }
 
   newSection = () => {
@@ -89,6 +102,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
   }
 
   drop = (event: CdkDragDrop<Section[]>) => {
+    if (event.previousIndex === event.currentIndex) return;
     this.ngxsStore.dispatch(new DropSection(event.previousIndex, event.currentIndex));
   }
 

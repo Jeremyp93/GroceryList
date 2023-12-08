@@ -1,42 +1,41 @@
 ﻿using GroceryList.Application.Abstractions;
 using GroceryList.Domain.Aggregates.GroceryLists;
 using GroceryList.Domain.Aggregates.Stores;
-using GroceryList.Domain.Exceptions;
 using GroceryList.Domain.Repositories;
 using MediatR;
 
-namespace GroceryList.Application.Commands.Stores.UpdateStore;
-public class UpdateStoreHandler : IRequestHandler<UpdateStoreCommand, Result<Store>>
+namespace GroceryList.Application.Commands.Stores.UpdateSections;
+public class UpdateSectionsHandler : IRequestHandler<UpdateSectionsCommand, Result<List<Section>>>
 {
     private readonly IStoreRepository _repository;
     private readonly IGroceryListRepository _groceryListRepository;
     private readonly IClaimReader _claimReader;
 
-    public UpdateStoreHandler(IStoreRepository repository, IClaimReader claimReader, IGroceryListRepository groceryListRepository)
+    public UpdateSectionsHandler(IStoreRepository repository, IClaimReader claimReader, IGroceryListRepository groceryListRepository)
     {
         _repository = repository;
         _claimReader = claimReader;
         _groceryListRepository = groceryListRepository;
     }
 
-    public async Task<Result<Store>> Handle(UpdateStoreCommand command, CancellationToken cancellationToken)
+    public async Task<Result<List<Section>>> Handle(UpdateSectionsCommand command, CancellationToken cancellationToken)
     {
-        var store = await _repository.GetByIdAsync(command.Id);
-        if (store is null)
-        {
-            return Result<Store>.Failure(ResultStatusCode.NotFound, $"Store with id {command.Id} was not found");
-        }
-
         try
         {
+            var store = await _repository.GetByIdAsync(command.StoreId);
+            if (store is null)
+            {
+                return Result<List<Section>>.Failure(ResultStatusCode.NotFound, $"Store with id {command.StoreId} was not found");
+            }
+
             var userId = _claimReader.GetUserIdFromClaim();
 
             if (store.UserId != userId)
             {
-                return Result<Store>.Failure(ResultStatusCode.ValidationError, $"Store does not belong to user {userId}");
+                return Result<List<Section>>.Failure(ResultStatusCode.ValidationError, $"Store does not belong to user {userId}");
             }
 
-            var sectionsRemoved = store.Sections.Where(s1 => !command.Sections.Any(s2 => s2.Name == s1.Name)).Select(s => s.Name).ToList();
+            var sectionsRemoved = command.Sections is null ? store.Sections.Select(s => s.Name).ToList() : store.Sections.Where(s1 => !command.Sections.Any(s2 => s2.Name == s1.Name)).Select(s => s.Name).ToList();
 
             if (sectionsRemoved.Any())
             {
@@ -66,17 +65,16 @@ public class UpdateStoreHandler : IRequestHandler<UpdateStoreCommand, Result<Sto
               .Select(x => Section.Create(x.Name, x.Priority))
               .ToList();
 
-            var address = Address.Create(command.Street, command.City, command.Country, command.ZipCode);
-
-            store.Update(command.Name, userId, sections, address);
+            store.UpdateSections(sections);
 
             await _repository.UpdateAsync(store);
 
-            return Result<Store>.Success(store);
+            return Result<List<Section>>.Success(sections ?? new());
         }
-        catch (BusinessValidationException e)
+        catch (Exception)
         {
-            return Result<Store>.Failure(ResultStatusCode.ValidationError, e.Errors);
+
+            throw;
         }
     }
 }

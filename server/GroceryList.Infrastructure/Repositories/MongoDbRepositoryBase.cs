@@ -82,10 +82,27 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
     /* [TODO]: to be improved - probably not the most efficient option */
     public async Task UpdateRangeAsync(IEnumerable<TAggregateRoot> entities)
     {
+        var bulkOperations = new List<WriteModel<TAggregateRoot>>();
+
         foreach (var entity in entities)
         {
             entity.UpdateTrackingInformation(_username, _dateTimeProvider.UtcNow);
-            await UpdateAsync(entity);
+
+            var filter = Builders<TAggregateRoot>.Filter.Eq("_id", entity.Id); // Assuming _id is the identifier field
+
+            var replaceOneModel = new ReplaceOneModel<TAggregateRoot>(filter, entity)
+            {
+                IsUpsert = false // Set to true if you want to upsert
+            };
+
+            bulkOperations.Add(replaceOneModel);
+        }
+
+        var options = new BulkWriteOptions { IsOrdered = false }; // Set IsOrdered as needed
+
+        if (bulkOperations.Any())
+        {
+            await _collection.BulkWriteAsync(bulkOperations, options);
         }
 
         await _mediator.DispatchDomainEventsAsync(entities);

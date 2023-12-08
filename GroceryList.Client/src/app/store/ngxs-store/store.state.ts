@@ -5,7 +5,7 @@ import { v4 as UUID } from 'uuid';
 
 import { StoreService } from "../store.service";
 import { Store } from "../types/store.type";
-import { AddStore, DeleteStore, DropSection, GetSelectedStore, GetStores, SetSelectedStore, UpdateStore } from "./store.actions";
+import { AddStore, DeleteStore, DropSection, GetSelectedStore, GetStores, SetSelectedStore, UpdateSections, UpdateStore } from "./store.actions";
 import { Section } from "../types/section.type";
 
 export interface StoreStateModel {
@@ -144,8 +144,19 @@ export class StoreState {
         });
 
         patchState({
-            ...state,
             selectedStore: selectedStore
         });
+    }
+
+    @Action(UpdateSections)
+    updateSections({ getState, patchState }: StateContext<StoreStateModel>) {
+        const state = getState();
+        return this.storeService.updateSections(state.selectedStore?.id!, state.selectedStore!.sections).pipe(
+            tap((result) => {
+                patchState({
+                    selectedStore: {...state.selectedStore!, sections: result}
+                });
+            })
+        );
     }
 }
