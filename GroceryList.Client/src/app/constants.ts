@@ -48,7 +48,7 @@ export const SIGNUP_FORM = {
 export const STORE_FORM = {
     NAME: 'name',
     STREET: 'street',
-    ZIPCODE: 'zipcode',
+    ZIPCODE: 'zipCode',
     CITY: 'city',
     COUNTRY: 'country',
     SECTIONS: 'sections'

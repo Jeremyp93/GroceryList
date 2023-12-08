@@ -1,10 +1,11 @@
 import { inject } from "@angular/core";
 import { State, Selector, Action, StateContext } from "@ngxs/store";
 import { tap } from "rxjs";
+import { v4 as UUID } from 'uuid';
 
 import { StoreService } from "../store.service";
 import { Store } from "../types/store.type";
-import { AddStore, DeleteStore, GetSelectedStore, GetStores, SetSelectedStore, UpdateStore } from "./store.actions";
+import { AddStore, DeleteStore, DropSection, GetSelectedStore, GetStores, SetSelectedStore, UpdateStore } from "./store.actions";
 import { Section } from "../types/section.type";
 
 export interface StoreStateModel {
@@ -41,7 +42,7 @@ export class StoreState {
 
     @Selector()
     static getSections(state: StoreStateModel): Section[] {
-        return state.selectedStore?.sections ?? [];
+        return state.selectedStore?.sections.sort((a, b) => a.priority - b.priority) ?? [];
     }
 
     @Action(GetStores)
@@ -67,12 +68,18 @@ export class StoreState {
                     ...state,
                     stores: filteredArray,
                 });
-            }));
+            })
+        );
     }
 
     @Action(SetSelectedStore)
     setSelectedStore({ getState, setState, dispatch }: StateContext<StoreStateModel>, { payload }: SetSelectedStore) {
         const state = getState();
+        if (payload) {
+            const sections = [...payload?.sections];
+            const sectionWithIds = sections.map(i => ({ ...i, id: UUID() }));
+            payload.sections = sectionWithIds;
+        }
         setState({
             ...state,
             selectedStore: payload
@@ -87,19 +94,24 @@ export class StoreState {
                 patchState({
                     stores: [...state.stores, result]
                 });
-            }));
+            })
+        );
     }
 
     @Action(GetSelectedStore)
-    getSelectedStore({ getState, setState, dispatch }: StateContext<StoreStateModel>, { id }: GetSelectedStore) {
+    getSelectedStore({ getState, setState }: StateContext<StoreStateModel>, { id }: GetSelectedStore) {
         return this.storeService.getStoreById(id).pipe(
             tap((result) => {
                 const state = getState();
+                const sections = [...result.sections];
+                const sectionWithIds = sections.map(i => ({ ...i, id: UUID() }));
+                result.sections = sectionWithIds;
                 setState({
                     ...state,
                     selectedStore: result
                 });
-            }));
+            })
+        );
     }
 
     @Action(UpdateStore)
@@ -115,6 +127,25 @@ export class StoreState {
                     stores: stores,
                     lastUpdatedStore: result
                 });
-            }));
+            })
+        );
+    }
+
+    @Action(DropSection)
+    dropSection({ getState, patchState }: StateContext<StoreStateModel>, { prevIndex, currentIndex }: DropSection) {
+        const state = getState();
+        const selectedStore = {...state.selectedStore!};
+        const sections = selectedStore.sections ?? [];
+        const movedItem = sections.splice(prevIndex, 1)[0];
+        sections.splice(currentIndex, 0, movedItem);
+        movedItem.priority = currentIndex + 1;
+        sections.forEach((section, index) => {
+            section.priority = index + 1;
+        });
+
+        patchState({
+            ...state,
+            selectedStore: selectedStore
+        });
     }
 }
