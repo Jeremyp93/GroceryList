@@ -5,7 +5,7 @@ import { v4 as UUID } from 'uuid';
 
 import { StoreService } from "../store.service";
 import { Store } from "../types/store.type";
-import { AddStore, DeleteStore, DropSection, GetSelectedStore, GetStores, SetSelectedStore, UpdateSections, UpdateStore } from "./store.actions";
+import { AddSection, AddStore, DeleteSection, DeleteStore, DropSection, GetSelectedStore, GetStores, SaveSections, SetSelectedStore, UpdateStore } from "./store.actions";
 import { Section } from "../types/section.type";
 
 export interface StoreStateModel {
@@ -148,15 +148,55 @@ export class StoreState {
         });
     }
 
-    @Action(UpdateSections)
-    updateSections({ getState, patchState }: StateContext<StoreStateModel>) {
+    @Action(SaveSections)
+    saveSections({ getState, patchState }: StateContext<StoreStateModel>) {
         const state = getState();
         return this.storeService.updateSections(state.selectedStore?.id!, state.selectedStore!.sections).pipe(
             tap((result) => {
                 patchState({
-                    selectedStore: {...state.selectedStore!, sections: result}
+                    selectedStore: {...state.selectedStore!, sections: result.map(i => ({ ...i, id: UUID() }))}
                 });
             })
         );
+    }
+
+    @Action(DeleteSection)
+    deleteSection({ getState, setState }: StateContext<StoreStateModel>, { id }: DeleteSection) {
+        const state = getState();
+        const selectedStore = { ...state.selectedStore! };
+        const sections = [...selectedStore.sections];
+
+        const sectionToDelete = sections.find(s => s.id === id);
+        if (sectionToDelete) {
+            const priorityToDelete = sectionToDelete.priority;
+
+            const updatedSections = sections.filter(s => s.id !== id).map(s => {
+                if (s.priority > priorityToDelete) {
+                    return { ...s, priority: s.priority - 1 };
+                }
+                return s;
+            });
+
+            selectedStore.sections = updatedSections;
+            setState({
+                ...state,
+                selectedStore: selectedStore,
+            });
+        }
+    }
+
+    @Action(AddSection)
+    addSection({ getState, patchState }: StateContext<StoreStateModel>, { payload }: AddSection) {
+        const state = getState();
+        const selectedStore = { ...state.selectedStore! };
+        const sections = [...selectedStore.sections];
+        const highestPriority = sections.reduce((maxPriority, obj) => {
+            return obj.priority > maxPriority ? obj.priority : maxPriority;
+        }, -Infinity);
+        sections.push({ ...payload, id: UUID(), priority: highestPriority+1 });
+        selectedStore.sections = sections;
+        patchState({
+            selectedStore: selectedStore
+        });
     }
 }

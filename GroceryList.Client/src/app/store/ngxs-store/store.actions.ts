@@ -1,3 +1,4 @@
+import { Section } from "../types/section.type";
 import { Store } from "../types/store.type";
 
 export class GetStores {
@@ -46,6 +47,20 @@ export class DropSection {
     }
 }
 
-export class UpdateSections {
-    static readonly type = '[Store] Update Sections';
+export class SaveSections {
+    static readonly type = '[Store] Save Sections';
+}
+
+export class DeleteSection {
+    static readonly type = '[Store] Delete Section';
+
+    constructor(public id: string) {
+    }
+}
+
+export class AddSection {
+    static readonly type = '[Store] Add Section';
+
+    constructor(public payload: Section) {
+    }
 }

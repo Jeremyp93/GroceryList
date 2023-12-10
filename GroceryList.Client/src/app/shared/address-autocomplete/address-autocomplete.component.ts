@@ -43,8 +43,10 @@ export class AddressAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   onFocus = (event: Event) => {
-    console.log((event.target as HTMLInputElement).value);
-    this.#searchTerms.next((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    if (value) {
+      this.#searchTerms.next(value);
+    }
   }
 
   clearInput = () => {
