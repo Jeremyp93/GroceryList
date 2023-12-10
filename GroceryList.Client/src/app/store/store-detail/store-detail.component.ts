@@ -1,36 +1,52 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, HostListener, ViewChild, ViewContainerRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Observable, Subscription, lastValueFrom, take } from 'rxjs';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { CdkDropListGroup, CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { trigger, transition, animate, style } from '@angular/animations';
+
 import { Store as NgxsStore, Select } from '@ngxs/store';
 import { StoreState } from '../ngxs-store/store.state';
-import { Observable, Subscription, lastValueFrom, take } from 'rxjs';
 import { Section } from '../types/section.type';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { ActivatedRoute, Params } from '@angular/router';
 import { ROUTES_PARAM } from '../../constants';
-import { DropSection, GetSelectedStore, UpdateSections } from '../ngxs-store/store.actions';
+import { AddSection, DeleteSection, DropSection, GetSelectedStore, SaveSections } from '../ngxs-store/store.actions';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
 import { LoadingSize } from '../../shared/loading/loading-size.enum';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
-import { CdkDropListGroup, CdkDropList,CdkDrag, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { LetDirective } from '@ngrx/component';
+import { ButtonHover } from '../../shared/button/button-hover.enum';
+import { ComponentCanDeactivate } from '../../guards/pending-changes-guard.service';
+import { TileNewSectionComponent } from './tile-new-section/tile-new-section.component';
 
 @Component({
   selector: 'app-store-detail',
   standalone: true,
   imports: [CommonModule, HeaderComponent, ButtonComponent, LoadingComponent, CdkDropListGroup, CdkDropList, CdkDrag, LetDirective],
   templateUrl: './store-detail.component.html',
-  styleUrl: './store-detail.component.scss'
+  styleUrl: './store-detail.component.scss',
+  animations: [
+    trigger('tileFadeSlideOut', [
+      transition(':leave', [
+        animate('300ms', style({ transform: 'translateX(100%)' })),
+      ]),
+    ])
+  ]
 })
-export class StoreDetailComponent implements OnInit, OnDestroy {
+export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   private ngxsStore = inject(NgxsStore);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   @Select(StoreState.getSections) sections$!: Observable<Section[]>;
+  @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   title: string = 'Sections';
   isLoading: boolean = false;
   id: string = '';
   #routeSubscription!: Subscription;
+  #itemAddedSubscription: Subscription | null = null;
+  #addFormClosedSubscription: Subscription | null = null;
   saved: boolean = false;
   saveProcess: boolean = false;
   #pendingChanges: boolean = false;
@@ -45,6 +61,15 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
 
   get buttonStyles(): typeof ButtonStyle {
     return ButtonStyle;
+  }
+
+  get hoverChoices(): typeof ButtonHover {
+    return ButtonHover;
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.#pendingChanges;
   }
 
   ngOnInit(): void {
@@ -77,13 +102,17 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  editStore = () => {
+  deleteSection = (sectionId: string) => {
+    this.ngxsStore.dispatch(new DeleteSection(sectionId)).subscribe(() => this.#pendingChanges = true);
+  }
 
+  editStore = () => {
+    this.router.navigate([ROUTES_PARAM.STORE.EDIT], { relativeTo: this.route });
   }
 
   saveSections = () => {
     this.saveProcess = true;
-    this.ngxsStore.dispatch(new UpdateSections()).subscribe({
+    this.ngxsStore.dispatch(new SaveSections()).subscribe({
       next: () => {
         this.saveProcess = this.#pendingChanges = false;
         this.saved = true;
@@ -98,17 +127,36 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
   }
 
   newSection = () => {
-
+    const componentRef = this.dynamicComponentContainer.createComponent(TileNewSectionComponent);
+    this.#itemAddedSubscription = componentRef.instance.itemAdded.subscribe(section => {
+      this.ngxsStore.dispatch(new AddSection(section)).subscribe(() => {
+        this.#pendingChanges = true
+        this.#itemAddedSubscription?.unsubscribe();
+        this.dynamicComponentContainer.clear();
+      });
+    });
+    setTimeout(() => {
+      this.#addFormClosedSubscription = componentRef.instance.onClickOutside.subscribe(() => {
+        this.#addFormClosedSubscription?.unsubscribe();
+        this.dynamicComponentContainer.clear();
+      });
+    });
   }
 
   drop = (event: CdkDragDrop<Section[]>) => {
     if (event.previousIndex === event.currentIndex) return;
-    this.ngxsStore.dispatch(new DropSection(event.previousIndex, event.currentIndex));
+    this.ngxsStore.dispatch(new DropSection(event.previousIndex, event.currentIndex)).subscribe(() => this.#pendingChanges = true);
   }
 
   ngOnDestroy(): void {
     if (this.#routeSubscription) {
       this.#routeSubscription.unsubscribe();
+    }
+    if (this.#itemAddedSubscription) {
+      this.#itemAddedSubscription.unsubscribe();
+    }
+    if (this.#addFormClosedSubscription) {
+      this.#addFormClosedSubscription.unsubscribe();
     }
   }
 }

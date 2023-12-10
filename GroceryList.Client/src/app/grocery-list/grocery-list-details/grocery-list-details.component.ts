@@ -167,7 +167,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   }
 
   editGroceryList = () => {
-    this.router.navigate(['edit'], { relativeTo: this.route });
+    this.router.navigate([ROUTES_PARAM.GROCERY_LIST.EDIT], { relativeTo: this.route });
   }
 
   saveIngredients = async () => {
@@ -197,7 +197,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
     this.exportFormSubmitted = true;
     if (this.exportForm.invalid) return;
     const groceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
-    //const groceryList = await lastValueFrom(this.groceryListService.getGroceryList(this.id));
     this.ingredients$.pipe(take(1)).subscribe(ingredients => {
       const newList = { ...groceryList, name: name, storeId: storeId, ingredients: [...ingredients.filter(i => !i.selected)] };
       this.ngStore.dispatch(new AddGroceryList(newList)).subscribe(_ => {
@@ -219,7 +218,6 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
     if (this.#routeSubscription) {
       this.#routeSubscription.unsubscribe();
     }
-    //this.ingredientService.setIngredients([]);
     if (this.itemAddedSubscription) {
       this.itemAddedSubscription.unsubscribe();
     }
