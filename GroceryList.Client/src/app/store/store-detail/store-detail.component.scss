@@ -10,8 +10,11 @@ ul {
 
     .tile-container {
         @include tile;
-        cursor: grab;
         justify-content: space-between;
+
+        .drag {
+          cursor: grab;
+        }
     }
 }
 
@@ -43,11 +46,12 @@ ul {
     cursor: grabbing;
     justify-content: space-between;
   }
+
   
   .cdk-drag-placeholder {
     opacity: 0;
   }
-  
+
   .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }

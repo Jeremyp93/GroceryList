@@ -25,11 +25,11 @@
 }
 <div cdkDropListGroup>
   <ng-container *ngrxLet="sections$ as sections">
-    <ul cdkDropList [cdkDropListData]="sections" (cdkDropListDropped)="drop($event)">
+    <ul cdkDropList cdkDropListLockAxis="y" [cdkDropListData]="sections" (cdkDropListDropped)="drop($event)">
       <ng-template #dynamicComponentContainer></ng-template>
       @for(section of sections; track section.id) {
       <li cdkDrag class="tile-container" @tileFadeSlideOut [@.disabled]="saveProcess">
-        <img src="../../../assets/icons/icons8-drag-reorder-24.png" alt="drag-icon" width="20" />
+        <div cdkDragHandle class="drag"><img src="../../../assets/icons/icons8-drag-reorder-24.png" alt="drag-icon" width="20" /></div>
         {{section.name}}
         <app-button [buttonStyle]="buttonStyles.danger" (click)="deleteSection(section.id!)"
           [buttonHover]="hoverChoices.invert"><img src="../../../assets/icons/icons8-delete-24.png" alt="delete-icon"

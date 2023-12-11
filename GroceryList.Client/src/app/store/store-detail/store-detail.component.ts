@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, inject, HostListener, ViewChild, ViewCont
 import { CommonModule } from '@angular/common';
 import { Observable, Subscription, lastValueFrom, take } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { CdkDropListGroup, CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDropListGroup, CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { trigger, transition, animate, style } from '@angular/animations';
 
 import { Store as NgxsStore, Select } from '@ngxs/store';
@@ -24,7 +24,7 @@ import { TileNewSectionComponent } from './tile-new-section/tile-new-section.com
 @Component({
   selector: 'app-store-detail',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, ButtonComponent, LoadingComponent, CdkDropListGroup, CdkDropList, CdkDrag, LetDirective],
+  imports: [CommonModule, HeaderComponent, ButtonComponent, LoadingComponent, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragHandle, LetDirective],
   templateUrl: './store-detail.component.html',
   styleUrl: './store-detail.component.scss',
   animations: [
