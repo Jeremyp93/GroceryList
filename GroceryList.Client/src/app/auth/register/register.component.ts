@@ -9,12 +9,13 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { SIGNUP_FORM, ROUTES_PARAM } from '../../constants';
 import { AuthState } from '../ngxs-store/auth.state';
-import { AddressAutocompleteComponent } from '../../shared/address-autocomplete/address-autocomplete.component';
+import { InputFieldComponent } from '../../shared/input-field/input-field.component';
+import { InputType } from '../../shared/input-field/input-type.enum';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, ButtonComponent, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, ButtonComponent, RouterModule, InputFieldComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -30,6 +31,10 @@ export class RegisterComponent implements OnInit {
   signupForm!: FormGroup;
   isLoading: boolean = false;
   isSubmitted: boolean = false;
+
+  get inputTypes(): typeof InputType {
+    return InputType;
+  }
 
   ngOnInit(): void {
     const isLoggedIn = this.ngxsStore.selectSnapshot(AuthState.isAuthenticated);

@@ -19,14 +19,8 @@
     /></app-button>
   </div>
   <div class="content">
-    <div class="group">
-      <label for="name">Name</label>
-      <input
-        type="text"
-        id="name"
-        placeholder="Name of the list"
-        formControlName="name"
-      />
+    <div class="group with-label first">
+      <app-input-field [type]="inputTypes.text" label="Name of the list" id="name" formControlName="name"></app-input-field>
       @if(this.groceryListForm.controls["name"].invalid && submitted) {
       <span class="error">Name is required</span>
       }
@@ -64,21 +58,22 @@
       ingredientControl.value.id) {
       <div class="ingredient-section" [formGroupName]="$index">
         <div class="ingredient-amount">
-          <input type="number" formControlName="amount" placeholder="1" (keydown.enter)="onEnterPressed($event)" />
+          <app-input-field [type]="inputTypes.number" placeHolder="1" [id]="'amount_' + ingredientControl.value.id" formControlName="amount" (keydown.enter)="onEnterPressed($event)"></app-input-field>
           @if(ingredientControl.get("amount")?.invalid &&
           ingredientControl.get("amount")?.touched) {
           <span class="error">Amount is required</span>
           }
         </div>
         <div class="ingredient-name">
-          <input
+          <app-input-field #inputFields [type]="inputTypes.text" placeHolder="Name of ingredient" [id]="'name_' + ingredientControl.value.id" formControlName="name" (keydown.enter)="onEnterPressed($event)"></app-input-field>
+          <!-- <input
             #inputFields
             [id]="'name_' + ingredientControl.value.id"
             type="text"
             formControlName="name"
             placeholder="Name of ingredient"
             (keydown.enter)="onEnterPressed($event)"
-          />
+          /> -->
           @if(ingredientControl.get("name")?.invalid && submitted) {
           <span class="error">Name is required</span>
           }

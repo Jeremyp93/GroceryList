@@ -6,7 +6,17 @@
     display: flex;
     align-self: flex-start;
   }
-
+  input {
+    background-color: transparent;
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid transparent;
+    border-bottom: 1px solid $primary-color;
+    outline: none;
+    color: $secondary-color;
+    font-size: large;
+  }
+  
   .input-wrapper {
     position: relative;
 

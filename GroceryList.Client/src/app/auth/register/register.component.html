@@ -9,49 +9,29 @@
       class="form"
     >
       <div class="content">
-        <div class="group">
-          <input
-            type="text"
-            id="firstname"
-            placeholder="First Name"
-            [formControlName]="signupFormFirstName"
-          />
+        <div class="group with-label">
+          <app-input-field [type]="inputTypes.text" label="First Name" id="firstname" [formControlName]="signupFormFirstName"></app-input-field>
           @if(this.signupForm.controls[signupFormFirstName].invalid &&
           isSubmitted) {
           <span class="error">Please enter your first name</span>
           }
         </div>
-        <div class="group">
-          <input
-            type="text"
-            id="lastname"
-            placeholder="Last Name"
-            [formControlName]="signupFormLastName"
-          />
+        <div class="group with-label">
+          <app-input-field [type]="inputTypes.text" label="Last Name" id="lastname" [formControlName]="signupFormLastName"></app-input-field>
           @if(this.signupForm.controls[signupFormLastName].invalid &&
           isSubmitted) {
           <span class="error">Please enter your last name</span>
           }
         </div>
-        <div class="group">
-          <input
-            type="email"
-            id="username"
-            placeholder="Email"
-            [formControlName]="signupFormEmail"
-          />
+        <div class="group with-label">
+          <app-input-field [type]="inputTypes.email" label="Email" id="email" [formControlName]="signupFormEmail"></app-input-field>
           @if(this.signupForm.controls[signupFormEmail].invalid && isSubmitted)
           {
           <span class="error">Please enter a valid email</span>
           }
         </div>
-        <div class="group">
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            [formControlName]="signupFormPassword"
-          />
+        <div class="group with-label">
+          <app-input-field [type]="inputTypes.password" label="Password" id="password" [formControlName]="signupFormPassword"></app-input-field>
           @if(this.signupForm.controls[signupFormPassword].invalid &&
           isSubmitted) {
           <span class="error"
@@ -59,13 +39,8 @@
           >
           }
         </div>
-        <div class="group">
-          <input
-            type="password"
-            id="confirmPassword"
-            placeholder="Confirm Password"
-            [formControlName]="signupFormConfirmPassword"
-          />
+        <div class="group with-label">
+          <app-input-field [type]="inputTypes.password" label="Confirm Password" id="confirmPassword" [formControlName]="signupFormConfirmPassword"></app-input-field>
           @if(this.signupForm.controls[signupFormConfirmPassword].invalid &&
           isSubmitted) {
           <span class="error">Passwords must be the same</span>

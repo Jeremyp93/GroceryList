@@ -19,14 +19,8 @@
     /></app-button>
   </div>
   <div class="content">
-    <div class="group">
-      <label for="name">Name</label>
-      <input
-        type="text"
-        id="name"
-        placeholder="Name of the store"
-        formControlName="name"
-      />
+    <div class="group with-label first">
+      <app-input-field [type]="inputTypes.text" label="Name of the store" id="name" formControlName="name"></app-input-field>
       @if(this.storeForm.controls["name"].invalid && submitted) {
       <span class="error">Name is required</span>
       }
@@ -36,16 +30,16 @@
     </div>
     @if(showAddressFields) {
       <div class="group">
-        <input type="text" placeholder="Street" formControlName="street">
+        <app-input-field [type]="inputTypes.text" placeHolder="Street" id="street" formControlName="street"></app-input-field>
       </div>
       <div class="group">
-        <input type="text" placeholder="Zip Code" formControlName="zipCode">
+        <app-input-field [type]="inputTypes.text" placeHolder="Zip Code" id="zipCode" formControlName="zipCode"></app-input-field>
       </div>
       <div class="group">
-        <input type="text" placeholder="City" formControlName="city">
+        <app-input-field [type]="inputTypes.text" placeHolder="City" id="city" formControlName="city"></app-input-field>
       </div>
       <div class="group">
-        <input type="text" placeholder="Country" formControlName="country">
+        <app-input-field [type]="inputTypes.text" placeHolder="Country" id="country" formControlName="country"></app-input-field>
       </div>
     }
     <div class="group" formArrayName="sections">

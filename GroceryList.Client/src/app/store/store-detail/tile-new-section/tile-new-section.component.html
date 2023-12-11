@@ -2,7 +2,7 @@
   <form [formGroup]="addForm" class="form">
     <div class="content">
       <div class="group">
-        <input #inputField type="text" placeholder="Name" formControlName="name" (keydown.enter)="onEnterPressed()" />
+        <app-input-field #inputField [type]="inputTypes.text" placeHolder="Name" id="name" formControlName="name" (keydown.enter)="onEnterPressed()"></app-input-field>
         @if(addForm.get("name")?.invalid && formSubmitted) {
         <span class="error">Name is required</span>
         }

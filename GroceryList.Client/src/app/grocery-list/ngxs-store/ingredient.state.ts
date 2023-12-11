@@ -1,6 +1,6 @@
 import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import { tap } from 'rxjs';
-import { inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { v4 as UUID } from 'uuid';
 
 import { Ingredient } from '../types/ingredient.type';
@@ -21,6 +21,7 @@ export interface IngredientStateModel {
         ingredients: []
     },
 })
+@Injectable()
 export class IngredientState {
     groceryListService = inject(GroceryListService);
     ngxsStore = inject(Store);

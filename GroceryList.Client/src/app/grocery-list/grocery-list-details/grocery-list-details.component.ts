@@ -27,11 +27,13 @@ import { LoadingColor } from '../../shared/loading/loading-color.enum';
 import { ComponentCanDeactivate } from '../../guards/pending-changes-guard.service';
 import { GetStores } from '../../store/ngxs-store/store.actions';
 import { StoreState } from '../../store/ngxs-store/store.state';
+import { InputFieldComponent } from '../../shared/input-field/input-field.component';
+import { InputType } from '../../shared/input-field/input-type.enum';
 
 @Component({
   selector: 'app-grocery-list-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, TileIngredientComponent, HeaderComponent, ButtonComponent, LoadingComponent, ReactiveFormsModule, ModalComponent, LoadingComponent],
+  imports: [CommonModule, RouterModule, TileIngredientComponent, HeaderComponent, ButtonComponent, LoadingComponent, ReactiveFormsModule, ModalComponent, LoadingComponent, InputFieldComponent],
   templateUrl: './grocery-list-details.component.html',
   styleUrl: './grocery-list-details.component.scss',
   animations: [
@@ -74,6 +76,9 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   }
   get loadingColors(): typeof LoadingColor {
     return LoadingColor;
+  }
+  get inputTypes(): typeof InputType {
+    return InputType;
   }
 
   @HostListener('window:beforeunload')

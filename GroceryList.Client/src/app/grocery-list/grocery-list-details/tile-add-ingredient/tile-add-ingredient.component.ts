@@ -8,11 +8,13 @@ import { Ingredient } from '../../types/ingredient.type';
 import { Section } from '../../../store/types/section.type';
 import { INGREDIENT_FORM } from '../../../constants';
 import { ButtonHover } from '../../../shared/button/button-hover.enum';
+import { InputType } from '../../../shared/input-field/input-type.enum';
+import { InputFieldComponent } from '../../../shared/input-field/input-field.component';
 
 @Component({
   selector: 'app-tile-add-ingredient',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, ReactiveFormsModule],
+  imports: [CommonModule, ButtonComponent, ReactiveFormsModule, InputFieldComponent],
   templateUrl: './tile-add-ingredient.component.html',
   styleUrl: './tile-add-ingredient.component.scss'
 })
@@ -20,14 +22,17 @@ export class TileAddIngredientComponent implements OnInit, AfterViewInit {
   @Output() itemAdded: EventEmitter<Ingredient> = new EventEmitter<Ingredient>();
   @Output() onClickOutside: EventEmitter<void> = new EventEmitter<void>();
   @Input() sections: Section[] = [];
-  @ViewChild('inputField') inputField!: ElementRef;
+  @ViewChild('inputField', { read: InputFieldComponent, static: true }) inputFieldComponent!: InputFieldComponent;
   elementRef = inject(ElementRef)
   categories: string[] = [];
   addForm!: FormGroup;
   formSubmitted: boolean = false;
 
-  public get hoverChoices(): typeof ButtonHover {
+  get hoverChoices(): typeof ButtonHover {
     return ButtonHover;
+  }
+  get inputTypes(): typeof InputType {
+    return InputType;
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -44,7 +49,9 @@ export class TileAddIngredientComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.inputField.nativeElement.focus();
+    if (this.inputFieldComponent) {
+      this.inputFieldComponent.focusInput();
+    }
   }
 
   addItem = () => {
