@@ -1,4 +1,4 @@
-import { inject } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { State, Selector, Action, StateContext } from "@ngxs/store";
 import { tap } from "rxjs";
 import { v4 as UUID } from 'uuid';
@@ -22,6 +22,7 @@ export interface StoreStateModel {
         lastUpdatedStore: null
     }
 })
+@Injectable()
 export class StoreState {
     storeService = inject(StoreService);
 

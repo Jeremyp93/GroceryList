@@ -20,11 +20,13 @@ import { AddStore, GetSelectedStore, SetSelectedStore, UpdateStore } from '../..
 import { StoreState } from '../../ngxs-store/store.state';
 import { Store } from '../../types/store.type';
 import { Section } from '../../types/section.type';
+import { InputFieldComponent } from '../../../shared/input-field/input-field.component';
+import { InputType } from '../../../shared/input-field/input-type.enum';
 
 @Component({
   selector: 'app-store-new',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent, AddressAutocompleteComponent],
+  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent, AddressAutocompleteComponent, InputFieldComponent],
   templateUrl: './store-new.component.html',
   styleUrl: './store-new.component.scss'
 })
@@ -56,9 +58,11 @@ export class StoreNewComponent implements OnInit, OnDestroy {
   get buttonStyles(): typeof ButtonStyle {
     return ButtonStyle;
   }
-
-  get sectionControls() { // a getter!
+  get sectionControls() {
     return (this.storeForm.get(STORE_FORM.SECTIONS) as FormArray).controls;
+  }
+  get inputTypes(): typeof InputType {
+    return InputType;
   }
 
   ngOnInit(): void {

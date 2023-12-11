@@ -22,11 +22,13 @@ import { LoadingColor } from '../../shared/loading/loading-color.enum';
 import { LinkMapsStorePipe } from './link-maps-store.pipe';
 import { ButtonHover } from '../../shared/button/button-hover.enum';
 import { displayDateAsHuman } from '../../helpers/date.helper';
+import { InputType } from '../../shared/input-field/input-type.enum';
+import { InputFieldComponent } from '../../shared/input-field/input-field.component';
 
 @Component({
   selector: 'app-grocery-list-items',
   standalone: true,
-  imports: [CommonModule, AnchorButtonComponent, RouterModule, ButtonComponent, HeaderComponent, ModalComponent, ReactiveFormsModule, LetDirective, LoadingComponent, LinkMapsStorePipe],
+  imports: [CommonModule, AnchorButtonComponent, RouterModule, ButtonComponent, HeaderComponent, ModalComponent, ReactiveFormsModule, LetDirective, LoadingComponent, LinkMapsStorePipe, InputFieldComponent],
   templateUrl: './grocery-list-items.component.html',
   styleUrl: './grocery-list-items.component.scss',
   animations: [
@@ -69,8 +71,12 @@ export class GroceryListItemsComponent implements OnInit {
     return LoadingColor;
   }
 
-  public get hoverChoices(): typeof ButtonHover {
+  get hoverChoices(): typeof ButtonHover {
     return ButtonHover;
+  }
+
+  get inputTypes(): typeof InputType {
+    return InputType;
   }
 
   ngOnInit(): void {

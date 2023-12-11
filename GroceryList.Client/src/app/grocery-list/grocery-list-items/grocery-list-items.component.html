@@ -10,7 +10,7 @@
     >
       <div class="content">
         <div class="group">
-          <input type="text" placeholder="Name" formControlName="name" />
+          <app-input-field [type]="inputTypes.text" placeHolder="Name" id="name" formControlName="name"></app-input-field>
           @if(this.duplicateForm.controls["name"].invalid &&
           duplicateFormSubmitted) {
           <span class="error">Name is required</span>

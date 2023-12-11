@@ -2,19 +2,13 @@
   <form [formGroup]="addForm" class="form">
     <div class="line1">
       <div class="group">
-        <input type="number" formControlName="amount" (keydown.enter)="onEnterPressed()" />
+        <app-input-field [type]="inputTypes.number" id="amount" formControlName="amount" (keydown.enter)="onEnterPressed()"></app-input-field>
         @if(addForm.get("amount")?.invalid && formSubmitted) {
         <span class="error">Amount is required</span>
         }
       </div>
       <div class="group full-width">
-        <input
-          #inputField
-          type="text"
-          placeholder="Name"
-          formControlName="name"
-          (keydown.enter)="onEnterPressed()"
-        />
+        <app-input-field #inputField [type]="inputTypes.text" placeHolder="Name" id="name" formControlName="name" (keydown.enter)="onEnterPressed()"></app-input-field>
         @if(addForm.get("name")?.invalid && formSubmitted) {
         <span class="error">Name is required</span>
         }

@@ -36,8 +36,12 @@
                 color: $secondary-color;
             }
         
-            &:not(:last-child) {
-                margin-bottom: 20px;
+            &:not(:first-child).with-label {
+                margin-top: 40px;
+            }
+
+            &:not(.with-label):not(:first-child) {
+                margin-top: 20px;
             }
         }
     }
@@ -219,4 +223,8 @@
     
     -moz-appearance: textfield;
 
+}
+
+app-input-field {
+    width: 100%;
 }

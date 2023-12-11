@@ -1,6 +1,6 @@
 import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
-import { inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { GroceryList } from '../types/grocery-list.type';
 import { GroceryListService } from '../grocery-list.service';
@@ -23,6 +23,7 @@ export interface GroceryListStateModel {
         lastUpdatedGroceryList: null
     }
 })
+@Injectable()
 export class GroceryListState {
     groceryListService = inject(GroceryListService);
     ingredientState = inject(IngredientState);

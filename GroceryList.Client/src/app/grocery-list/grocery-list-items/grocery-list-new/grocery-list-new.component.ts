@@ -23,11 +23,13 @@ import { LoadingColor } from '../../../shared/loading/loading-color.enum';
 import { ButtonHover } from '../../../shared/button/button-hover.enum';
 import { GetStores } from '../../../store/ngxs-store/store.actions';
 import { StoreState } from '../../../store/ngxs-store/store.state';
+import { InputFieldComponent } from '../../../shared/input-field/input-field.component';
+import { InputType } from '../../../shared/input-field/input-type.enum';
 
 @Component({
   selector: 'app-grocery-list-new',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent],
+  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent, InputFieldComponent],
   templateUrl: './grocery-list-new.component.html',
   styleUrl: './grocery-list-new.component.scss'
 })
@@ -47,7 +49,8 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   title: string = '';
   #routeSubscription!: Subscription;
 
-  @ViewChildren('inputFields') inputFields!: QueryList<ElementRef>;
+  //@ViewChildren('inputFields') inputFields!: QueryList<ElementRef>;
+  @ViewChildren('inputFields', { read: InputFieldComponent }) inputFields!: QueryList<InputFieldComponent>;
 
   get ingredientControls() { // a getter!
     return (this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray).controls;
@@ -65,10 +68,13 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     return LoadingColor;
   }
 
-  public get hoverChoices(): typeof ButtonHover {
+  get hoverChoices(): typeof ButtonHover {
     return ButtonHover;
   }
 
+  get inputTypes(): typeof InputType {
+    return InputType;
+  }
   ngOnInit(): void {
     this.#routeSubscription = this.route.params.subscribe(async (params: Params) => {
       this.idToEdit = params[ROUTES_PARAM.ID_PARAMETER];
@@ -193,7 +199,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   #focusOnControl = (index: number) => {
     const elements = this.inputFields.toArray();
     if (elements[index]) {
-      elements[index].nativeElement.focus();
+      elements[index].focusInput();
     }
   }
 

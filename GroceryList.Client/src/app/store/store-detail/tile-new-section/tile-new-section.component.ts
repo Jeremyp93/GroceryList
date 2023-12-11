@@ -6,11 +6,13 @@ import { ButtonComponent } from '../../../shared/button/button.component';
 import { ButtonHover } from '../../../shared/button/button-hover.enum';
 import { Section } from '../../types/section.type';
 import { SECTION_FORM } from '../../../constants';
+import { InputFieldComponent } from '../../../shared/input-field/input-field.component';
+import { InputType } from '../../../shared/input-field/input-type.enum';
 
 @Component({
   selector: 'app-tile-new-section',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, ReactiveFormsModule],
+  imports: [CommonModule, ButtonComponent, ReactiveFormsModule, InputFieldComponent],
   templateUrl: './tile-new-section.component.html',
   styleUrl: './tile-new-section.component.scss'
 })
@@ -20,10 +22,13 @@ export class TileNewSectionComponent implements OnInit {
   elementRef = inject(ElementRef)
   addForm!: FormGroup;
   formSubmitted: boolean = false;
-  @ViewChild('inputField') inputField!: ElementRef;
+  @ViewChild('inputField', { read: InputFieldComponent, static: true }) inputFieldComponent!: InputFieldComponent;
 
   get hoverChoices(): typeof ButtonHover {
     return ButtonHover;
+  }
+  get inputTypes(): typeof InputType {
+    return InputType;
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -39,7 +44,7 @@ export class TileNewSectionComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.inputField.nativeElement.focus();
+    this.inputFieldComponent.focusInput();
   }
 
   addItem = () => {

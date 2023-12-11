@@ -9,11 +9,13 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { LOGIN_FORM, ROUTES_PARAM } from '../../constants';
 import { AuthState } from '../ngxs-store/auth.state';
+import { InputFieldComponent } from '../../shared/input-field/input-field.component';
+import { InputType } from '../../shared/input-field/input-type.enum';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, ButtonComponent, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, ButtonComponent, RouterModule, InputFieldComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -26,6 +28,10 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading: boolean = false;
   isSubmitted: boolean = false;
+
+  get inputTypes(): typeof InputType {
+    return InputType;
+  }
 
   ngOnInit(): void {
     const isLoggedIn = this.ngxsStore.selectSnapshot(AuthState.isAuthenticated);

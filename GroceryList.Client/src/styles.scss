@@ -5,28 +5,10 @@
 body {
     background-color: #F7F3F6;
     text-align: center;
+    font-family: $font-family;
 
     &.modal-open {
         overflow: hidden;
-    }
-}
-
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"] {
-    background-color: transparent;
-    width: calc(100% - 20px);
-    padding: 10px;
-    border: 1px solid transparent;
-    border-bottom: 1px solid $primary-color;
-    outline: none;
-    color: $secondary-color;
-    font-size: large;
-
-    &:focus {
-        border: 1px solid $primary-color;
-        border-radius: 5px;
     }
 }
 

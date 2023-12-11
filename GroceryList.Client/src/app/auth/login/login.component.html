@@ -8,25 +8,15 @@
       class="form"
     >
       <div class="content">
-        <div class="group">
-          <input
-            type="email"
-            id="username"
-            placeholder="Username"
-            [formControlName]="loginFormUsername"
-          />
+        <div class="group with-label">
+          <app-input-field [type]="inputTypes.email" label="Email" id="email" [formControlName]="loginFormUsername"></app-input-field>
           @if(this.loginForm.controls[loginFormUsername].invalid && isSubmitted)
           {
           <span class="error">Please enter a valid email</span>
           }
         </div>
-        <div class="group">
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            [formControlName]="loginFormPassword"
-          />
+        <div class="group with-label">
+          <app-input-field [type]="inputTypes.password" label="Password" id="password" [formControlName]="loginFormPassword"></app-input-field>
           @if(this.loginForm.controls[loginFormPassword].invalid && isSubmitted)
           {
           <span class="error"
