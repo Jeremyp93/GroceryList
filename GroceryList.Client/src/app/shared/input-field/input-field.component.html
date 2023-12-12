@@ -1,8 +1,8 @@
 <div class="field-holder">
     @if (type === inputTypes.number) {
-        <input #inputField type="text" [id]="'input-' + id" [value]="value" (input)="onInputChange($event)" [placeholder]="placeHolder ?? ''" onlyNumbers />
+        <input #inputField type="text" [id]="'input-' + id" [value]="value" (input)="onInputChange($event)" [placeholder]="placeHolder ?? ' '" onlyNumbers />
     } @else {
-        <input #inputField [type]="type" [id]="'input-' + id" [value]="value" (input)="onInputChange($event)" [placeholder]="placeHolder ?? ''" />
+        <input #inputField [type]="type" [id]="'input-' + id" [value]="value" (input)="onInputChange($event)" [placeholder]="placeHolder ?? ' '" />
     }
     @if (label) {
         <label [for]="'input-' + id">{{ label }}</label>
