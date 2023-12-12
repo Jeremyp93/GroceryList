@@ -44,7 +44,8 @@ export class StoreNewComponent implements OnInit, OnDestroy {
   validationInProgress: boolean = false;
   showAddressFields: boolean = false;
 
-  @ViewChildren('inputFields') inputFields!: QueryList<ElementRef>;
+  //@ViewChildren('inputFields') inputFields!: QueryList<ElementRef>;
+  @ViewChildren('inputFields', { read: InputFieldComponent }) inputFields!: QueryList<InputFieldComponent>;
 
   get hoverChoices(): typeof ButtonHover {
     return ButtonHover;
@@ -189,7 +190,7 @@ export class StoreNewComponent implements OnInit, OnDestroy {
   #focusOnControl = (index: number) => {
     const elements = this.inputFields.toArray();
     if (elements[index]) {
-      elements[index].nativeElement.focus();
+      elements[index].focusInput();
     }
   }
 

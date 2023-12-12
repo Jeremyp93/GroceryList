@@ -61,14 +61,7 @@
         sectionControl.value.id) {
       <div class="section-container" [formGroupName]="$index">
         <div class="name">
-          <input
-            #inputFields
-            [id]="'name_' + sectionControl.value.id"
-            type="text"
-            formControlName="name"
-            placeholder="Name of Section"
-            (keydown.enter)="onEnterPressed($event)"
-          />
+          <app-input-field #inputFields [type]="inputTypes.text" placeHolder="Name of Section" [id]="'name_' + sectionControl.value.id" formControlName="name" (keydown.enter)="onEnterPressed($event)"></app-input-field>
         </div>
         <div class="delete">
           <app-button
