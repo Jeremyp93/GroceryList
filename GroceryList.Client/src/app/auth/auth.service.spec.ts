@@ -45,7 +45,7 @@ describe('AuthService', () => {
     const mockRegister: Register = { firstName: 'John', lastName: 'Doe', email: 'example@test.ca', password: 'password' };
 
     authService.register(mockRegister).subscribe((response) => {
-      expect(response).toBeUndefined(); // Assuming the registration doesn't return a response
+      expect(response).toBeNull();
     });
 
     const req = httpTestingController.expectOne(`${environment.userApiUrl}`);
