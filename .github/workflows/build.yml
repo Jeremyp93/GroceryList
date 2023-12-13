@@ -40,8 +40,23 @@ jobs:
         with:
           node-version: '20.x' # Specify the Node.js version
 
-      - name: Install dependencies and build Angular app
+      # - name: Install dependencies and build Angular app
+      #   run: |
+      #     cd GroceryList.Client
+      #     npm install --legacy-peer-deps
+      #     npm run build
+
+      - name: Install dependencies
         run: |
           cd GroceryList.Client
           npm install --legacy-peer-deps
-          npm run build 
+    
+      - name: Run Angular unit tests
+        run: |
+          cd GroceryList.Client
+          npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
+  
+      - name: Build Angular app
+        run: |
+          cd GroceryList.Client
+          npm run build
