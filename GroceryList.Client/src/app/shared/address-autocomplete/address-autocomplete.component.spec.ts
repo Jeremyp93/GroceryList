@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddressAutocompleteComponent } from './address-autocomplete.component';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { AutocompleteService } from './autocomplete.service';
 
 describe('AddressAutocompleteComponent', () => {
   let component: AddressAutocompleteComponent;
@@ -8,7 +10,8 @@ describe('AddressAutocompleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddressAutocompleteComponent]
+      imports: [AddressAutocompleteComponent],
+      providers: [ HttpClient, HttpHandler ]
     })
     .compileComponents();
     
