@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GroceryListItemsComponent } from './grocery-list-items.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgxsModule } from '@ngxs/store';
 
 describe('GroceryListItemsComponent', () => {
   let component: GroceryListItemsComponent;
@@ -8,7 +10,7 @@ describe('GroceryListItemsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroceryListItemsComponent]
+      imports: [GroceryListItemsComponent, RouterTestingModule, NgxsModule.forRoot()]
     })
     .compileComponents();
     
