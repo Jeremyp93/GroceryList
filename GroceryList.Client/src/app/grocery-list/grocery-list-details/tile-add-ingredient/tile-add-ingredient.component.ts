@@ -23,7 +23,7 @@ export class TileAddIngredientComponent implements OnInit, AfterViewInit {
   @Output() onClickOutside: EventEmitter<void> = new EventEmitter<void>();
   @Input() sections: Section[] = [];
   @ViewChild('inputField', { read: InputFieldComponent, static: true }) inputFieldComponent!: InputFieldComponent;
-  elementRef = inject(ElementRef)
+  #elementRef = inject(ElementRef)
   categories: string[] = [];
   addForm!: FormGroup;
   formSubmitted: boolean = false;
@@ -37,7 +37,7 @@ export class TileAddIngredientComponent implements OnInit, AfterViewInit {
 
   @HostListener('document:click', ['$event.target'])
   onClick(target: EventTarget | null): void {
-    const clickedInside = this.elementRef.nativeElement.contains(target);
+    const clickedInside = this.#elementRef.nativeElement.contains(target);
     if (!clickedInside) {
       this.onClickOutside.emit();
     }
