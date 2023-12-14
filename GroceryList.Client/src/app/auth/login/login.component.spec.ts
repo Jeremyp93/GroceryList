@@ -83,7 +83,6 @@ describe('LoginComponent', () => {
     component.loginForm.controls[LOGIN_FORM.PASSWORD].setValue('');
 
     component.onSubmit();
-
     expect(component.isLoading).toBe(true);
     expect(component.isSubmitted).toBe(true);
   });
