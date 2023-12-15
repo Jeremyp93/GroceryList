@@ -1,6 +1,7 @@
 import { HttpClient} from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable, map } from "rxjs";
+import { NIL } from "uuid";
 
 import { GroceryListRequestDto, GroceryListResponseDto } from "./dtos/grocery-list-dto.type";
 import { GroceryList } from "./types/grocery-list.type";
@@ -29,6 +30,9 @@ export class GroceryListService {
     }
 
     addGroceryList = (list: GroceryListRequestDto): Observable<GroceryList> => {
+        if (!list.storeId) {
+            list.storeId = NIL;
+        }
         return this.httpClient.post<GroceryListResponseDto>(environment.groceryListApiUrl, list).pipe(map((createdListDto: GroceryListResponseDto) => {
             return this.#fromDto(createdListDto);
         }));
@@ -39,6 +43,9 @@ export class GroceryListService {
     }
 
     updateGroceryList = (id: string, list: GroceryListRequestDto): Observable<GroceryList> => {
+        if (!list.storeId) {
+            list.storeId = NIL;
+        }
         return this.httpClient.put<GroceryListResponseDto>(`${environment.groceryListApiUrl}/${id}`, list).pipe(map((updatedListDto: GroceryListResponseDto) => {
             return this.#fromDto(updatedListDto);
         }));

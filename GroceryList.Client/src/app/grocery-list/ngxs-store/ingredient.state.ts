@@ -45,9 +45,9 @@ export class IngredientState {
     addIngredient({ getState, patchState }: StateContext<IngredientStateModel>, { payload }: AddIngredient) {
         const state = getState();
         const ingredients = [...state.ingredients];
-        ingredients.push({ ...payload, id: UUID() })
+        ingredients.push({ ...payload, id: UUID() });
         patchState({
-            ingredients: [...state.ingredients, payload]
+            ingredients: ingredients
         });
     }
 
@@ -101,13 +101,13 @@ export class IngredientState {
 }
 
 const sortIngredientsByPriority = (ingredients: Ingredient[], sections: Section[]): Ingredient[] => {
-    if (sections.length === 0) {
-        return ingredients;
-    }
-
     // Separate selected and unselected ingredients
     const selectedIngredients = ingredients.filter(ingredient => ingredient.selected);
     const unselectedIngredients = ingredients.filter(ingredient => !ingredient.selected);
+
+    if (sections.length === 0) {
+        unselectedIngredients.concat(selectedIngredients);
+    }
 
     unselectedIngredients.sort((a, b) => {
         const priorityA = getSectionPriority(a.category, sections);
