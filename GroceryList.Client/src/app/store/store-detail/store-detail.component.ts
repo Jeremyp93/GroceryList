@@ -10,7 +10,7 @@ import { StoreState } from '../ngxs-store/store.state';
 import { Section } from '../types/section.type';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ROUTES_PARAM } from '../../constants';
-import { AddSection, DeleteSection, DropSection, GetSelectedStore, SaveSections } from '../ngxs-store/store.actions';
+import { AddSection, DeleteSection, DropSection, GetSelectedStore, SaveSections, SetSelectedStore } from '../ngxs-store/store.actions';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { LoadingColor } from '../../shared/loading/loading-color.enum';
@@ -158,5 +158,6 @@ export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeac
     if (this.#addFormClosedSubscription) {
       this.#addFormClosedSubscription.unsubscribe();
     }
+    this.ngxsStore.dispatch(new SetSelectedStore(null));
   }
 }

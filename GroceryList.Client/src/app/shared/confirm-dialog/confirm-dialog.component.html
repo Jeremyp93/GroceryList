@@ -1,0 +1,15 @@
+@if(confirmDialogService.dialogQuestion()) {
+<div class="modal">
+    <div class="modal-content">
+        <p>{{confirmDialogService.dialogQuestion()}}</p>
+        <div class="buttons">
+            <app-button (click)="setAnswer(true)" [buttonHover]="hoverChoices.invert">
+                <img src="../../../assets/icons/icons8-check-24.png" alt="icons8-check-24" width="20" />
+            </app-button>
+            <app-button (click)="setAnswer(false)" [buttonHover]="hoverChoices.invert">
+                <img src="../../../assets/icons/icons8-cancel-96.png" alt="icons8-check-24" width="20" />
+            </app-button>
+        </div>
+    </div>
+</div>
+}

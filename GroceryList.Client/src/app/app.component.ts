@@ -8,11 +8,12 @@ import { ROUTES_PARAM } from './constants';
 import { AuthState } from './auth/ngxs-store/auth.state';
 import { Logout } from './auth/ngxs-store/auth.actions';
 import { AlertComponent } from './shared/alert/alert.component';
+import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, AlertComponent],
+  imports: [CommonModule, RouterModule, AlertComponent, ConfirmDialogComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
