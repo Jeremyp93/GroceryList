@@ -2,6 +2,11 @@
 
 .address-wrapper {
   position: relative;
+
+  .options {
+    z-index: 50;
+  }
+
   label {
     display: flex;
     align-self: flex-start;
