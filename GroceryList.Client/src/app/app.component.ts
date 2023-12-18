@@ -1,8 +1,8 @@
-import { Component, HostListener, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ROUTES_PARAM } from './constants';
 import { AuthState } from './auth/ngxs-store/auth.state';
@@ -19,7 +19,7 @@ import { SideMenuService } from './menu/side-menu/side-menu.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   router = inject(Router);
   actions = inject(Actions);
   ngxsStore = inject(Store);
@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
   storeRoute: string = '/' + ROUTES_PARAM.STORE.STORE;
   showMenu: boolean = false;
   showSidebar: boolean = false;
+  #sideMenuSubscription!: Subscription;
 
   @HostListener('window:resize')
   onResize() {
@@ -56,7 +57,7 @@ export class AppComponent implements OnInit {
 
     this.ngxsStore.select(AuthState.isAuthenticated).subscribe(value => this.showMenu = value);
 
-    this.#sideMenuService.isOpen$.subscribe(open => this.showSidebar = open);
+    this.#sideMenuSubscription = this.#sideMenuService.isOpen$.subscribe(open => this.showSidebar = open);
   }
 
   onLogout = () => {
@@ -69,5 +70,8 @@ export class AppComponent implements OnInit {
     } else {
       this.#sideMenuService.openMenu();
     }
+  }
+  ngOnDestroy() {
+    this.#sideMenuSubscription.unsubscribe();
   }
 }

@@ -2,7 +2,7 @@ import { Component, Renderer2, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 
 import { AuthState } from '../../auth/ngxs-store/auth.state';
@@ -41,14 +41,16 @@ export class SideMenuComponent implements OnInit {
   #renderer = inject(Renderer2);
   isOpen = false;
   @Select(AuthState.getName) name$!: Observable<string>;
+  #sideMenuSubscription!: Subscription;
+  #routerSubscription!: Subscription;
 
   ngOnInit(): void {
-    this.#router.events.subscribe(event => {
+    this.#routerSubscription = this.#router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         this.#sideMenuService.closeMenu();
       }
     });
-    this.#sideMenuService.isOpen$.subscribe(open => {
+    this.#sideMenuSubscription = this.#sideMenuService.isOpen$.subscribe(open => {
       if (open) {
         this.#renderer.addClass(document.body, 'sidebar-open');
       } else {
@@ -56,5 +58,10 @@ export class SideMenuComponent implements OnInit {
       }
       this.isOpen = open;
     });
+  }
+
+  ngOnDestroy() {
+    this.#routerSubscription.unsubscribe();
+    this.#sideMenuSubscription.unsubscribe();
   }
 }
