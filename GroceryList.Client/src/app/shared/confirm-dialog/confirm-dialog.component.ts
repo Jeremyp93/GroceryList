@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { ConfirmDialogService } from './confirm-dialog.service';
 import { ButtonComponent } from '../button/button.component';
 import { ButtonHover } from '../button/button-hover.enum';

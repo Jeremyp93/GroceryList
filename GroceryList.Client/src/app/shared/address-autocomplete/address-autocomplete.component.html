@@ -4,7 +4,7 @@
         <input type="text" placeholder="Search" (input)="onInputChange($event)" (focus)="onFocus($event)" [(ngModel)]="searchText">
         <span *ngIf="searchText" class="clear-icon" (click)="clearInput()">X</span>
     </div>
-    <ul>
+    <ul class="options">
         <li *ngFor="let address of filteredAddresses" (click)="selectAddress(address)">
             {{ address.formatted }}
         </li>
