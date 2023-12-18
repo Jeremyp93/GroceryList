@@ -1,8 +1,23 @@
 <app-alert></app-alert>
 <app-confirm-dialog></app-confirm-dialog>
+<app-side-menu></app-side-menu>
 @if(showMenu) {
 <div class="top-menu">
-  <p>{{ name$ | async }}</p>
+  <div class="sidebar-toggle" (click)="openCloseSidebar()">
+    @if (showSidebar) {
+      <img
+      src="../assets/icons/icons8-cancel-96.png"
+      alt="menu-icon"
+      width="20"
+    />
+    } @else {
+      <img
+      src="../assets/icons/icons8-hamburger-24.png"
+      alt="menu-icon"
+      width="20"
+    />
+    }
+  </div>
   <a (click)="onLogout()">Logout</a>
 </div>
 }
