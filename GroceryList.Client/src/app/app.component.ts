@@ -9,11 +9,13 @@ import { AuthState } from './auth/ngxs-store/auth.state';
 import { Logout } from './auth/ngxs-store/auth.actions';
 import { AlertComponent } from './shared/alert/alert.component';
 import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
+import { SideMenuComponent } from './menu/side-menu/side-menu.component';
+import { SideMenuService } from './menu/side-menu/side-menu.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, AlertComponent, ConfirmDialogComponent],
+  imports: [CommonModule, RouterModule, AlertComponent, ConfirmDialogComponent, SideMenuComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -21,12 +23,14 @@ export class AppComponent implements OnInit {
   router = inject(Router);
   actions = inject(Actions);
   ngxsStore = inject(Store);
+  #sideMenuService = inject(SideMenuService);
   @Select(AuthState.getName) name$!: Observable<string>;
   isKeyboardOpen = false;
   previousHeight: number = 0;
   groceryListRoute: string = '/' + ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST;
   storeRoute: string = '/' + ROUTES_PARAM.STORE.STORE;
   showMenu: boolean = false;
+  showSidebar: boolean = false;
 
   @HostListener('window:resize')
   onResize() {
@@ -51,9 +55,19 @@ export class AppComponent implements OnInit {
     });
 
     this.ngxsStore.select(AuthState.isAuthenticated).subscribe(value => this.showMenu = value);
+
+    this.#sideMenuService.isOpen$.subscribe(open => this.showSidebar = open);
   }
 
   onLogout = () => {
     this.ngxsStore.dispatch(new Logout());
+  }
+
+  openCloseSidebar = () => {
+    if (this.showSidebar) {
+      this.#sideMenuService.closeMenu();
+    } else {
+      this.#sideMenuService.openMenu();
+    }
   }
 }
