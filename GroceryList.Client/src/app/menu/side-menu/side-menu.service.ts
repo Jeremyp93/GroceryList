@@ -1,4 +1,4 @@
-import { Injectable, Renderer2, inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
 @Injectable({providedIn: 'root'})

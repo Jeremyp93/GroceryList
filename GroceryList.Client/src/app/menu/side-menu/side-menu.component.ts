@@ -1,10 +1,11 @@
-import { Component, Input, Renderer2, inject, HostListener, OnInit } from '@angular/core';
+import { Component, Renderer2, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Select } from '@ngxs/store';
-import { AuthState } from '../../auth/ngxs-store/auth.state';
 import { Observable } from 'rxjs';
-import { NavigationStart, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { NavigationStart, Router, RouterModule } from '@angular/router';
+
+import { AuthState } from '../../auth/ngxs-store/auth.state';
 import { SideMenuService } from './side-menu.service';
 
 @Component({

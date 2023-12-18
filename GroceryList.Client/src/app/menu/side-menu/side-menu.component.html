@@ -1,15 +1,13 @@
 @if (isOpen) {
-    <div class="sidebar" @sidebarAnimation>
-        <div class="sidebar-header">
-          {{name$ | async}}
-        </div>
-        <div class="menu-items">
-          <!-- Menu items -->
-          <ul>
-            <li routerLinkActive="active"><a routerLink="/grocery-lists">Grocery Lists</a></li>
-            <li routerLinkActive="active"><a routerLink="/stores">Stores</a></li>
-            <!-- Add more menu items as needed -->
-          </ul>
-        </div>
-      </div>
+<div class="sidebar" @sidebarAnimation>
+  <div class="sidebar-header">
+    {{name$ | async}}
+  </div>
+  <div class="menu-items">
+    <ul>
+      <li routerLinkActive="active"><a routerLink="/grocery-lists">Grocery Lists</a></li>
+      <li routerLinkActive="active"><a routerLink="/stores">Stores</a></li>
+    </ul>
+  </div>
+</div>
 }
