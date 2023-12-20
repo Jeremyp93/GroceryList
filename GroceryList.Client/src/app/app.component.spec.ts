@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { NgxsModule } from '@ngxs/store';
-import { AlertComponent } from './shared/alert/alert.component';
-import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AppComponent', () => {
   beforeEach(async () => {

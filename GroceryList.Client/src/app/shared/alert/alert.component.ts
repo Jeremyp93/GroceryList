@@ -14,18 +14,18 @@ import { AlertService } from './alert.service';
   styleUrl: './alert.component.scss'
 })
 export class AlertComponent implements OnInit, OnDestroy {
-  alertService = inject(AlertService);
-  cd= inject(ChangeDetectorRef)
+  #alertService = inject(AlertService);
+  #cd= inject(ChangeDetectorRef)
   alert!: Alert;
   showAlert: boolean = false;
   alertServiceSubscription!: Subscription;
 
   ngOnInit(): void {
-    this.alertServiceSubscription = this.alertService.alert$.subscribe(alert => {
+    this.alertServiceSubscription = this.#alertService.alert$.subscribe(alert => {
       this.alert = alert;
       if (alert.type !== AlertType.NoAlert) {
         this.showAlert = true;
-        setTimeout(() => {this.showAlert = false; this.cd.detectChanges();}, 5000)
+        setTimeout(() => {this.showAlert = false; this.#cd.detectChanges();}, 5000)
         return;
       }
     });

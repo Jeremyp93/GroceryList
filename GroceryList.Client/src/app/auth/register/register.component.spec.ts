@@ -1,15 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
-import { NgxsModule } from '@ngxs/store';
+import { NgxsModule, Store } from '@ngxs/store';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ROUTES_PARAM } from '../../constants';
 import { Register } from '../ngxs-store/auth.actions';
 import { of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
+  let ngxsStore: Store;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -17,6 +20,8 @@ describe('RegisterComponent', () => {
     })
     .compileComponents();
     
+    ngxsStore = TestBed.inject(Store);
+    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -44,17 +49,17 @@ describe('RegisterComponent', () => {
       password: 'password',
       confirmPassword: 'password'
     });
-    spyOn(component.ngxsStore, 'dispatch').and.returnValue(of(null));
-    spyOn(component.router, 'navigate');
+    spyOn(ngxsStore, 'dispatch').and.returnValue(of(null));
+    spyOn(router, 'navigate');
     component.onSubmit();
-    expect(component.ngxsStore.dispatch).toHaveBeenCalledWith(new Register({
+    expect(ngxsStore.dispatch).toHaveBeenCalledWith(new Register({
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
       password: 'password',
       confirmPassword: 'password'
     } as any));
-    expect(component.router.navigate).toHaveBeenCalledWith([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
+    expect(router.navigate).toHaveBeenCalledWith([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
   });
 
   it('should not submit form when all fields are filled with invalid data', () => {
@@ -65,13 +70,13 @@ describe('RegisterComponent', () => {
       password: 'pass',
       confirmPassword: 'pass'
     });
-    spyOn(component.ngxsStore, 'dispatch');
-    spyOn(component.router, 'navigate');
+    spyOn(ngxsStore, 'dispatch');
+    spyOn(router, 'navigate');
     component.onSubmit();
     expect(component.isLoading).toBe(false);
     expect(component.isSubmitted).toBe(true);
-    expect(component.ngxsStore.dispatch).not.toHaveBeenCalled();
-    expect(component.router.navigate).not.toHaveBeenCalled();
+    expect(ngxsStore.dispatch).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should not submit form multiple times when all fields are filled with invalid data', () => {
@@ -82,15 +87,15 @@ describe('RegisterComponent', () => {
       password: 'pass',
       confirmPassword: 'pass'
     });
-    spyOn(component.ngxsStore, 'dispatch');
-    spyOn(component.router, 'navigate');
+    spyOn(ngxsStore, 'dispatch');
+    spyOn(router, 'navigate');
     component.onSubmit();
     component.onSubmit();
     component.onSubmit();
     expect(component.isLoading).toBe(false);
     expect(component.isSubmitted).toBe(true);
-    expect(component.ngxsStore.dispatch).not.toHaveBeenCalled();
-    expect(component.router.navigate).not.toHaveBeenCalled();
+    expect(ngxsStore.dispatch).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should handle server error when submitting form', () => {
@@ -102,12 +107,12 @@ describe('RegisterComponent', () => {
       confirmPassword: 'password'
     });
   
-    spyOn(component.ngxsStore, 'dispatch').and.returnValue(throwError(() => new Error('error')));
-    spyOn(component.router, 'navigate');
+    spyOn(ngxsStore, 'dispatch').and.returnValue(throwError(() => new Error('error')));
+    spyOn(router, 'navigate');
     component.onSubmit();
     expect(component.isLoading).toBe(false);
     expect(component.isSubmitted).toBe(false);
-    expect(component.ngxsStore.dispatch).toHaveBeenCalled();
-    expect(component.router.navigate).not.toHaveBeenCalled();
+    expect(ngxsStore.dispatch).toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 });

@@ -14,8 +14,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class AddressAutocompleteComponent implements OnInit, OnDestroy {
   @Output() addressSelected = new EventEmitter<AutocompleteAddress>();
-  autocompleteService = inject(AutocompleteService);
-  elementRef = inject(ElementRef);
+  #autocompleteService = inject(AutocompleteService);
+  #elementRef = inject(ElementRef);
   searchText = '';
   filteredAddresses: AutocompleteAddress[] = [];
   #searchTerms = new Subject<string>();
@@ -23,7 +23,7 @@ export class AddressAutocompleteComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event.target'])
   onClick(target: EventTarget | null): void {
-    const clickedInside = this.elementRef.nativeElement.contains(target);
+    const clickedInside = this.#elementRef.nativeElement.contains(target);
     if (!clickedInside) {
       this.filteredAddresses = [];
     }
@@ -32,7 +32,7 @@ export class AddressAutocompleteComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.#searchSubscription = this.#searchTerms.pipe(
       debounceTime(500),
-      switchMap((term: string) => this.autocompleteService.autocomplete(term))
+      switchMap((term: string) => this.#autocompleteService.autocomplete(term))
     ).subscribe((addresses: any[]) => {
       this.filteredAddresses = addresses;
     });
@@ -55,9 +55,8 @@ export class AddressAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   selectAddress(address: AutocompleteAddress) {
-    // Handle selection of the address, e.g., fill form fields
     this.searchText = address.formatted;
-    this.filteredAddresses = []; // Clear the suggestions
+    this.filteredAddresses = [];
     this.addressSelected.emit(address);
   }
 

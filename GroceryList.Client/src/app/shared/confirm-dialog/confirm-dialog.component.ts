@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Renderer2, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ConfirmDialogService } from './confirm-dialog.service';
@@ -14,12 +14,22 @@ import { ButtonHover } from '../button/button-hover.enum';
 })
 export class ConfirmDialogComponent {
   confirmDialogService = inject(ConfirmDialogService);
+  #renderer = inject(Renderer2);
 
   get hoverChoices(): typeof ButtonHover {
     return ButtonHover;
   }
 
+  constructor() {
+    effect(() => {
+      if (this.confirmDialogService.dialogQuestion()) {
+        this.#renderer.addClass(document.body, 'modal-open');
+      }
+    });
+  }
+
   setAnswer = (answer: boolean) => {
+    this.#renderer.removeClass(document.body, 'modal-open');
     this.confirmDialogService.setAnswer(answer);
   }
 }

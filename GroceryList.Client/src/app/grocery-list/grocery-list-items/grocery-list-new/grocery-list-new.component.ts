@@ -9,7 +9,6 @@ import { Store as NgxsStore, Select } from '@ngxs/store';
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { StoreService } from '../../../store/store.service';
 import { ButtonComponent } from '../../../shared/button/button.component';
-import { GroceryListService } from '../../grocery-list.service';
 import { Ingredient } from '../../types/ingredient.type';
 import { Store } from '../../../store/types/store.type';
 import { AddGroceryList, GetSelectedGroceryList, SetSelectedGroceryList, UpdateGroceryList } from '../../ngxs-store/grocery-list.actions';
@@ -34,11 +33,10 @@ import { InputType } from '../../../shared/input-field/input-type.enum';
   styleUrl: './grocery-list-new.component.scss'
 })
 export class GroceryListNewComponent implements OnInit, OnDestroy {
-  storeService = inject(StoreService);
-  groceryListService = inject(GroceryListService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  ngStore = inject(NgxsStore);
+  #storeService = inject(StoreService);
+  #router = inject(Router);
+  #route = inject(ActivatedRoute);
+  #ngStore = inject(NgxsStore);
   @Select(StoreState.getStores) stores$!: Observable<Store[]>;
   groceryListForm!: FormGroup;
   categories: string[] = [];
@@ -49,7 +47,6 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   title: string = '';
   #routeSubscription!: Subscription;
 
-  //@ViewChildren('inputFields') inputFields!: QueryList<ElementRef>;
   @ViewChildren('inputFields', { read: InputFieldComponent }) inputFields!: QueryList<InputFieldComponent>;
 
   get ingredientControls() { // a getter!
@@ -76,13 +73,13 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     return InputType;
   }
   ngOnInit(): void {
-    this.#routeSubscription = this.route.params.subscribe(async (params: Params) => {
+    this.#routeSubscription = this.#route.params.subscribe(async (params: Params) => {
       this.idToEdit = params[ROUTES_PARAM.ID_PARAMETER];
       if (this.idToEdit) {
         this.editMode = true;
       }
       this.title = `${this.editMode ? 'Edit' : 'Add'} Grocery List`;
-      this.ngStore.dispatch(new GetStores());
+      this.#ngStore.dispatch(new GetStores());
       await this.#initForm();
     });
   }
@@ -113,10 +110,10 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     if (this.editMode) {
       if (!this.groceryListForm.pristine) {
-        this.ngStore.dispatch(new UpdateGroceryList(this.groceryListForm.value, this.idToEdit!)).subscribe({
+        this.#ngStore.dispatch(new UpdateGroceryList(this.groceryListForm.value, this.idToEdit!)).subscribe({
           next: () => {
-            const updatedList = this.ngStore.selectSnapshot(GroceryListState.getLastUpdatedGroceryList);
-            this.ngStore.dispatch(new SetSelectedGroceryList(updatedList)).subscribe(() => this.#back());
+            const updatedList = this.#ngStore.selectSnapshot(GroceryListState.getLastUpdatedGroceryList);
+            this.#ngStore.dispatch(new SetSelectedGroceryList(updatedList)).subscribe(() => this.#back());
           },
           error: () => this.isLoading = false
         });
@@ -124,7 +121,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
         this.#back();
       }
     } else {
-      this.ngStore.dispatch(new AddGroceryList(this.groceryListForm.value)).subscribe({
+      this.#ngStore.dispatch(new AddGroceryList(this.groceryListForm.value)).subscribe({
         next: () => this.#back(),
         error: () => this.isLoading = false
       });
@@ -137,7 +134,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       this.categories = [];
       return;
     }
-    const store = await lastValueFrom(this.storeService.getStoreById(selectedValue));
+    const store = await lastValueFrom(this.#storeService.getStoreById(selectedValue));
     this.categories = store.sections.map(s => s.name);
   }
 
@@ -152,10 +149,10 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
 
   #initForm = async () => {
     if (this.editMode) {
-      const groceryList = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+      const groceryList = this.#ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
       if (!groceryList) {
-        await lastValueFrom(this.ngStore.dispatch(new GetSelectedGroceryList(this.idToEdit!)));
-        const list = this.ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
+        await lastValueFrom(this.#ngStore.dispatch(new GetSelectedGroceryList(this.idToEdit!)));
+        const list = this.#ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
         this.#setupEditForm(list!);
         return;
       }
@@ -204,6 +201,6 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   }
 
   #back = () => {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.#router.navigate(['../'], { relativeTo: this.#route });
   }
 }

@@ -14,14 +14,14 @@ import { ButtonHover } from '../button/button-hover.enum';
 export class HeaderComponent {
   @Input() title: string = '';
   @Input() backButton: boolean = false;
-  router = inject(Router);
-  route = inject(ActivatedRoute);
+  #router = inject(Router);
+  #route = inject(ActivatedRoute);
 
   public get hoverChoices(): typeof ButtonHover {
     return ButtonHover;
   }
 
   back = () => {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.#router.navigate(['../'], { relativeTo: this.#route });
   }
 }

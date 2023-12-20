@@ -20,8 +20,8 @@ import { InputType } from '../../shared/input-field/input-type.enum';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
-  ngxsStore = inject(Store);
-  router = inject(Router);
+  #ngxsStore = inject(Store);
+  #router = inject(Router);
   readonly loginRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.LOGIN;
   readonly signupFormFirstName: string = SIGNUP_FORM.FIRST_NAME;
   readonly signupFormLastName: string = SIGNUP_FORM.LAST_NAME;
@@ -37,9 +37,9 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const isLoggedIn = this.ngxsStore.selectSnapshot(AuthState.isAuthenticated);
+    const isLoggedIn = this.#ngxsStore.selectSnapshot(AuthState.isAuthenticated);
     if (isLoggedIn) {
-      this.ngxsStore.dispatch(new Logout());
+      this.#ngxsStore.dispatch(new Logout());
     }
     this.#initForm();
   }
@@ -48,10 +48,10 @@ export class RegisterComponent implements OnInit {
     this.isSubmitted = true;
     if (this.signupForm.invalid) return;
     this.isLoading = true;
-    this.ngxsStore.dispatch(new Register(this.signupForm.value)).subscribe({
+    this.#ngxsStore.dispatch(new Register(this.signupForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
-        this.router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
+        this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
       },
       error: () => {
         this.isLoading = this.isSubmitted = false;

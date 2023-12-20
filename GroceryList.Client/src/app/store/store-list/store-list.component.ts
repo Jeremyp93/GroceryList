@@ -1,18 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Select, Store as NgxsStore } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { LetDirective } from '@ngrx/component';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Router, RouterModule } from '@angular/router';
+
 import { DeleteStore, GetStores, SetSelectedStore } from '../ngxs-store/store.actions';
 import { StoreState } from '../ngxs-store/store.state';
-import { Observable } from 'rxjs';
 import { Store } from '../types/store.type';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ButtonHover } from '../../shared/button/button-hover.enum';
-import { LetDirective } from '@ngrx/component';
 import { displayDateAsHuman } from '../../helpers/date.helper';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
-import { animate, style, transition, trigger } from '@angular/animations';
-import { Router, RouterModule } from '@angular/router';
 import { ROUTES_PARAM } from '../../constants';
 
 @Component({
@@ -39,8 +40,8 @@ import { ROUTES_PARAM } from '../../constants';
   ]
 })
 export class StoreListComponent implements OnInit {
-  ngxsStore = inject(NgxsStore);
-  router = inject(Router);
+  #ngxsStore = inject(NgxsStore);
+  #router = inject(Router);
   @Select(StoreState.getStores) stores$!: Observable<Store[]>;
 
   get hoverChoices(): typeof ButtonHover {
@@ -52,16 +53,16 @@ export class StoreListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ngxsStore.dispatch(new GetStores());
+    this.#ngxsStore.dispatch(new GetStores());
   }
 
   newStore = () => {
-    this.router.navigate([ROUTES_PARAM.STORE.STORE, ROUTES_PARAM.STORE.NEW]);
+    this.#router.navigate([ROUTES_PARAM.STORE.STORE, ROUTES_PARAM.STORE.NEW]);
   }
 
   delete = (event: Event, id: string) => {
     event.stopPropagation();
-    this.ngxsStore.dispatch(new DeleteStore(id));
+    this.#ngxsStore.dispatch(new DeleteStore(id));
   }
 
   cancelDelete = (event: Event, store: Store) => {
@@ -79,11 +80,11 @@ export class StoreListComponent implements OnInit {
   }
 
   selectStore = (store: Store) => {
-    this.ngxsStore.dispatch(new SetSelectedStore(store)).subscribe(() => this.router.navigate([ROUTES_PARAM.STORE.STORE, store.id]));
+    this.#ngxsStore.dispatch(new SetSelectedStore(store)).subscribe(() => this.#router.navigate([ROUTES_PARAM.STORE.STORE, store.id]));
   }
 
   editStore = (event: Event, store: Store) => {
     event.stopPropagation();
-    this.ngxsStore.dispatch(new SetSelectedStore(store)).subscribe(() => this.router.navigate([ROUTES_PARAM.STORE.STORE, store.id, ROUTES_PARAM.STORE.EDIT]));
+    this.#ngxsStore.dispatch(new SetSelectedStore(store)).subscribe(() => this.#router.navigate([ROUTES_PARAM.STORE.STORE, store.id, ROUTES_PARAM.STORE.EDIT]));
   }
 }

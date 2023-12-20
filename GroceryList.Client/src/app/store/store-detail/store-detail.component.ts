@@ -36,9 +36,9 @@ import { TileNewSectionComponent } from './tile-new-section/tile-new-section.com
   ]
 })
 export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
-  private ngxsStore = inject(NgxsStore);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  #ngxsStore = inject(NgxsStore);
+  #route = inject(ActivatedRoute);
+  #router = inject(Router);
   @Select(StoreState.getSections) sections$!: Observable<Section[]>;
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   title: string = 'Sections';
@@ -74,7 +74,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeac
 
   ngOnInit(): void {
     this.isLoading = true;
-    const selectedStore = this.ngxsStore.selectSnapshot(StoreState.getSelectedStore);
+    const selectedStore = this.#ngxsStore.selectSnapshot(StoreState.getSelectedStore);
     if (selectedStore) {
       this.id = selectedStore.id;
       this.title = selectedStore.name;
@@ -83,15 +83,15 @@ export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeac
       return;
     }
 
-    this.#routeSubscription = this.route.params.subscribe(async (params: Params) => {
+    this.#routeSubscription = this.#route.params.subscribe(async (params: Params) => {
       this.id = params[ROUTES_PARAM.ID_PARAMETER];
       try {
-        await lastValueFrom(this.ngxsStore.dispatch(new GetSelectedStore(this.id)));
+        await lastValueFrom(this.#ngxsStore.dispatch(new GetSelectedStore(this.id)));
       } catch {
         this.isLoading = false;
         return;
       }
-      const selectedStore = this.ngxsStore.selectSnapshot(StoreState.getSelectedStore);
+      const selectedStore = this.#ngxsStore.selectSnapshot(StoreState.getSelectedStore);
       if (!selectedStore) {
         this.isLoading = false;
         return;
@@ -103,16 +103,16 @@ export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeac
   }
 
   deleteSection = (sectionId: string) => {
-    this.ngxsStore.dispatch(new DeleteSection(sectionId)).subscribe(() => this.#pendingChanges = true);
+    this.#ngxsStore.dispatch(new DeleteSection(sectionId)).subscribe(() => this.#pendingChanges = true);
   }
 
   editStore = () => {
-    this.router.navigate([ROUTES_PARAM.STORE.EDIT], { relativeTo: this.route });
+    this.#router.navigate([ROUTES_PARAM.STORE.EDIT], { relativeTo: this.#route });
   }
 
   saveSections = () => {
     this.saveProcess = true;
-    this.ngxsStore.dispatch(new SaveSections()).subscribe({
+    this.#ngxsStore.dispatch(new SaveSections()).subscribe({
       next: () => {
         this.saveProcess = this.#pendingChanges = false;
         this.saved = true;
@@ -129,7 +129,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeac
   newSection = () => {
     const componentRef = this.dynamicComponentContainer.createComponent(TileNewSectionComponent);
     this.#itemAddedSubscription = componentRef.instance.itemAdded.subscribe(section => {
-      this.ngxsStore.dispatch(new AddSection(section)).subscribe(() => {
+      this.#ngxsStore.dispatch(new AddSection(section)).subscribe(() => {
         this.#pendingChanges = true
         this.#itemAddedSubscription?.unsubscribe();
         this.dynamicComponentContainer.clear();
@@ -145,7 +145,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeac
 
   drop = (event: CdkDragDrop<Section[]>) => {
     if (event.previousIndex === event.currentIndex) return;
-    this.ngxsStore.dispatch(new DropSection(event.previousIndex, event.currentIndex)).subscribe(() => this.#pendingChanges = true);
+    this.#ngxsStore.dispatch(new DropSection(event.previousIndex, event.currentIndex)).subscribe(() => this.#pendingChanges = true);
   }
 
   ngOnDestroy(): void {
@@ -158,6 +158,6 @@ export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeac
     if (this.#addFormClosedSubscription) {
       this.#addFormClosedSubscription.unsubscribe();
     }
-    this.ngxsStore.dispatch(new SetSelectedStore(null));
+    this.#ngxsStore.dispatch(new SetSelectedStore(null));
   }
 }

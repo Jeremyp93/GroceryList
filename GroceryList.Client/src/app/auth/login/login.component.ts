@@ -20,8 +20,8 @@ import { InputType } from '../../shared/input-field/input-type.enum';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
-  ngxsStore = inject(Store);
-  router = inject(Router);
+  #ngxsStore = inject(Store);
+  #router = inject(Router);
   readonly registerRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.REGISTER;
   readonly loginFormUsername: string = LOGIN_FORM.USERNAME;
   readonly loginFormPassword: string = LOGIN_FORM.PASSWORD;
@@ -34,9 +34,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const isLoggedIn = this.ngxsStore.selectSnapshot(AuthState.isAuthenticated);
+    const isLoggedIn = this.#ngxsStore.selectSnapshot(AuthState.isAuthenticated);
     if (isLoggedIn) {
-      this.ngxsStore.dispatch(new Logout());
+      this.#ngxsStore.dispatch(new Logout());
     }
     this.#initForm();
   }
@@ -45,10 +45,10 @@ export class LoginComponent implements OnInit {
     this.isSubmitted = true;
     if (this.loginForm.invalid) return;
     this.isLoading = true;
-    this.ngxsStore.dispatch(new Login(this.loginForm.value)).subscribe({
+    this.#ngxsStore.dispatch(new Login(this.loginForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
-        this.router.navigate([`/${ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST}`]);
+        this.#router.navigate([`/${ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST}`]);
       },
       error: () => {
         this.isLoading = this.isSubmitted = false;
