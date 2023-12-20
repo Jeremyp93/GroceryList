@@ -1,22 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
-import { NgxsModule } from '@ngxs/store';
+import { NgxsModule, Store } from '@ngxs/store';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Login, Logout } from '../ngxs-store/auth.actions';
 import { LOGIN_FORM } from '../../constants';
 import { LoginComponent } from './login.component';
+import { Router } from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let ngxsStore: Store;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LoginComponent, NgxsModule.forRoot(), RouterTestingModule]
     })
       .compileComponents();
-
+    ngxsStore = TestBed.inject(Store);
+    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -32,12 +36,12 @@ describe('LoginComponent', () => {
   });
 
   it('should dispatch a Logout action when the user is already logged in', () => {
-    spyOn(component.ngxsStore, 'selectSnapshot').and.returnValue(true);
-    spyOn(component.ngxsStore, 'dispatch');
+    spyOn(ngxsStore, 'selectSnapshot').and.returnValue(true);
+    spyOn(ngxsStore, 'dispatch');
 
     component.ngOnInit();
 
-    expect(component.ngxsStore.dispatch).toHaveBeenCalledWith(new Logout());
+    expect(ngxsStore.dispatch).toHaveBeenCalledWith(new Logout());
   });
 
   it('should initialize the login form on initialization', () => {
@@ -45,25 +49,25 @@ describe('LoginComponent', () => {
   });
 
   it('should dispatch a Login action with the form values when the form is valid', () => {
-    spyOn(component.ngxsStore, 'dispatch').and.returnValue(new Observable<void>);
+    spyOn(ngxsStore, 'dispatch').and.returnValue(new Observable<void>);
     component.loginForm.controls[LOGIN_FORM.USERNAME].setValue('test@example.com');
     component.loginForm.controls[LOGIN_FORM.PASSWORD].setValue('password');
 
     component.onSubmit();
 
-    expect(component.ngxsStore.dispatch).toHaveBeenCalledWith(new Login({ username: 'test@example.com', password: 'password' }));
+    expect(ngxsStore.dispatch).toHaveBeenCalledWith(new Login({ username: 'test@example.com', password: 'password' }));
   });
 
   it('should not dispatch a Login action and should not navigate when the form is submitted with invalid data', () => {
-    spyOn(component.ngxsStore, 'dispatch');
-    spyOn(component.router, 'navigate');
+    spyOn(ngxsStore, 'dispatch');
+    spyOn(router, 'navigate');
     component.loginForm.controls[LOGIN_FORM.USERNAME].setValue('test');
     component.loginForm.controls[LOGIN_FORM.PASSWORD].setValue('');
 
     component.onSubmit();
 
-    expect(component.ngxsStore.dispatch).not.toHaveBeenCalled();
-    expect(component.router.navigate).not.toHaveBeenCalled();
+    expect(ngxsStore.dispatch).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should display error messages when the form is submitted with invalid data', () => {

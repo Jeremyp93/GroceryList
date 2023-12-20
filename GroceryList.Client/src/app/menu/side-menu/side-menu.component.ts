@@ -61,7 +61,11 @@ export class SideMenuComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.#routerSubscription.unsubscribe();
-    this.#sideMenuSubscription.unsubscribe();
+    if (this.#routerSubscription) {
+      this.#routerSubscription.unsubscribe();
+    }
+    if (this.#sideMenuSubscription) {
+      this.#sideMenuSubscription.unsubscribe();
+    }
   }
 }
