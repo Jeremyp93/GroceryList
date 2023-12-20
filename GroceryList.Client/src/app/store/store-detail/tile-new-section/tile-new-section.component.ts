@@ -19,7 +19,7 @@ import { InputType } from '../../../shared/input-field/input-type.enum';
 export class TileNewSectionComponent implements OnInit {
   @Output() itemAdded: EventEmitter<Section> = new EventEmitter<Section>();
   @Output() onClickOutside: EventEmitter<void> = new EventEmitter<void>();
-  elementRef = inject(ElementRef)
+  #elementRef = inject(ElementRef)
   addForm!: FormGroup;
   formSubmitted: boolean = false;
   @ViewChild('inputField', { read: InputFieldComponent, static: true }) inputFieldComponent!: InputFieldComponent;
@@ -33,7 +33,7 @@ export class TileNewSectionComponent implements OnInit {
 
   @HostListener('document:click', ['$event.target'])
   onClick(target: EventTarget | null): void {
-    const clickedInside = this.elementRef.nativeElement.contains(target);
+    const clickedInside = this.#elementRef.nativeElement.contains(target);
     if (!clickedInside) {
       this.onClickOutside.emit();
     }

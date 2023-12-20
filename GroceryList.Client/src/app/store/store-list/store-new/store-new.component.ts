@@ -31,20 +31,19 @@ import { InputType } from '../../../shared/input-field/input-type.enum';
   styleUrl: './store-new.component.scss'
 })
 export class StoreNewComponent implements OnInit, OnDestroy {
-  route = inject(ActivatedRoute);
-  ngxsStore = inject(NgxsStore);
-  router = inject(Router);
+  #route = inject(ActivatedRoute);
+  #ngxsStore = inject(NgxsStore);
+  #router = inject(Router);
   title: string = 'Add Store';
   storeForm!: FormGroup;
   isLoading: boolean = false;
   submitted: boolean = false;
-  #routeSubscription!: Subscription;
   idToEdit: string | null = null;
   editMode: boolean = false;
   validationInProgress: boolean = false;
   showAddressFields: boolean = false;
+  #routeSubscription!: Subscription;
 
-  //@ViewChildren('inputFields') inputFields!: QueryList<ElementRef>;
   @ViewChildren('inputFields', { read: InputFieldComponent }) inputFields!: QueryList<InputFieldComponent>;
 
   get hoverChoices(): typeof ButtonHover {
@@ -67,7 +66,7 @@ export class StoreNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.#routeSubscription = this.route.params.subscribe(async (params: Params) => {
+    this.#routeSubscription = this.#route.params.subscribe(async (params: Params) => {
       this.idToEdit = params[ROUTES_PARAM.ID_PARAMETER];
       if (this.idToEdit) {
         this.editMode = true;
@@ -84,10 +83,10 @@ export class StoreNewComponent implements OnInit, OnDestroy {
     if (this.editMode) {
       if (!this.storeForm.pristine) {
         this.#setPriorities();
-        this.ngxsStore.dispatch(new UpdateStore(this.storeForm.value, this.idToEdit!)).subscribe({
+        this.#ngxsStore.dispatch(new UpdateStore(this.storeForm.value, this.idToEdit!)).subscribe({
           next: () => {
-            const updatedStore = this.ngxsStore.selectSnapshot(StoreState.getLastUpdatedStore);
-            this.ngxsStore.dispatch(new SetSelectedStore(updatedStore)).subscribe(() => this.#back());
+            const updatedStore = this.#ngxsStore.selectSnapshot(StoreState.getLastUpdatedStore);
+            this.#ngxsStore.dispatch(new SetSelectedStore(updatedStore)).subscribe(() => this.#back());
           },
           error: () => this.isLoading = false
         });
@@ -96,7 +95,7 @@ export class StoreNewComponent implements OnInit, OnDestroy {
       }
     } else {
       this.#setPriorities();
-      this.ngxsStore.dispatch(new AddStore(this.storeForm.value)).subscribe({
+      this.#ngxsStore.dispatch(new AddStore(this.storeForm.value)).subscribe({
         next: () => this.#back(),
         error: () => this.isLoading = false
       });
@@ -144,10 +143,10 @@ export class StoreNewComponent implements OnInit, OnDestroy {
 
   #initForm = async () => {
     if (this.editMode) {
-      const store = this.ngxsStore.selectSnapshot(StoreState.getSelectedStore);
+      const store = this.#ngxsStore.selectSnapshot(StoreState.getSelectedStore);
       if (!store) {
-        await lastValueFrom(this.ngxsStore.dispatch(new GetSelectedStore(this.idToEdit!)));
-        const list = this.ngxsStore.selectSnapshot(StoreState.getSelectedStore);
+        await lastValueFrom(this.#ngxsStore.dispatch(new GetSelectedStore(this.idToEdit!)));
+        const list = this.#ngxsStore.selectSnapshot(StoreState.getSelectedStore);
         this.#setupEditForm(list!);
         return;
       }
@@ -203,6 +202,6 @@ export class StoreNewComponent implements OnInit, OnDestroy {
   }
 
   #back = () => {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.#router.navigate(['../'], { relativeTo: this.#route });
   }
 }

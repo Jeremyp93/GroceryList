@@ -20,9 +20,9 @@ import { SideMenuService } from './menu/side-menu/side-menu.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  router = inject(Router);
-  actions = inject(Actions);
-  ngxsStore = inject(Store);
+  #router = inject(Router);
+  #actions = inject(Actions);
+  #ngxsStore = inject(Store);
   #sideMenuService = inject(SideMenuService);
   @Select(AuthState.getName) name$!: Observable<string>;
   isKeyboardOpen = false;
@@ -51,17 +51,17 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.actions.pipe(ofActionDispatched(Logout)).subscribe(() => {
-      this.router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
+    this.#actions.pipe(ofActionDispatched(Logout)).subscribe(() => {
+      this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
     });
 
-    this.ngxsStore.select(AuthState.isAuthenticated).subscribe(value => this.showMenu = value);
+    this.#ngxsStore.select(AuthState.isAuthenticated).subscribe(value => this.showMenu = value);
 
     this.#sideMenuSubscription = this.#sideMenuService.isOpen$.subscribe(open => this.showSidebar = open);
   }
 
   onLogout = () => {
-    this.ngxsStore.dispatch(new Logout());
+    this.#ngxsStore.dispatch(new Logout());
   }
 
   openCloseSidebar = () => {

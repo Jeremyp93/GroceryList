@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 export class ModalComponent implements OnDestroy {
   @Input() isOpen: boolean = false;
   @Output() closeModalEvent = new EventEmitter<void>();
-  renderer = inject(Renderer2);
+  #renderer = inject(Renderer2);
 
   @HostListener('document:click', ['$event.target'])
   onClick(target: EventTarget | null): void {
@@ -22,19 +22,19 @@ export class ModalComponent implements OnDestroy {
 
   ngOnChanges(): void {
     if (this.isOpen) {
-      this.renderer.addClass(document.body, 'modal-open');
+      this.#renderer.addClass(document.body, 'modal-open');
     } else {
-      this.renderer.removeClass(document.body, 'modal-open');
+      this.#renderer.removeClass(document.body, 'modal-open');
     }
   }
 
   closeModal = (): void => {
     this.isOpen = false;
-    this.renderer.removeClass(document.body, 'modal-open');
+    this.#renderer.removeClass(document.body, 'modal-open');
     this.closeModalEvent.emit();
   }
 
   ngOnDestroy(): void {
-    this.renderer.removeClass(document.body, 'modal-open');
+    this.#renderer.removeClass(document.body, 'modal-open');
   }
 }

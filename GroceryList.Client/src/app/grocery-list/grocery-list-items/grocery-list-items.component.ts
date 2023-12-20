@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { style, transition, trigger, animate } from '@angular/animations';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -49,9 +49,8 @@ import { InputFieldComponent } from '../../shared/input-field/input-field.compon
   ],
 })
 export class GroceryListItemsComponent implements OnInit {
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  ngStore = inject(Store);
+  #router = inject(Router);
+  #ngStore = inject(Store);
   @Select(GroceryListState.getGroceryLists) groceryLists$!: Observable<GroceryList[]>;
   modalOpen: boolean = false;
   duplicateForm!: FormGroup;
@@ -81,7 +80,7 @@ export class GroceryListItemsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.ngStore.dispatch(new GetGroceryLists()).subscribe({
+    this.#ngStore.dispatch(new GetGroceryLists()).subscribe({
       next: () => this.isLoading = false,
       error: () => this.isLoading = false
     });
@@ -93,16 +92,16 @@ export class GroceryListItemsComponent implements OnInit {
   }
 
   selectList = (list: GroceryList) => {
-    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, list.id]));
+    this.#ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.#router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, list.id]));
   }
 
   newList = () => {
-    this.router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, ROUTES_PARAM.GROCERY_LIST.NEW]);
+    this.#router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, ROUTES_PARAM.GROCERY_LIST.NEW]);
   }
 
   editList = (event: Event, list: GroceryList) => {
     this.preventPropagation(event);
-    this.ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, list.id, ROUTES_PARAM.GROCERY_LIST.EDIT]));
+    this.#ngStore.dispatch(new SetSelectedGroceryList(list)).subscribe(() => this.#router.navigate([ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, list.id, ROUTES_PARAM.GROCERY_LIST.EDIT]));
   }
 
   showDeleteList = (event: Event, list: GroceryList) => {
@@ -112,7 +111,7 @@ export class GroceryListItemsComponent implements OnInit {
 
   deleteList = (event: Event, id: string) => {
     this.preventPropagation(event);
-    this.ngStore.dispatch(new DeleteGroceryList(id));
+    this.#ngStore.dispatch(new DeleteGroceryList(id));
   }
 
   cancelDeleteList = (event: Event, list: GroceryList) => {
@@ -137,10 +136,10 @@ export class GroceryListItemsComponent implements OnInit {
     this.isLoading = true;
     const name = this.duplicateForm.get(GROCERY_LIST_FORM.NAME)?.value;
     const list = { ...this.#selectedList, name: name };
-    this.ngStore.dispatch(new AddGroceryList(list)).subscribe({
+    this.#ngStore.dispatch(new AddGroceryList(list)).subscribe({
       next: () => {
         this.duplicateForm.reset();
-        this.ngStore.dispatch(new SetSelectedGroceryList(null));
+        this.#ngStore.dispatch(new SetSelectedGroceryList(null));
         this.duplicateFormSubmitted = this.isLoading = this.modalOpen = false;
       },
       error: () => {
