@@ -7,9 +7,10 @@ body {
     text-align: center;
     font-family: $font-family;
     color: $secondary-color;
-
+    
     &.modal-open,
-    &.sidebar-open {
+    &.sidebar-open,
+    &.confirm-open {
         overflow: hidden;
     }
 }

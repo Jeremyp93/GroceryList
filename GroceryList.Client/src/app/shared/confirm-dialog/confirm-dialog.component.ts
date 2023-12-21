@@ -23,13 +23,14 @@ export class ConfirmDialogComponent {
   constructor() {
     effect(() => {
       if (this.confirmDialogService.dialogQuestion()) {
-        this.#renderer.addClass(document.body, 'modal-open');
+        this.#renderer.addClass(document.body, 'confirm-open');
       }
     });
   }
 
   setAnswer = (answer: boolean) => {
-    this.#renderer.removeClass(document.body, 'modal-open');
+    console.log('removed');
+    this.#renderer.removeClass(document.body, 'confirm-open');
     this.confirmDialogService.setAnswer(answer);
   }
 }
