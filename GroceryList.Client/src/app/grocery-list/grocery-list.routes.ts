@@ -6,8 +6,8 @@ import { canDeactivateFormComponent } from "../guards/pending-changes-guard.serv
 import { validIdGuard } from "../guards/validId-guard.service";
 import { GroceryListDetailsComponent } from "./grocery-list-details/grocery-list-details.component";
 import { GroceryListItemsComponent } from "./grocery-list-items/grocery-list-items.component";
-import { GroceryListNewComponent } from "./grocery-list-items/grocery-list-new/grocery-list-new.component";
 import { GroceryListComponent } from "./grocery-list.component";
+import { GroceryListNewComponent } from "./grocery-list-items/grocery-list-new/grocery-list-new.component";
 
 export const GROCERY_LIST_ROUTES: Routes = [
     {
