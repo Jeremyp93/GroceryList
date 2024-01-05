@@ -32,14 +32,14 @@ import { InputType } from '../../../shared/input-field/input-type.enum';
   templateUrl: './grocery-list-new.component.html',
   styleUrl: './grocery-list-new.component.scss'
 })
-export class GroceryListNewComponent implements OnInit, OnDestroy {
+export class GroceryListNewOldComponent implements OnInit, OnDestroy {
   #storeService = inject(StoreService);
   #router = inject(Router);
   #route = inject(ActivatedRoute);
   #ngStore = inject(NgxsStore);
   @Select(StoreState.getStores) stores$!: Observable<Store[]>;
   groceryListForm!: FormGroup;
-  categories: any[] = [];
+  categories: string[] = [];
   editMode: boolean = false;
   idToEdit: string | null = null;
   submitted: boolean = false;
@@ -84,17 +84,16 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAddIngredient = (category: string) => {
-    const id = UUID();
+  onAddIngredient = () => {
     const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
     ingredients.insert(0, new FormGroup({
-      [INGREDIENT_FORM.ID]: new FormControl(id),
+      [INGREDIENT_FORM.ID]: new FormControl(UUID()),
       [INGREDIENT_FORM.NAME]: new FormControl(null, Validators.required),
       [INGREDIENT_FORM.AMOUNT]: new FormControl("1", [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
-      [INGREDIENT_FORM.CATEGORY]: new FormControl(category)
+      [INGREDIENT_FORM.CATEGORY]: new FormControl("")
     }));
     setTimeout(() => {
-      this.#focusOnControl(id);
+      this.#focusOnControl(0);
     }, 100);
   }
 
@@ -106,7 +105,6 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   }
 
   onSubmit = () => {
-    console.log(this.groceryListForm.value);
     this.submitted = true;
     if (this.groceryListForm.invalid) return;
     this.isLoading = true;
@@ -132,30 +130,17 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
 
   onChangeStore = async (event: Event) => {
     const selectedValue = (event.target as HTMLSelectElement).value;
-    this.#resetCategory();
     if (!selectedValue) {
       this.categories = [];
       return;
     }
     const store = await lastValueFrom(this.#storeService.getStoreById(selectedValue));
-    this.categories = [...store.sections.map(s => s.name), ''];
+    this.categories = store.sections.map(s => s.name);
   }
 
-  onEnterPressed = (event: KeyboardEvent | Event, category: string) => {
+  onEnterPressed = (event: KeyboardEvent | Event) => {
     event.preventDefault();
-    this.onAddIngredient(category);
-  }
-
-  getIngredientsControl = (cateogry: string) => {
-    if (!cateogry) {
-      return (this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray).controls.filter(c => !c.value.category);
-    }
-    return (this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray).controls.filter(c => c.value.category === cateogry);
-  }
-
-  getIndex(ingredientId: string): number {
-    const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
-    return ingredients.controls.findIndex(i => i.value.id === ingredientId);
+    this.onAddIngredient();
   }
 
   ngOnDestroy(): void {
@@ -184,16 +169,15 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     let ingredients: FormArray<any> = new FormArray<any>([]);
     if (groceryList.store) {
       storeId = groceryList.store.id;
-      this.categories = [...groceryList.store.sections.map(s => s.name), ''];
+      this.categories = groceryList.store.sections.map(s => s.name);
     }
     if (groceryList.ingredients.length > 0) {
-      console.log(groceryList.ingredients);
       groceryList.ingredients.forEach((ingredient: Ingredient) => {
         ingredients.push(new FormGroup({
           [INGREDIENT_FORM.ID]: new FormControl(UUID()),
           [INGREDIENT_FORM.NAME]: new FormControl(ingredient.name, Validators.required),
           [INGREDIENT_FORM.AMOUNT]: new FormControl(ingredient.amount, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
-          [INGREDIENT_FORM.CATEGORY]: new FormControl(this.categories.includes(ingredient.category) ? ingredient.category : '')
+          [INGREDIENT_FORM.CATEGORY]: new FormControl(ingredient.category)
         }));
       });
     }
@@ -209,24 +193,14 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     });
   }
 
-  #focusOnControl = (id: string) => {
+  #focusOnControl = (index: number) => {
     const elements = this.inputFields.toArray();
-    console.log(elements);
-    const element = elements.find(e => e.id === `name_${id}`);
-    if (element) {
-      element.focusInput();
+    if (elements[index]) {
+      elements[index].focusInput();
     }
   }
 
   #back = () => {
     this.#router.navigate(['../'], { relativeTo: this.#route });
-  }
-
-  #resetCategory = () => {
-    const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
-    for (let i = 0; i < ingredients.length; i++) {
-      const formGroup = ingredients.at(i) as FormGroup;
-      formGroup.get(INGREDIENT_FORM.CATEGORY)?.setValue('');
-    }
   }
 }

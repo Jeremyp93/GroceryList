@@ -20,37 +20,17 @@ hr {
     }
 }
 
-.accordion {
-    margin-top: 10px;
-    width: 100%;
-  }
-  .accordion-item {
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-  }
-  .accordion-header {
-    background-color: #f1f1f1;
-    padding: 10px;
-    //cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .accordion-content {
-    padding: 10px;
-
-    .error {
-        display: flex;
-    }
-  }
-
 .ingredient-section {
     width: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: 40px minmax(auto, 1fr) 30px;
+    grid-template-rows: auto auto;
     gap: 10px;
+    margin-top: 10px;
 
     .ingredient-amount {
-        width: 40px;
+        grid-column: 1 / span 1;
+        grid-row: 1 / span 1;
 
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
@@ -65,7 +45,8 @@ hr {
     }
 
     .ingredient-name {
-        flex: 1;
+        grid-column: 2 / span 2;
+        grid-row: 1 / span 1;
 
         @include flex-column;
 
@@ -74,8 +55,14 @@ hr {
         }
     }
 
+    .ingredient-category {
+        grid-column: 1 / span 2;
+        grid-row: 2 / span 1;
+    }
+
     .ingredient-delete {
-        width: 30px;
+        grid-column: 3 / span 1;
+        grid-row: 2 / span 1;
 
         @include flex-center;
     }
