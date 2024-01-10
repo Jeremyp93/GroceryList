@@ -29,7 +29,6 @@ export class ConfirmDialogComponent {
   }
 
   setAnswer = (answer: boolean) => {
-    console.log('removed');
     this.#renderer.removeClass(document.body, 'confirm-open');
     this.confirmDialogService.setAnswer(answer);
   }
