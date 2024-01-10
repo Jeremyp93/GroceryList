@@ -1,6 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { v4 as UUID } from 'uuid';
 
 import { environment } from "../../environments/environment";
 import { Item } from "./types/item";
@@ -13,6 +14,11 @@ export class ItemsService {
 
     getAllItems = () => {
         //return this.httpClient.delete<void>(`${environment.itemApiUrl}/${id}`);
+    }
+
+    addItem = (name: string) => {
+        //this.httpClient.post<Item>(`${environment.itemApiUrl}`, {name: name}).subscribe(item => this.items.next([...this.items.value, item]));
+        this.items.next([...this.items.value, {id: UUID(), name: name}])
     }
 
     deleteItem = (id: string) => {

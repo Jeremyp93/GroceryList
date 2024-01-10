@@ -178,6 +178,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       [INGREDIENT_FORM.AMOUNT]: new FormControl("1", [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
       [INGREDIENT_FORM.CATEGORY]: new FormControl(category)
     }));
+    this.groceryListForm.markAsDirty();
   }
 
   ngOnDestroy(): void {

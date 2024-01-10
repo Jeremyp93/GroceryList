@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { take } from 'rxjs';
@@ -9,6 +9,7 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
 import { InputFieldComponent } from '../../shared/input-field/input-field.component';
 import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
+import { ButtonHover } from '../../shared/button/button-hover.enum';
 
 @Component({
   selector: 'app-item-list',
@@ -23,9 +24,15 @@ export class ItemListComponent implements OnInit {
   searchText: string = '';
   items: Item[] = [];
   filteredItems: Item[] = [];
+  addingProcess: boolean = false;
+  @ViewChild('newItemNameInput', {static: false}) inputFieldComponent!: InputFieldComponent;
 
   get buttonStyles(): typeof ButtonStyle {
     return ButtonStyle;
+  }
+
+  get buttonHoverChoices(): typeof ButtonHover {
+    return ButtonHover;
   }
 
   async ngOnInit(): Promise<void> {
@@ -39,7 +46,7 @@ export class ItemListComponent implements OnInit {
     this.filteredItems = this.items.filter(i => i.name.toLowerCase().startsWith(this.searchText.toLowerCase()));
   }
 
-  deleteItem =(itemId: string) => {
+  deleteItem = (itemId: string) => {
     this.#confirmDialogService.setQuestion(`Are you sure you want to delete item ${this.filteredItems.find(i => i.id === itemId)?.name} ?`);
     this.#confirmDialogService.answer$.pipe(take(1)).subscribe(response => {
       if (response) {
@@ -47,5 +54,22 @@ export class ItemListComponent implements OnInit {
         this.searchText = '';
       }
     })
+  }
+
+  startAddingProcess = () => {
+    this.addingProcess = true;
+    setTimeout(() => {
+      this.inputFieldComponent.focusInput();
+    }, 100);
+    
+  }
+
+  stopAddingProcess = () => {
+    this.addingProcess = false;
+  }
+
+  addItem = (name: string) => {
+    this.itemsService.addItem(name);
+    this.stopAddingProcess();
   }
 }
