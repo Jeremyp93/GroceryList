@@ -16,6 +16,9 @@ export const ROUTES_PARAM = {
         NEW: 'new',
         EDIT: 'edit'
     },
+    ITEMS: {
+        ITEMS: 'items'
+    },
     AUTHENTICATION: {
         LOGIN: 'login',
         REGISTER: 'register'

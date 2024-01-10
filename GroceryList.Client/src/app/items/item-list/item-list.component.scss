@@ -1,0 +1,36 @@
+@import '_mixins';
+
+.input-wrapper {
+    margin-top: 30px;
+    width: 75%;
+    margin: 0 auto;
+
+    input {
+        position: relative;
+    }
+}
+
+.cards {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+
+    .card {
+        background-color: white;
+        padding: 10px;
+        height: 100px;
+        box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, .1);
+        @include flex-column;
+
+        .body {
+            flex: 1;
+            @include flex-center;
+        }
+
+        .footer {
+            @include flex-center;
+            gap: 10px;
+        }
+    }
+}

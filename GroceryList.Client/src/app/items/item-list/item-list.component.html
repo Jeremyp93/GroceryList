@@ -1,0 +1,18 @@
+<div class="input-wrapper">
+    <app-input-field placeHolder="Search..." [(ngModel)]="searchText" (input)="onInputChange($event)"></app-input-field>
+</div>
+<div class="cards">
+    @for (item of filteredItems; track item.id) {
+        <div class="card">
+            <div class="body">{{item.name}}</div>
+            <div class="footer"><app-button>E</app-button><app-button
+                [buttonStyle]="buttonStyles.danger"
+                ><img
+                  src="../../../assets/icons/icons8-delete-24.png"
+                  alt="delete-icon"
+                  width="20"
+                />
+              </app-button></div>
+        </div>
+    }
+</div>

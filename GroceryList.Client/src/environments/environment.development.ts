@@ -3,5 +3,6 @@ export const environment = {
     groceryListApiUrl: 'http://localhost:5058/api/grocerylists',
     storeApiUrl: 'http://localhost:5058/api/stores',
     userApiUrl: 'http://localhost:5058/api/users',
-    autocompleteApiUrl: 'http://localhost:5058/api/geocodeautocomplete'
+    autocompleteApiUrl: 'http://localhost:5058/api/geocodeautocomplete',
+    itemApiUrl: 'http://localhost:5058/api/items'
 };
