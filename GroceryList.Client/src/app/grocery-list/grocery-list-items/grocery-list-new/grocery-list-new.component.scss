@@ -25,10 +25,15 @@ hr {
 }
 
 .horizontal-gallery {
-    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+    position: sticky;
+    top: 40px;
+    width: 100%;
+    background-color: white;
   }
   
   .gallery-wrapper {
