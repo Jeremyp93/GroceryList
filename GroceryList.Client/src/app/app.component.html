@@ -27,7 +27,7 @@
 @if(showMenu) {
 <div class="bottom-menu" [class.keyboard-open]="isKeyboardOpen">
   <ul>
-    <li routerLinkActive="active">
+    <li routerLinkActive="active" [ngStyle]="{'border-right': '1px solid black'}">
       <a [routerLink]="groceryListRoute"
         ><img
           src="../assets/icons/icons8-list-24.png"

@@ -1,0 +1,40 @@
+<div class="input-wrapper">
+    <app-input-field placeHolder="Search..." [(ngModel)]="searchText" (input)="onInputChange($event)"></app-input-field>
+</div>
+<div class="button-section">
+    <app-button [buttonHover]="buttonHoverChoices.invert" (click)="startAddingProcess()">
+        <img src="../../../assets/icons/icons8-plus-24.png" alt="add-icon"
+                    width="20" />
+    </app-button>
+</div>
+<div class="cards">
+    @if (addingProcess) {
+        <div class="card">
+            <div class="body"><app-input-field #newItemNameInput placeHolder="Name" (keydown.enter)="addItem(newItemNameInput.value)"></app-input-field></div>
+            <div class="footer">
+                <app-button [buttonStyle]="buttonStyles.danger" [buttonHover]="buttonHoverChoices.invert"
+                    (click)="stopAddingProcess()">
+                    <img src="../../../assets/icons/icons8-cancel-96.png" alt="delete-icon"
+                        width="20" />
+                </app-button>
+                <app-button [buttonHover]="buttonHoverChoices.invert"
+                    (click)="addItem(newItemNameInput.value)">
+                    <img src="../../../assets/icons/icons8-check-24.png" alt="delete-icon"
+                        width="20" />
+                </app-button>
+            </div>
+        </div>
+    }
+    @for (item of filteredItems; track item.id) {
+    <div class="card">
+        <div class="body">{{item.name}}</div>
+        <div class="footer">
+            <app-button [buttonStyle]="buttonStyles.danger"
+                (click)="deleteItem(item.id)">
+                <img src="../../../assets/icons/icons8-delete-24.png" alt="delete-icon"
+                    width="20" />
+            </app-button>
+        </div>
+    </div>
+    }
+</div>

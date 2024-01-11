@@ -15,6 +15,10 @@ export const routes: Routes = [
         loadChildren: () => import('./store/store.routes').then(m => m.STORE_ROUTES),
     },
     {
+        path: ROUTES_PARAM.ITEMS.ITEMS,
+        loadChildren: () => import('./items/items.routes').then(m => m.ITEM_ROUTES),
+    },
+    {
         path: ROUTES_PARAM.AUTHENTICATION.LOGIN, component: LoginComponent, title: 'Grocery List - Login'
     },
     {

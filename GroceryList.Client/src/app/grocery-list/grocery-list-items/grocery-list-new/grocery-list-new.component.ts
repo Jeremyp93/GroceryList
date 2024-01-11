@@ -5,6 +5,7 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { v4 as UUID } from 'uuid';
 import { Store as NgxsStore, Select } from '@ngxs/store';
+import { CdkDropListGroup, CdkDropList, CdkDrag, CdkDragHandle, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { StoreService } from '../../../store/store.service';
@@ -24,11 +25,13 @@ import { GetStores } from '../../../store/ngxs-store/store.actions';
 import { StoreState } from '../../../store/ngxs-store/store.state';
 import { InputFieldComponent } from '../../../shared/input-field/input-field.component';
 import { InputType } from '../../../shared/input-field/input-type.enum';
+import { ItemsService } from '../../../items/items.service';
+import { Item } from '../../../items/types/item';
 
 @Component({
   selector: 'app-grocery-list-new',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent, InputFieldComponent],
+  imports: [CommonModule, HeaderComponent, ButtonComponent, ReactiveFormsModule, LoadingComponent, InputFieldComponent, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragHandle],
   templateUrl: './grocery-list-new.component.html',
   styleUrl: './grocery-list-new.component.scss'
 })
@@ -37,6 +40,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   #router = inject(Router);
   #route = inject(ActivatedRoute);
   #ngStore = inject(NgxsStore);
+  #itemsService = inject(ItemsService);
   @Select(StoreState.getStores) stores$!: Observable<Store[]>;
   groceryListForm!: FormGroup;
   categories: any[] = [];
@@ -45,6 +49,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   submitted: boolean = false;
   isLoading: boolean = false;
   title: string = '';
+  items$!: Observable<Item[]>;
   #routeSubscription!: Subscription;
 
   @ViewChildren('inputFields', { read: InputFieldComponent }) inputFields!: QueryList<InputFieldComponent>;
@@ -81,6 +86,8 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       this.title = `${this.editMode ? 'Edit' : 'Add'} Grocery List`;
       this.#ngStore.dispatch(new GetStores());
       await this.#initForm();
+      this.#itemsService.getAllItems();
+      this.items$ = this.#itemsService.items$;
     });
   }
 
@@ -158,6 +165,23 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
     return ingredients.controls.findIndex(i => i.value.id === ingredientId);
   }
 
+  drop = (event: CdkDragDrop<string>) => {
+    const id = UUID();
+    const item = event.item.element.nativeElement.innerText;
+    const category = event.container.data;
+    if (this.#ingredientExist(item, category)) {
+      return;
+    }
+    const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
+    ingredients.insert(0, new FormGroup({
+      [INGREDIENT_FORM.ID]: new FormControl(id),
+      [INGREDIENT_FORM.NAME]: new FormControl(item, Validators.required),
+      [INGREDIENT_FORM.AMOUNT]: new FormControl("1", [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
+      [INGREDIENT_FORM.CATEGORY]: new FormControl(category)
+    }));
+    this.groceryListForm.markAsDirty();
+  }
+
   ngOnDestroy(): void {
     this.#routeSubscription.unsubscribe();
   }
@@ -228,5 +252,10 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       const formGroup = ingredients.at(i) as FormGroup;
       formGroup.get(INGREDIENT_FORM.CATEGORY)?.setValue('');
     }
+  }
+
+  #ingredientExist = (item: string, category: string): boolean => {
+    const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
+    return ingredients.controls.find(c => c.value.name === item && c.value.category === category) ? true : false;
   }
 }

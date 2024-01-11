@@ -20,7 +20,7 @@
   </div>
   <div class="content">
     <div class="group with-label first">
-      <app-input-field [type]="inputTypes.text" label="Name of the store" id="name" formControlName="name"></app-input-field>
+      <app-input-field [type]="inputTypes.text" label="Name of the store" placeHolder="Name" id="name" formControlName="name"></app-input-field>
       @if(this.storeForm.controls["name"].invalid && submitted) {
       <span class="error">Name is required</span>
       }
