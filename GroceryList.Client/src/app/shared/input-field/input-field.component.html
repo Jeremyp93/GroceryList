@@ -1,10 +1,13 @@
 <div class="field-holder">
+    @if(label && placeHolder) {
+        <label [for]="'input-' + id">{{ label }}</label>
+    }
     @if (type === inputTypes.number) {
         <input #inputField type="text" [id]="'input-' + id" [value]="value" (input)="onInputChange($event)" [placeholder]="placeHolder ?? ' '" onlyNumbers />
     } @else {
         <input #inputField [type]="type" [id]="'input-' + id" [value]="value" (input)="onInputChange($event)" [placeholder]="placeHolder ?? ' '" />
     }
-    @if (label) {
-        <label [for]="'input-' + id">{{ label }}</label>
+    @if (label && !placeHolder) {
+        <label class="moving-label" [for]="'input-' + id">{{ label }}</label>
     }
 </div>

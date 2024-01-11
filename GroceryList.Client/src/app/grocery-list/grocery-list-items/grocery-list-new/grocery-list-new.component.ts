@@ -86,6 +86,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       this.title = `${this.editMode ? 'Edit' : 'Add'} Grocery List`;
       this.#ngStore.dispatch(new GetStores());
       await this.#initForm();
+      this.#itemsService.getAllItems();
       this.items$ = this.#itemsService.items$;
     });
   }

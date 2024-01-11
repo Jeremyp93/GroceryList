@@ -7,7 +7,7 @@
   </div>
   <div class="content">
     <div class="group with-label first">
-      <app-input-field [type]="inputTypes.text" label="Name of the list" id="name"
+      <app-input-field [type]="inputTypes.text" label="Name of the list" placeHolder="Name" id="name"
         formControlName="name"></app-input-field>
       @if(this.groceryListForm.controls["name"].invalid && submitted) {
       <span class="error">Name is required</span>
@@ -37,7 +37,7 @@
             <div class="gallery-wrapper">
               <div cdkDropList class="gallery-items">
                 @for (item of (items$ | async); track item.id) {
-                  <div cdkDragBoundary=".drop-list-group" cdkDrag [cdkDragStartDelay]="500" class="gallery-item">{{item.name}}</div>
+                  <div cdkDragBoundary=".drop-list-group" cdkDrag [cdkDragStartDelay]="200" class="gallery-item">{{item.name}}</div>
                 }
               </div>
             </div>

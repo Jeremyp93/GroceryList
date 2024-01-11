@@ -10,7 +10,7 @@
 <div class="cards">
     @if (addingProcess) {
         <div class="card">
-            <div class="body"><app-input-field #newItemNameInput placeHolder="Name"></app-input-field></div>
+            <div class="body"><app-input-field #newItemNameInput placeHolder="Name" (keydown.enter)="addItem(newItemNameInput.value)"></app-input-field></div>
             <div class="footer">
                 <app-button [buttonStyle]="buttonStyles.danger" [buttonHover]="buttonHoverChoices.invert"
                     (click)="stopAddingProcess()">
@@ -29,7 +29,6 @@
     <div class="card">
         <div class="body">{{item.name}}</div>
         <div class="footer">
-            <app-button>E</app-button>
             <app-button [buttonStyle]="buttonStyles.danger"
                 (click)="deleteItem(item.id)">
                 <img src="../../../assets/icons/icons8-delete-24.png" alt="delete-icon"

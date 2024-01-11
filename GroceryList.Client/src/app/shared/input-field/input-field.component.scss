@@ -5,7 +5,7 @@
     //margin-bottom: 5px;
 
     input,
-    label {
+    .moving-label {
         padding: 10px;
         width: calc(100% - 20px);
         font-size: large;
@@ -21,6 +21,11 @@
     }
 
     label {
+        display: flex;
+        justify-self: flex-start;
+    }
+
+    .moving-label {
         position: absolute;
         left: 0;
         top: 0;
@@ -40,8 +45,8 @@
         /* Generic */
     }
 
-    input:focus + label,
-    input:not(:placeholder-shown) + label {
+    input:focus + .moving-label,
+    input:not(:placeholder-shown) + .moving-label {
         color: $secondary-color;
         top: -30px;
         pointer-events: none;

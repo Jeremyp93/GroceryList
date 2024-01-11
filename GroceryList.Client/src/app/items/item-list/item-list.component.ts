@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 
 import { Item } from '../types/item';
 import { ItemsService } from '../items.service';
@@ -18,7 +18,7 @@ import { ButtonHover } from '../../shared/button/button-hover.enum';
   templateUrl: './item-list.component.html',
   styleUrl: './item-list.component.scss'
 })
-export class ItemListComponent implements OnInit {
+export class ItemListComponent implements OnInit, OnDestroy {
   itemsService = inject(ItemsService);
   #confirmDialogService = inject(ConfirmDialogService);
   searchText: string = '';
@@ -26,6 +26,7 @@ export class ItemListComponent implements OnInit {
   filteredItems: Item[] = [];
   addingProcess: boolean = false;
   @ViewChild('newItemNameInput', {static: false}) inputFieldComponent!: InputFieldComponent;
+  #itemSubscription!: Subscription;
 
   get buttonStyles(): typeof ButtonStyle {
     return ButtonStyle;
@@ -36,7 +37,8 @@ export class ItemListComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.itemsService.items$.subscribe(items => {
+    this.itemsService.getAllItems();
+    this.#itemSubscription = this.itemsService.items$.subscribe(items => {
       this.items = items;
       this.filteredItems = items;
     });
@@ -71,5 +73,9 @@ export class ItemListComponent implements OnInit {
   addItem = (name: string) => {
     this.itemsService.addItem(name);
     this.stopAddingProcess();
+  }
+
+  ngOnDestroy(): void {
+    this.#itemSubscription.unsubscribe();
   }
 }
