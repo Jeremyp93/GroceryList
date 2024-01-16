@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, Signal, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable, Subscription, lastValueFrom } from 'rxjs';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -49,7 +49,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   submitted: boolean = false;
   isLoading: boolean = false;
   title: string = '';
-  items$!: Observable<Item[]>;
+  items: Signal<Item[]> = this.#itemsService.items;
   #routeSubscription!: Subscription;
 
   @ViewChildren('inputFields', { read: InputFieldComponent }) inputFields!: QueryList<InputFieldComponent>;
@@ -87,7 +87,6 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       this.#ngStore.dispatch(new GetStores());
       await this.#initForm();
       this.#itemsService.getAllItems();
-      this.items$ = this.#itemsService.items$;
     });
   }
 
