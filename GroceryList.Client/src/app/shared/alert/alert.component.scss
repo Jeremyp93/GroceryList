@@ -12,11 +12,26 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 0;
-    background-color: $danger-color;
 
     @media screen and (max-width: 991px) {
         left: 0;
         width: 100%;
+    }
+
+    &.error {
+        background-color: $danger-color;
+    }
+
+    &.warning {
+        background-color: #e57e17;
+    }
+
+    &.info {
+        background-color: rgb(44, 148, 183);
+    }
+
+    &.success {
+        background-color: $success-color;
     }
 
     .message {

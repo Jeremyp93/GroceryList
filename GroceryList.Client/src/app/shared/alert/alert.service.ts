@@ -1,5 +1,4 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Injectable, signal } from "@angular/core";
 
 import { Alert, AlertType } from "./alert.model";
 
@@ -7,17 +6,10 @@ import { Alert, AlertType } from "./alert.model";
     providedIn: 'root'
   })
   export class AlertService {
-    private alertSubject: BehaviorSubject<Alert>;
-    get alert$(): Observable<Alert> {
-        return this.alertSubject.asObservable();
-    }
-  
-    constructor() {
-        const initialAlert: Alert = new Alert(AlertType.NoAlert);
-        this.alertSubject = new BehaviorSubject<Alert>(initialAlert);
-    }
+    #alertS = signal<Alert>(new Alert(AlertType.NoAlert));
+    alert = this.#alertS.asReadonly();
   
     setAlertObs(alert: Alert) {
-        this.alertSubject.next(alert);
+        this.#alertS.set(alert);
     }
 }
