@@ -1,5 +1,4 @@
-import { Injectable, inject } from "@angular/core";
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { Injectable, inject, signal } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 import { environment } from "../../environments/environment";
@@ -8,18 +7,18 @@ import { Item } from "./types/item";
 @Injectable({providedIn: 'root'})
 export class ItemsService {
     httpClient = inject(HttpClient);
-    private items: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
-    items$ = this.items.asObservable();
+    #itemsS = signal<Item[]>([]);
+    items = this.#itemsS.asReadonly();
 
     getAllItems = () => {
-        this.httpClient.get<Item[]>(`${environment.itemApiUrl}`).subscribe(items => this.items.next(items));
+        this.httpClient.get<Item[]>(`${environment.itemApiUrl}`).subscribe(items => this.#itemsS.set(items));
     }
 
     addItem = (name: string) => {
-        this.httpClient.post<Item>(`${environment.itemApiUrl}`, {name: name}).subscribe(item => this.items.next([...this.items.value, item]));
+        this.httpClient.post<Item>(`${environment.itemApiUrl}`, {name: name}).subscribe(item => this.#itemsS.set([...this.#itemsS(), item]));
     }
 
     deleteItem = (id: string) => {
-        this.httpClient.delete<void>(`${environment.itemApiUrl}/${id}`).subscribe(() => this.items.next([...this.items.value.filter(i => i.id !== id)]));
+        this.httpClient.delete<void>(`${environment.itemApiUrl}/${id}`).subscribe(() => this.#itemsS.set([...this.#itemsS().filter(i => i.id !== id)]));
     }
 }

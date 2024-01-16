@@ -36,7 +36,7 @@
           <div class="horizontal-gallery" #gallery>
             <div class="gallery-wrapper">
               <div cdkDropList class="gallery-items">
-                @for (item of (items$ | async); track item.id) {
+                @for (item of items(); track item.id) {
                   <div cdkDragBoundary=".drop-list-group" cdkDrag [cdkDragStartDelay]="200" class="gallery-item">{{item.name}}</div>
                 }
               </div>
