@@ -16,7 +16,7 @@ import { Ingredient } from '../types/ingredient.type';
 import { Store } from '../../store/types/store.type';
 import { Section } from '../../store/types/section.type';
 import { IngredientState } from '../ngxs-store/ingredient.state';
-import { AddIngredient, DeleteIngredient, ResetIngredients, SaveIngredients, SelectIngredient } from '../ngxs-store/ingredient.actions';
+import { AddIngredient, DeleteIngredient, ResetIngredients, SaveIngredients, SelectIngredient, SetIngredients } from '../ngxs-store/ingredient.actions';
 import { AddGroceryList, GetSelectedGroceryList } from '../ngxs-store/grocery-list.actions';
 import { GroceryListState } from '../ngxs-store/grocery-list.state';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
@@ -28,6 +28,8 @@ import { GetStores } from '../../store/ngxs-store/store.actions';
 import { StoreState } from '../../store/ngxs-store/store.state';
 import { InputFieldComponent } from '../../shared/input-field/input-field.component';
 import { InputType } from '../../shared/input-field/input-type.enum';
+import { AlertService } from '../../shared/alert/alert.service';
+import { Alert, AlertType } from '../../shared/alert/alert.model';
 
 @Component({
   selector: 'app-grocery-list-details',
@@ -48,6 +50,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #ngStore = inject(NgxsStore);
+  #alertService = inject(AlertService);
   @Select(IngredientState.getIngredients) ingredients$!: Observable<Ingredient[]>;
   @Select(StoreState.getSections) sections$!: Observable<Section[]>;
   @Select(StoreState.getStores) stores$!: Observable<Store[]>;
@@ -134,7 +137,7 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
       componentRef.setInput('sections', sections);
       this.itemAddedSubscription = componentRef.instance.itemAdded.subscribe(ingredient => {
         this.#ngStore.dispatch(new AddIngredient(ingredient)).subscribe(() => {
-          this.#pendingChanges = true
+          this.#pendingChanges = true;
           this.itemAddedSubscription?.unsubscribe();
           this.dynamicComponentContainer.clear();
         });
@@ -174,7 +177,17 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
 
   exportToNewList = async (event: Event) => {
     event.stopPropagation();
-    this.#ngStore.dispatch(new GetStores()).subscribe(() => {this.modalOpen = true});
+    if (this.#pendingChanges) {
+      this.#alertService.setAlertObs(new Alert(AlertType.Warning, 'Please make sure to save your changes first.'));
+    } else {
+      this.ingredients$.pipe(take(1)).subscribe(ingredients => {
+        if(ingredients.filter(i => !i.selected).length > 0) {
+          this.#ngStore.dispatch(new GetStores()).subscribe(() => {this.modalOpen = true});
+        } else {
+          this.#alertService.setAlertObs(new Alert(AlertType.Warning, 'No ingredients to export.'));
+        }
+      });
+    }
   }
 
   onSubmitExportForm = async () => {
@@ -184,7 +197,15 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
     if (this.exportForm.invalid) return;
     const groceryList = this.#ngStore.selectSnapshot(GroceryListState.getSelectedGroceryList);
     this.ingredients$.pipe(take(1)).subscribe(ingredients => {
-      const newList = { ...groceryList, name: name, storeId: storeId, ingredients: [...ingredients.filter(i => !i.selected)] };
+      let newList = { ...groceryList, name: name, storeId: storeId, ingredients: [...ingredients.filter(i => !i.selected)] };
+      if (storeId !== groceryList?.store?.id) {
+        newList = {...newList, ingredients: newList.ingredients.map(i => {return {...i, category: ''}})};
+      }
+      this.saveProcess = true;
+      this.#ngStore.dispatch(new SetIngredients([...ingredients.filter(i => i.selected)]));
+      this.#ngStore.dispatch(new SaveIngredients(this.id)).subscribe(() => {
+        this.saveProcess = false;
+      });
       this.#ngStore.dispatch(new AddGroceryList(newList)).subscribe(_ => {
         this.exportForm.reset();
         this.exportFormSubmitted = false;
