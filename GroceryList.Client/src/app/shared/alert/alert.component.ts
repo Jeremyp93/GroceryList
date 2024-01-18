@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef, effect } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AlertType } from './alert.model';
@@ -14,7 +14,6 @@ import { AlertService } from './alert.service';
 })
 export class AlertComponent {
   #alertService = inject(AlertService);
-  #cd= inject(ChangeDetectorRef)
   alert = this.#alertService.alert;
   showAlert: boolean = false;
 
@@ -22,7 +21,7 @@ export class AlertComponent {
     effect(() => {
       if (this.#alertService.alert().type !== AlertType.NoAlert) {
         this.showAlert = true;
-        setTimeout(() => {this.showAlert = false; this.#cd.detectChanges();}, 5000)
+        setTimeout(() => this.showAlert = false, 5000)
       }
     });
   }
