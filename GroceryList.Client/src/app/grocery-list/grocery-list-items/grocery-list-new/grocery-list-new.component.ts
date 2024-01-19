@@ -165,18 +165,29 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   }
 
   drop = (event: CdkDragDrop<string>) => {
-    const id = UUID();
-    const item = event.item.element.nativeElement.innerText;
-    const category = event.container.data;
-    if (this.#ingredientExist(item, category)) {
+    console.log(event);
+    const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
+    const newCategory = event.container.data;
+    const name = event.item.data.name;
+    if (this.#ingredientExist(name, newCategory)) {
       return;
     }
-    const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
+    if (event.item.data.type === 'edit') {
+      const oldCategory = event.item.data.category;
+      const ingredient = ingredients.controls.find(c => c.value.name === name && c.value.category === oldCategory);
+      if (ingredient) {
+        ingredient.get(INGREDIENT_FORM.CATEGORY)?.setValue(newCategory);
+      }
+      this.groceryListForm.markAsDirty();
+      return;
+    }
+
+    const id = UUID();
     ingredients.insert(0, new FormGroup({
       [INGREDIENT_FORM.ID]: new FormControl(id),
-      [INGREDIENT_FORM.NAME]: new FormControl(item, Validators.required),
+      [INGREDIENT_FORM.NAME]: new FormControl(name, Validators.required),
       [INGREDIENT_FORM.AMOUNT]: new FormControl("1", [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
-      [INGREDIENT_FORM.CATEGORY]: new FormControl(category)
+      [INGREDIENT_FORM.CATEGORY]: new FormControl(newCategory)
     }));
     this.groceryListForm.markAsDirty();
   }

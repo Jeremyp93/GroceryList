@@ -37,7 +37,7 @@
             <div class="gallery-wrapper">
               <div cdkDropList class="gallery-items">
                 @for (item of items(); track item.id) {
-                  <div cdkDragBoundary=".drop-list-group" cdkDrag [cdkDragStartDelay]="200" class="gallery-item">{{item.name}}</div>
+                  <div cdkDragBoundary=".drop-list-group" cdkDrag [cdkDragStartDelay]="200" [cdkDragData]="{name: item.name, type: 'new'}" class="gallery-item">{{item.name}}</div>
                 }
               </div>
             </div>
@@ -53,7 +53,10 @@
           <div class="accordion-content">
             @for (ingredientControl of getIngredientsControl(category); track
             ingredientControl.value.id; let indexControl = $index) {
-            <div class="ingredient-section" [formGroupName]="getIndex(ingredientControl.value.id)">
+            <div class="ingredient-section" [formGroupName]="getIndex(ingredientControl.value.id)" cdkDragBoundary=".drop-list-group" cdkDrag [cdkDragData]="{category, name: ingredientControl.value.name, type: 'edit'}">
+              <div cdkDragHandle class="ingredient-grab">
+                <img src="../../../../assets/icons/icons8-drag-reorder-24.png" alt="drag-icon" width="20" />
+              </div>
               <div class="ingredient-amount">
                 <app-input-field [type]="inputTypes.number" placeHolder="1"
                   [id]="'amount_' + ingredientControl.value.id" formControlName="amount"
