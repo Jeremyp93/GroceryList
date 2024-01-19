@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withViewTransitions } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -17,7 +17,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes),
+  providers: [provideRouter(routes, withViewTransitions()),
     provideAnimations(),
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     importProvidersFrom(NgxsModule.forRoot([GroceryListState, IngredientState, AuthState, StoreState]),
@@ -31,6 +31,6 @@ export const appConfig: ApplicationConfig = {
       collapsed: false,
       disabled: environment.production
     })),
-  ]
+  ],
 };
 
