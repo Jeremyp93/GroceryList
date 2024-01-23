@@ -21,16 +21,25 @@ public class AddUserHandler : IRequestHandler<AddUserCommand, Result<User>>
     {
         try
         {
-            var user = await _repository.SingleOrDefaultAsync(u => u.Email.ToLower() == command.Email.ToLower(), "");
-            if (user is not null)
+            var user = await _repository.SingleOrDefaultAsync(u => u.Email.ToLower() == command.Email.ToLower());
+            if (user is not null && !string.IsNullOrEmpty(user.Password))
             {
                 return Result<User>.Failure(ResultStatusCode.ValidationError, "Email is already taken");
             }
 
             var hashedPassword = _passwordHasher.Hash(command.Password);
-            var newUser = User.Create(command.FirstName, command.LastName, command.Email, hashedPassword);
+            User result;
+            if (user is not null)
+            {
+                result = User.Create(user.Id, command.FirstName, command.LastName, user.Email, hashedPassword, user.OAuthProviders.ToList());
+                await _repository.UpdateAsync(result);
+            }
+            else
+            {
+                var newUser = User.Create(Guid.NewGuid(), command.FirstName, command.LastName, command.Email, hashedPassword);
 
-            var result = await _repository.AddAsync(newUser);
+                result = await _repository.AddAsync(newUser);
+            }
 
             return Result<User>.Success(result);
         }

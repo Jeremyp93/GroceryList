@@ -32,6 +32,10 @@
         .content {
             box-shadow: none;
         }
+
+        .submit.bottom {
+            margin-top: 0;
+        }
     }
 
     > p {
@@ -47,5 +51,32 @@
                 text-decoration: underline;
             }
         }
+    }
+
+    div {
+        margin-bottom: 10px;
+        @include flex-column;
+        align-items: center;
+        .twitch-anchor {
+            width: 70%;
+            background-color: #6441a5;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            @include flex-center;
+
+            &:hover {
+                background-color: #9147ff;
+            }
+
+            .twitch-logo {
+                width: 20px;
+                height: 20px;
+                margin-right: 5px;
+              }
+          }
     }
 }

@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { ROUTES_PARAM } from './constants';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { TwitchCallbackComponent } from './auth/callback/twitch-callback/twitch-callback.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, pathMatch: 'full' },
@@ -23,6 +24,9 @@ export const routes: Routes = [
     },
     {
         path: ROUTES_PARAM.AUTHENTICATION.REGISTER, component: RegisterComponent, title: 'Grocery List - Register'
+    },
+    {
+        path: 'auth/twitch-callback', component: TwitchCallbackComponent, title: 'Redirecting...'
     },
     { path: '**', redirectTo: ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST }
 ];

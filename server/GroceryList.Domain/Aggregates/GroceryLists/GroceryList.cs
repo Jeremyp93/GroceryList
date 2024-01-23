@@ -1,7 +1,6 @@
 ﻿using GroceryList.Domain.Events.GroceryLists;
 using GroceryList.Domain.Exceptions;
 using GroceryList.Domain.SeedWork;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GroceryList.Domain.Aggregates.GroceryLists;
 

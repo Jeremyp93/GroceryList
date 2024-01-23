@@ -20,7 +20,7 @@ public class ClaimReader : IClaimReader
         if (_httpContextAccessor.HttpContext.User.Identity is ClaimsIdentity claimsIdentity)
         {
             // Accessing individual claims
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = claimsIdentity.FindFirst("user_id")?.Value;
             return userId is null ? Guid.Empty : Guid.Parse(userId);
         }
 

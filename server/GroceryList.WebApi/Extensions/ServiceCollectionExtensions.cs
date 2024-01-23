@@ -1,19 +1,15 @@
 ﻿using GroceryList.Application;
 using GroceryList.Application.Abstractions;
+using GroceryList.Application.Commands.LoginTwitch;
 using GroceryList.Domain.Events;
 using GroceryList.Domain.Helpers;
 using GroceryList.Domain.Helpers.Contracts;
 using GroceryList.Domain.Repositories;
 using GroceryList.Infrastructure.Authentication;
-using GroceryList.Infrastructure.DataBase;
 using GroceryList.Infrastructure.Repositories;
 using GroceryList.Infrastructure.Services;
-using GroceryList.WebApi.OptionsSetup;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using MongoDB.Bson.Serialization.Conventions;
-using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
 namespace GroceryList.WebApi.Extensions;
@@ -82,9 +78,10 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("AllowAnyOrigin",
                 builder => builder
-                    .AllowAnyOrigin()
+                    .WithOrigins("http://localhost:4200")
                     .AllowAnyHeader()
-                    .AllowAnyMethod());
+                    .AllowAnyMethod()
+                    .AllowCredentials());
         });
 
         services.AddCors(options =>
@@ -99,17 +96,35 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection SetupAuthentication(this IServiceCollection services)
+    public static IServiceCollection SetupCookieAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.ConfigureOptions<JwtOptionsSetup>();
-        services.ConfigureOptions<JwtBearerOptionsSetup>();
+        services.AddOptions<TwitchOptions>().Bind(configuration.GetSection("twitch"));
         services.AddHttpContextAccessor();
-        services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IClaimReader, ClaimReader>();
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Cookie.Name = "AuthCookie";
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.Domain = configuration.GetValue<string>("Cookie:Domain");
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+
+                if (configuration.GetValue<bool>("IsProduction"))
+                {
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                }
+                
+
+                options.Events.OnRedirectToLogin = (context) =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+            });
+
         return services;
     }
 
@@ -119,6 +134,12 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient<IAutoCompleteClient, GeoapifyClient>(client =>
         {
             client.BaseAddress = new Uri("https://api.geoapify.com/v1/geocode/");
+        });
+
+        // Add HttpClient and configure its base address
+        services.AddHttpClient<ITwitchClient, TwitchClient>(twithClient =>
+        {
+            twithClient.BaseAddress = new Uri("https://api.twitch.tv/helix/");
         });
 
         return services;

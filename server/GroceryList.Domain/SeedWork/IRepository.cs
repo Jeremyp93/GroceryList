@@ -12,7 +12,7 @@ namespace GroceryList.Domain.SeedWork
 
         Task<IEnumerable<TAggregateRoot>> WhereAsync(Expression<Func<TAggregateRoot, bool>>? expression, Func<IQueryable<TAggregateRoot>, IOrderedQueryable<TAggregateRoot>>? orderBy = null, CancellationToken cancellationToken = default);
 
-        Task<TAggregateRoot?> SingleOrDefaultAsync(Expression<Func<TAggregateRoot, bool>> expression, string includeProperties);
+        Task<TAggregateRoot?> SingleOrDefaultAsync(Expression<Func<TAggregateRoot, bool>> expression);
 
         Task<TAggregateRoot> AddAsync(TAggregateRoot entity);
 

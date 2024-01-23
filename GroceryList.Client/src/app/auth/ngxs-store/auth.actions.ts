@@ -14,3 +14,12 @@ export class Register {
 export class Logout {
     static readonly type = '[Auth] Logout';
 }
+
+export class CallbackTwitch {
+    static readonly type = '[Auth] Callback Twitch';
+    constructor(public code: string) { }
+}
+
+export class GetMyself {
+    static readonly type = '[Auth] Me';
+}
