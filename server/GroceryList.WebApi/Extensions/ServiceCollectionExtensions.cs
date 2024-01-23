@@ -90,7 +90,8 @@ public static class ServiceCollectionExtensions
                 builder => builder
                     .WithOrigins("https://grocery-list.scotex.tech")
                     .AllowAnyHeader()
-                    .WithMethods("GET", "POST", "PUT", "DELETE"));
+                    .WithMethods("GET", "POST", "PUT", "DELETE")
+                    .AllowCredentials());
         });
 
         return services;
