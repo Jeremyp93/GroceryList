@@ -11,6 +11,7 @@ import { LOGIN_FORM, ROUTES_PARAM } from '../../constants';
 import { AuthState } from '../ngxs-store/auth.state';
 import { InputFieldComponent } from '../../shared/input-field/input-field.component';
 import { InputType } from '../../shared/input-field/input-type.enum';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading: boolean = false;
   isSubmitted: boolean = false;
+  twitchUrl: string = '';
 
   get inputTypes(): typeof InputType {
     return InputType;
@@ -39,6 +41,7 @@ export class LoginComponent implements OnInit {
       this.#ngxsStore.dispatch(new Logout());
     }
     this.#initForm();
+    this.twitchUrl = `${environment.oauthApiUrl}/twitch/login`
   }
 
   onSubmit = () => {

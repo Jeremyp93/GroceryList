@@ -5,7 +5,6 @@ import {
   UrlSegment,
   UrlTree
 } from '@angular/router';
-import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { NgxsModule, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { authGuard } from './auth.guard';
@@ -23,23 +22,17 @@ describe('AuthGuard', () => {
     await TestBed.configureTestingModule( {
       imports: [NgxsModule.forRoot([AuthState])],
       providers: [
-        HttpClient, HttpHandler,
-        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-        JwtHelperService
+        HttpClient, HttpHandler
       ]
     });
     const store = TestBed.inject(Store);
-    const jwtHelperService = TestBed.inject(JwtHelperService);
     mockSelect = spyOn(store, 'selectSnapshot');
     mockDispatch = spyOn(store, 'dispatch');
-    mockIsTokenExpired = spyOn(jwtHelperService, 'isTokenExpired');
   })
 
   it('should return true when user is authenticated and token is not expired', async () => {
     const token = 'mockedTokenValue';
     mockSelect.withArgs(AuthState.isAuthenticated).and.returnValue(true);
-    mockSelect.withArgs(AuthState.token).and.returnValue(token);
-    mockIsTokenExpired.withArgs(token).and.returnValue(false);
 
     const canActivate = await runAuthGuardWithContext(getAuthGuardWithDummyUrl(urlPath));
 
@@ -49,19 +42,6 @@ describe('AuthGuard', () => {
 
   it('should return false and dispatch Logout when user is not authenticated', async () => {
     mockSelect.withArgs(AuthState.isAuthenticated).and.returnValue(false);
-    mockSelect.withArgs(AuthState.token).and.returnValue(null);
-
-    const canActivate = await runAuthGuardWithContext(getAuthGuardWithDummyUrl(urlPath));
-
-    expect(canActivate).toBe(false);
-    expect(mockDispatch).toHaveBeenCalledWith(new Logout());
-  });
-
-  it('should return false and dispatch Logout when token is expired', async () => {
-    const token = 'mockedTokenValue';
-    mockSelect.withArgs(AuthState.isAuthenticated).and.returnValue(true);
-    mockSelect.withArgs(AuthState.token).and.returnValue(token);
-    mockIsTokenExpired.withArgs(token).and.returnValue(true);
 
     const canActivate = await runAuthGuardWithContext(getAuthGuardWithDummyUrl(urlPath));
 

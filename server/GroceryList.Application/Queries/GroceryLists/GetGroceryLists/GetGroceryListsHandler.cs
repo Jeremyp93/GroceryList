@@ -1,5 +1,6 @@
 ﻿using GroceryList.Application.Abstractions;
 using GroceryList.Application.Helpers;
+using GroceryList.Domain.Aggregates.Users;
 using GroceryList.Domain.Repositories;
 using MediatR;
 
@@ -21,7 +22,6 @@ public class GetGroceryListsHandler : IRequestHandler<GetGroceryListsQuery, Resu
     public async Task<Result<IEnumerable<GroceryListResponseDto>>> Handle(GetGroceryListsQuery request, CancellationToken cancellationToken)
     {
         var userId = _claimReader.GetUserIdFromClaim();
-        //var result = await _repository.GetAllAsync(cancellationToken);
         var result = await _repository.WhereAsync(l => l.UserId == userId, null, cancellationToken);
         var lists = new List<GroceryListResponseDto>();
         foreach (var list in result)

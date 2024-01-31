@@ -11,4 +11,5 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './grocery-list.component.scss'
 })
 export class GroceryListComponent {
+  
 }

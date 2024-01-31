@@ -24,7 +24,6 @@ export class AppComponent implements OnInit, OnDestroy {
   #actions = inject(Actions);
   #ngxsStore = inject(Store);
   #sideMenuService = inject(SideMenuService);
-  @Select(AuthState.getName) name$!: Observable<string>;
   isKeyboardOpen = false;
   previousHeight: number = 0;
   groceryListRoute: string = '/' + ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST;

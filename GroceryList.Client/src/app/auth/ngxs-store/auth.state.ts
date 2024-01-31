@@ -1,36 +1,27 @@
 import { Injectable, inject } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { tap } from "rxjs";
-import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { Login, Logout, Register } from "./auth.actions";
+import { CallbackTwitch, GetMyself, Login, Logout, Register } from "./auth.actions";
 import { AuthService } from "../auth.service";
-import { TokenResponseDto } from "../dtos/token-response-dto.type";
 
 export interface AuthStateModel {
-    token: string | null;
-    username: string | null;
-    name: string | null
+    isAuthenticated: boolean;
+    name: string | null;
+    email: string | null;
 }
 
 @State<AuthStateModel>({
     name: 'auth',
     defaults: {
-        token: null,
-        username: null,
-        name: null
+        isAuthenticated: false,
+        name: null,
+        email: null
     }
 })
 
 @Injectable()
 export class AuthState {
-    jwtHelper = inject(JwtHelperService);
-
-    @Selector()
-    static token(state: AuthStateModel): string | null {
-        return state.token;
-    }
-
     @Selector()
     static getName(state: AuthStateModel): string | null {
         return state.name;
@@ -38,7 +29,7 @@ export class AuthState {
 
     @Selector()
     static isAuthenticated(state: AuthStateModel): boolean {
-        return !!state.token;
+        return state.isAuthenticated;
     }
 
     constructor(private authService: AuthService) { }
@@ -46,13 +37,11 @@ export class AuthState {
     @Action(Login)
     login(ctx: StateContext<AuthStateModel>, action: Login) {
         return this.authService.login(action.payload).pipe(
-            tap((result: TokenResponseDto) => {
-                const tokenDecoded = this.jwtHelper.decodeToken(result.token);
+            tap(() => {
                 ctx.patchState({
-                    token: result.token,
-                    username: action.payload.username,
-                    name: tokenDecoded.name
+                    isAuthenticated: true
                 });
+                ctx.dispatch(new GetMyself());
             })
         );
     }
@@ -64,10 +53,39 @@ export class AuthState {
 
     @Action(Logout)
     logout(ctx: StateContext<AuthStateModel>) {
-        ctx.setState({
-            token: null,
-            username: null,
-            name: null
-        });
+        return this.authService.logout().pipe(
+            tap(() => {
+                ctx.patchState({
+                    isAuthenticated: false,
+                    email: null,
+                    name: null
+                });
+            })
+        );
+    }
+
+    @Action(GetMyself)
+    getMyself(ctx: StateContext<AuthStateModel>) {
+        return this.authService.me().pipe(
+            tap((result) => {
+                ctx.patchState({
+                    name: result?.lastName ? `${result.firstName} ${result?.lastName}` : `${result.firstName}`,
+                    email: result.email,
+                    isAuthenticated: true
+                });
+            })
+        );
+    }
+
+    @Action(CallbackTwitch)
+    callbackTwitch(ctx: StateContext<AuthStateModel>, {code}: CallbackTwitch) {
+        return this.authService.loginTwitch(code).pipe(
+            tap(() => {
+                ctx.patchState({
+                    isAuthenticated: true
+                });
+                ctx.dispatch(new GetMyself());
+            })
+        );
     }
 }

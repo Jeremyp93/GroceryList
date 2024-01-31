@@ -7,8 +7,12 @@ using GroceryList.Application.Queries.Users.GetUsers;
 using GroceryList.Domain.Aggregates.Users;
 using GroceryList.WebApi.Models.Users;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using GroceryList.Application.Abstractions;
 
 namespace GroceryList.WebApi.Controllers;
 
@@ -17,10 +21,12 @@ namespace GroceryList.WebApi.Controllers;
 public class UsersController : BaseController
 {
     private readonly IMediator _mediator;
+    private IClaimReader _claimReader;
 
-    public UsersController(IMediator mediator, IMapper mapper) : base(mapper)
+    public UsersController(IMediator mediator, IMapper mapper, IClaimReader claimReader) : base(mapper)
     {
         _mediator = mediator;
+        _claimReader = claimReader;
     }
 
     [Authorize]
@@ -51,6 +57,21 @@ public class UsersController : BaseController
         return ReturnOk<UserResponse, User>(result.Data);
     }
 
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMyself()
+    {
+        var id = _claimReader.GetUserIdFromClaim();
+        var result = await _mediator.Send(new GetUserByIdQuery(id));
+
+        if (!result.IsSuccessful)
+        {
+            return ErrorResponse(result);
+        }
+
+        return ReturnOk<UserResponse, User>(result.Data);
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> LoginUser([FromBody] LoginRequest loginRequest)
     {
@@ -65,7 +86,30 @@ public class UsersController : BaseController
             return ErrorResponse(result);
         }
 
-        return Ok(new TokenResponse { Token = result.Data });
+        var claims = new List<Claim>
+        {
+            new("user_id", result.Data.Id.ToString())
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(identity),
+            new AuthenticationProperties
+            {
+                IsPersistent = true,
+                AllowRefresh = true,
+            });
+
+        return Ok();
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> LogoutUser()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        return Ok();
     }
 
     [HttpPost]

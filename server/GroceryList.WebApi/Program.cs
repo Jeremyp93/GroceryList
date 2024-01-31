@@ -25,7 +25,8 @@ builder.Services.ConfigureHelpers();
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureMongoDb(logger);
-builder.Services.SetupAuthentication();
+//builder.Services.SetupAuthentication();
+builder.Services.SetupCookieAuthentication(builder.Configuration);
 builder.Services.ConfigureServices();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -59,17 +60,12 @@ builder.Services.AddSwaggerGen(c =>
                         Id = "Bearer"
                     }
                 },
-                new string[] {}
+                Array.Empty<string>()
             }
         });
 });
 
 builder.Services.AddControllers();
-
-/* builder.Services.AddHttpsRedirection(options =>
-{
-    options.HttpsPort = 443; // Set the HTTPS port
-}); */
 
 var app = builder.Build();
 

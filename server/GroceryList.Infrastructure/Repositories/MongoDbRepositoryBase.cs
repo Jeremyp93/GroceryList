@@ -1,4 +1,5 @@
 ﻿using GroceryList.Application.Abstractions;
+using GroceryList.Domain.Aggregates.Users;
 using GroceryList.Domain.Helpers.Contracts;
 using GroceryList.Domain.SeedWork;
 using GroceryList.Infrastructure.Extension;
@@ -52,7 +53,7 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
         return result.ToEnumerable();
     }
 
-    public async Task<TAggregateRoot?> SingleOrDefaultAsync(Expression<Func<TAggregateRoot, bool>> expression, string includeProperties)
+    public async Task<TAggregateRoot?> SingleOrDefaultAsync(Expression<Func<TAggregateRoot, bool>> expression)
     {
         var filter = Builders<TAggregateRoot>.Filter.Where(expression);
         return await _collection.Find(filter).SingleOrDefaultAsync();
