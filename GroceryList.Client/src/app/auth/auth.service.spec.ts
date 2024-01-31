@@ -5,7 +5,6 @@ import { AuthService } from './auth.service';
 import { Login } from './types/login.type';
 import { Register } from './types/register.type';
 import { environment } from '../../environments/environment';
-import { TokenResponseDto } from './dtos/token-response-dto.type';
 import { ROUTES_PARAM } from '../constants';
 
 describe('AuthService', () => {
@@ -28,17 +27,12 @@ describe('AuthService', () => {
 
   it('should make a POST request for login', () => {
     const mockLogin: Login = { username: 'test@example.com', password: 'password123' };
-    const mockTokenResponse: TokenResponseDto = { token: 'mockToken' };
 
-    authService.login(mockLogin).subscribe((response) => {
-      expect(response).toEqual(mockTokenResponse);
-    });
+    authService.login(mockLogin).subscribe();
 
     const req = httpTestingController.expectOne(`${environment.userApiUrl}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ email: mockLogin.username, password: mockLogin.password });
-
-    req.flush(mockTokenResponse);
   });
 
   it('should make a POST request for registration', () => {

@@ -21,7 +21,13 @@ export const ROUTES_PARAM = {
     },
     AUTHENTICATION: {
         LOGIN: 'login',
-        REGISTER: 'register'
+        REGISTER: 'register',
+        LOGOUT: 'logout',
+        ME: 'me'
+    },
+    OAUTH: {
+        OAUTH: 'oauth',
+        TWITCH_CALLBACK: 'twitch/callback'
     },
     ID_PARAMETER: 'id',
 }

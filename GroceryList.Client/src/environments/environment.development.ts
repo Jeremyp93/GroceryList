@@ -4,5 +4,6 @@ export const environment = {
     storeApiUrl: 'http://localhost:5058/api/stores',
     userApiUrl: 'http://localhost:5058/api/users',
     autocompleteApiUrl: 'http://localhost:5058/api/geocodeautocomplete',
-    itemApiUrl: 'http://localhost:5058/api/items'
+    itemApiUrl: 'http://localhost:5058/api/items',
+    oauthApiUrl: 'http://localhost:5058/api/oauth'
 };

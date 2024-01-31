@@ -19,7 +19,6 @@ namespace GroceryList.Infrastructure.Services
 
         public async Task<IEnumerable<AutocompleteResponse>> AutoComplete(string searchText)
         {
-            var a = _httpClient.BaseAddress;
             var apiKey = _configuration.GetValue<string>("AutoComplete:ApiKey") ?? "";
             string apiUrl = $"autocomplete?text={searchText}&apiKey={apiKey}&limit=5";
 

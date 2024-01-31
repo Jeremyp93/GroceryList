@@ -4,5 +4,6 @@ export const environment = {
     storeApiUrl: 'https://api.grocery-list.scotex.tech/api/stores',
     userApiUrl: 'https://api.grocery-list.scotex.tech/api/users',
     autocompleteApiUrl: 'https://api.grocery-list.scotex.tech/api/geocodeautocomplete',
-    itemApiUrl: 'https://api.grocery-list.scotex.tech/api/items'
+    itemApiUrl: 'https://api.grocery-list.scotex.tech/api/items',
+    oauthApiUrl: 'https://api.grocery-list.scotex.tech/api/oauth'
 };
