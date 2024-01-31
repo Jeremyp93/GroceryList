@@ -3,5 +3,5 @@
 namespace GroceryList.Application.Abstractions;
 public interface ITwitchClient
 {
-    Task<TwitchUser> GetUser(string code);
+    Task<TwitchUser?> GetUser(string code);
 }

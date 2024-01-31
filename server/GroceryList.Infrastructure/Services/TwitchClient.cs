@@ -23,6 +23,11 @@ public class TwitchClient : ITwitchClient
     {
         var token = await Authenticate(code);
 
+        if (token is null)
+        {
+            return null;
+        }
+
         // Set headers
         _twitchHttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         _twitchHttpClient.DefaultRequestHeaders.Add("Client-Id", _options.ClientId);

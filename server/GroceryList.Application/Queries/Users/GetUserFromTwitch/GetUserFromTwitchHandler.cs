@@ -6,6 +6,7 @@ using MediatR;
 namespace GroceryList.Application.Queries.Users.GetUserFromTwitch;
 public class GetUserFromTwitchHandler : IRequestHandler<GetUserFromTwitchQuery, Result<User>>
 {
+    private const string TwitchKey = "twitch";
     private readonly ITwitchClient _twitchClient;
     private readonly IUserRepository _repository;
 
@@ -23,7 +24,7 @@ public class GetUserFromTwitchHandler : IRequestHandler<GetUserFromTwitchQuery, 
             return Result<User>.Failure(ResultStatusCode.ValidationError, "User info could not be retrieved.");
         }
 
-        var existingUser = await _repository.SingleOrDefaultAsync(u => u.OAuthProviders.Any(o => o.OAuthProviderId == twitchUser.Id && o.OAuthProviderName == "twitch"));
+        var existingUser = await _repository.SingleOrDefaultAsync(u => u.OAuthProviders.Any(o => o.OAuthProviderId == twitchUser.Id && o.OAuthProviderName == TwitchKey));
         if (existingUser is not null) 
         {
             return Result<User>.Success(existingUser);
@@ -32,15 +33,14 @@ public class GetUserFromTwitchHandler : IRequestHandler<GetUserFromTwitchQuery, 
         existingUser = await _repository.SingleOrDefaultAsync(u => u.Email.ToLowerInvariant() == twitchUser.Email.ToLowerInvariant());
         if (existingUser is not null)
         {
-            var updatedUser = User.Create(existingUser.Id, existingUser.FirstName, existingUser.LastName, existingUser.Email, existingUser.Password, existingUser.OAuthProviders.ToList());
-            updatedUser.AddOAuthProvider(OAuthProvider.Create(twitchUser.Id, "twitch"));
-            await _repository.UpdateAsync(updatedUser);
-            return Result<User>.Success(updatedUser);
+            existingUser.AddOAuthProvider(OAuthProvider.Create(twitchUser.Id, TwitchKey));
+            await _repository.UpdateAsync(existingUser);
+            return Result<User>.Success(existingUser);
         }
         else
         {
             var newUser = User.Create(Guid.NewGuid(), twitchUser.DisplayName, null, twitchUser.Email, null);
-            newUser.AddOAuthProvider(OAuthProvider.Create(twitchUser.Id, "twitch"));
+            newUser.AddOAuthProvider(OAuthProvider.Create(twitchUser.Id, TwitchKey));
 
             var createdUser = await _repository.AddAsync(newUser);
 

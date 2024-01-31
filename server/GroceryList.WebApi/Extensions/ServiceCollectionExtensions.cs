@@ -117,7 +117,6 @@ public static class ServiceCollectionExtensions
                 {
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 }
-                
 
                 options.Events.OnRedirectToLogin = (context) =>
                 {

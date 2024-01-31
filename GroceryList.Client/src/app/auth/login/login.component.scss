@@ -53,10 +53,11 @@
         }
     }
 
-    div {
+    .oauth {
         margin-bottom: 10px;
         @include flex-column;
         align-items: center;
+        
         .twitch-anchor {
             width: 70%;
             background-color: #6441a5;

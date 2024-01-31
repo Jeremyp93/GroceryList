@@ -1,7 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { tap } from "rxjs";
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { CallbackTwitch, GetMyself, Login, Logout, Register } from "./auth.actions";
 import { AuthService } from "../auth.service";
@@ -23,8 +22,6 @@ export interface AuthStateModel {
 
 @Injectable()
 export class AuthState {
-    jwtHelper = inject(JwtHelperService);
-
     @Selector()
     static getName(state: AuthStateModel): string | null {
         return state.name;
