@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
+import { Actions, Select, Store, ofActionCompleted, ofActionDispatched } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 
 import { ROUTES_PARAM } from './constants';
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.#actions.pipe(ofActionDispatched(Logout)).subscribe(() => {
+    this.#actions.pipe(ofActionCompleted(Logout)).subscribe(() => {
       this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
     });
 

@@ -112,7 +112,6 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   }
 
   onSubmit = () => {
-    console.log(this.groceryListForm.value);
     this.submitted = true;
     if (this.groceryListForm.invalid) return;
     this.isLoading = true;
@@ -165,7 +164,6 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   }
 
   drop = (event: CdkDragDrop<string>) => {
-    console.log(event);
     const ingredients = this.groceryListForm.get(GROCERY_LIST_FORM.INGREDIENTS) as FormArray;
     const newCategory = event.container.data;
     const name = event.item.data.name;
@@ -221,7 +219,6 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
       this.categories = [...groceryList.store.sections.map(s => s.name), ''];
     }
     if (groceryList.ingredients.length > 0) {
-      console.log(groceryList.ingredients);
       groceryList.ingredients.forEach((ingredient: Ingredient) => {
         ingredients.push(new FormGroup({
           [INGREDIENT_FORM.ID]: new FormControl(UUID()),
@@ -245,7 +242,6 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
 
   #focusOnControl = (id: string) => {
     const elements = this.inputFields.toArray();
-    console.log(elements);
     const element = elements.find(e => e.id === `name_${id}`);
     if (element) {
       element.focusInput();

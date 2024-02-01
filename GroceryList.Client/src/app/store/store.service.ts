@@ -13,33 +13,33 @@ export class StoreService {
     httpClient = inject(HttpClient);
 
     getAllStores = (): Observable<Store[]> => {
-        return this.httpClient.get<StoreResponseDto[]>(environment.storeApiUrl).pipe(map((dtos) => {
+        return this.httpClient.get<StoreResponseDto[]>(`${environment.apiUrl}/${environment.storeEndpoint}`).pipe(map((dtos) => {
             return dtos.map(dto => (this.#fromStoreDto(dto)));
         }));
     }
 
     getStoreById = (id: string): Observable<Store> => {
-        return this.httpClient.get<StoreResponseDto>(`${environment.storeApiUrl}/${id}`).pipe(map((dto) => this.#fromStoreDto(dto)));
+        return this.httpClient.get<StoreResponseDto>(`${environment.apiUrl}/${environment.storeEndpoint}/${id}`).pipe(map((dto) => this.#fromStoreDto(dto)));
     }
 
     deleteStore = (id: string): Observable<void> => {
-        return this.httpClient.delete<void>(`${environment.storeApiUrl}/${id}`);
+        return this.httpClient.delete<void>(`${environment.apiUrl}/${environment.storeEndpoint}/${id}`);
     }
 
     addStore = (store: Store): Observable<Store> => {
-        return this.httpClient.post<StoreResponseDto>(environment.storeApiUrl, this.#toStoreDto(store)).pipe(map((createdStoreDto: StoreResponseDto) => {
+        return this.httpClient.post<StoreResponseDto>(`${environment.apiUrl}/${environment.storeEndpoint}`, this.#toStoreDto(store)).pipe(map((createdStoreDto: StoreResponseDto) => {
             return this.#fromStoreDto(createdStoreDto);
         }));
     }
 
     updateStore = (id: string, store: Store): Observable<Store> => {
-        return this.httpClient.put<StoreResponseDto>(`${environment.storeApiUrl}/${id}`, this.#toStoreDto(store)).pipe(map((updatedStoreDto: StoreResponseDto) => {
+        return this.httpClient.put<StoreResponseDto>(`${environment.apiUrl}/${environment.storeEndpoint}/${id}`, this.#toStoreDto(store)).pipe(map((updatedStoreDto: StoreResponseDto) => {
             return this.#fromStoreDto(updatedStoreDto);
         }));
     }
 
     updateSections = (id: string, sections: Section[]): Observable<Section[]> => {
-        return this.httpClient.put<SectionDto[]>(`${environment.storeApiUrl}/${id}/sections`, sections).pipe(map((sectionsDto: SectionDto[]) => {
+        return this.httpClient.put<SectionDto[]>(`${environment.apiUrl}/${environment.storeEndpoint}/${id}/sections`, sections).pipe(map((sectionsDto: SectionDto[]) => {
             return sectionsDto.map((dto: SectionDto) => (this.#fromSectionDto(dto)));
         }));
     }

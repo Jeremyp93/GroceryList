@@ -16,6 +16,31 @@ services:
     networks:
       - traefik
 
+  portainer:
+    image: portainer/portainer-ce:latest
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer-data:/data
+    labels:
+      # Frontend
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer-frontend.rule=Host(`portainer.scotex.tech`)"
+      - "traefik.http.routers.portainer-frontend.entrypoints=websecure"
+      - "traefik.http.services.portainer-frontend.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer-frontend.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.portainer-frontend.service=portainer-frontend"
+
+      # Edge
+      - "traefik.http.routers.portainer-edge.rule=Host(`edge.scotex.tech`)"
+      - "traefik.http.routers.portainer-edge.entrypoints=websecure"
+      - "traefik.http.services.portainer-edge.loadbalancer.server.port=8000"
+      - "traefik.http.routers.portainer-edge.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.portainer-edge.service=portainer-edge"
+    networks:
+      - traefik
+
 networks:
   traefik:
     external: true

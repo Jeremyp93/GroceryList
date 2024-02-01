@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { Login, Logout } from '../ngxs-store/auth.actions';
 import { HeaderComponent } from '../../shared/header/header.component';
@@ -12,6 +12,8 @@ import { AuthState } from '../ngxs-store/auth.state';
 import { InputFieldComponent } from '../../shared/input-field/input-field.component';
 import { InputType } from '../../shared/input-field/input-type.enum';
 import { environment } from '../../../environments/environment';
+import { AlertService } from '../../shared/alert/alert.service';
+import { Alert, AlertType } from '../../shared/alert/alert.model';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +25,8 @@ import { environment } from '../../../environments/environment';
 export class LoginComponent implements OnInit {
   #ngxsStore = inject(Store);
   #router = inject(Router);
+  #route = inject(ActivatedRoute);
+  #alertService = inject(AlertService);
   readonly registerRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.REGISTER;
   readonly loginFormUsername: string = LOGIN_FORM.USERNAME;
   readonly loginFormPassword: string = LOGIN_FORM.PASSWORD;
@@ -36,12 +40,18 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const params = this.#route.snapshot.queryParams;
+    const confirmed = params['confirmed'];
+    if (confirmed && confirmed === 'true') {
+      this.#alertService.setAlertObs(new Alert(AlertType.Info, 'Email has been confirmed. Please log in.'));
+    }
     const isLoggedIn = this.#ngxsStore.selectSnapshot(AuthState.isAuthenticated);
     if (isLoggedIn) {
+      console.log('Login');
       this.#ngxsStore.dispatch(new Logout());
     }
     this.#initForm();
-    this.twitchUrl = `${environment.oauthApiUrl}/twitch/login`
+    this.twitchUrl = `${environment.apiUrl}/${environment.oauthEndpoint}/twitch/login`
   }
 
   onSubmit = () => {

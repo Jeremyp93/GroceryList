@@ -12,6 +12,6 @@ export class AutocompleteService {
         if (!searchInput) {
             return of([]);
         }
-        return this.httpClient.get<AutocompleteAddress[]>(`${environment.autocompleteApiUrl}?searchText=${searchInput}`);
+        return this.httpClient.get<AutocompleteAddress[]>(`${environment.apiUrl}/${environment.autocompleteEndpoint}?searchText=${searchInput}`);
     }
 }

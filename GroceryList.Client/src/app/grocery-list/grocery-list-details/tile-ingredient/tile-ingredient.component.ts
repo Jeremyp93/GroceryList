@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ButtonComponent } from '../../../shared/button/button.component';
@@ -14,7 +14,7 @@ import { ButtonHover } from '../../../shared/button/button-hover.enum';
   styleUrl: './tile-ingredient.component.scss'
 })
 export class TileIngredientComponent {
-  @Input() ingredient: Ingredient | null = null
+  ingredient = input.required<Ingredient>();
   @Output() onIngredientDeleted: EventEmitter<string> = new EventEmitter<string>();
 
   get buttonStyles(): typeof ButtonStyle {
@@ -27,6 +27,6 @@ export class TileIngredientComponent {
 
   showDeleteList = (event: Event) => {
     event.stopImmediatePropagation();
-    this.onIngredientDeleted.emit(this.ingredient!.id);
+    this.onIngredientDeleted.emit(this.ingredient().id);
   }
 }

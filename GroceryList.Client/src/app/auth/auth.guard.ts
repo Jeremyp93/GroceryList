@@ -1,5 +1,5 @@
 import { inject } from "@angular/core";
-import { CanActivateFn } from "@angular/router";
+import { CanActivateFn, Router } from "@angular/router";
 
 import { Store } from "@ngxs/store";
 import { AuthState } from "./ngxs-store/auth.state";

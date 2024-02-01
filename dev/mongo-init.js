@@ -17,20 +17,38 @@ db.createCollection("GroceryList", { capped: false });
 
 db.User.insert([
   {
-    _id: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
+    _id: UUID('5296cff2-9970-42dd-8f3e-e2688fb48601'),
+    userName: "jeremy.proot@outlook.com",
+    normalizedUserName: "JEREMY.PROOT@OUTLOOK.COM",
+    email: "jeremy.proot@outlook.com",
+    normalizedEmail: "JEREMY.PROOT@OUTLOOK.COM",
+    emailConfirmed: true,
+    passwordHash: "AQAAAAIAAYagAAAAEGARJwZ7q/G57ihI4O76DbXu/mrirZ9y3bz/dfJ9jpSduanFlWRG1LhKb1MEPSx+WA==",
+    securityStamp: "XABV5FE7V2I2WYMKWDQUNRRRMPX7FL6H",
+    concurrencyStamp: "e199daaa-746d-425e-9373-3809ffcd20a3",
+    phoneNumber: null,
+    phoneNumberConfirmed: false,
+    twoFactorEnabled: false,
+    lockoutEnd: null,
+    lockoutEnabled: true,
+    accessFailedCount: 0,
+    version: 1,
+    createdOn: ISODate("2024-02-01T20:29:25.619+00:00"),
+    claims: [],
+    roles: [],
+    logins: [],
+    tokens: [],
     firstName: "Jeremy",
     lastName: "Proot",
-    email: "jeremy.proot@outlook.com",
-    password:
-      "AQAAAAAAAAAAAAAAAB0aqgNTKIcpVOstZNbj546bxpa9VOMLZwHFJa3MjQ3Rt2KefDX6A1ocv4ALuGOBCA==",
-  },
+    oAuthProviders: []
+  }
 ]);
 
 db.Store.insert([
   {
-    _id: BinData(3, "5YhRP31jMk2zT4mg//NOFQ=="),
+    _id: UUID('657cf0f3-755d-4252-bdec-3b18148bacf6'),
     name: "Maxi",
-    userId: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
+    userId: UUID('5296cff2-9970-42dd-8f3e-e2688fb48601'),
     address: {
       street: "375 Rue Jean-Talon O",
       city: "Montreal",
@@ -54,9 +72,9 @@ db.Store.insert([
     ],
   },
   {
-    _id: BinData(3, "vh8kTF6uOEibqmhIn7kCMg=="),
+    _id: UUID('b2c3032b-7c85-48a9-9a6d-02dfcd020153'),
     name: "Marché Jean-Talon",
-    userId: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
+    userId: UUID('5296cff2-9970-42dd-8f3e-e2688fb48601'),
     address: {
       street: "7070 Av. Henri-Julien",
       city: "Montreal",
@@ -77,10 +95,10 @@ db.Store.insert([
 
 db.GroceryList.insert([
   {
-    _id: BinData(3, "KF1Uwz3/qUS1gOnbU4fwHw=="),
+    _id: UUID('06f69719-5d5e-43e5-9890-f284472e705b'),
     name: "List Maxi - course semaine",
-    userId: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
-    storeId: BinData(3, "5YhRP31jMk2zT4mg//NOFQ=="),
+    userId: UUID('5296cff2-9970-42dd-8f3e-e2688fb48601'),
+    storeId: UUID('657cf0f3-755d-4252-bdec-3b18148bacf6'),
     ingredients: [
       {
         name: "Gravier litiere",
@@ -161,10 +179,10 @@ db.GroceryList.insert([
     lastModifiedBy: "jeremy.proot@outlook.com",
   },
   {
-    _id: BinData(3, "ViuW04NJcEKrBKuznIulIQ=="),
+    _id: UUID('94fb0d4c-29a2-442d-8706-ecac031ac24b'),
     name: "List Jean-Talon",
-    userId: BinData(3, "N5m5cCElO0WZ70nw105Ssg=="),
-    storeId: BinData(3, "vh8kTF6uOEibqmhIn7kCMg=="),
+    userId: UUID('5296cff2-9970-42dd-8f3e-e2688fb48601'),
+    storeId: UUID('b2c3032b-7c85-48a9-9a6d-02dfcd020153'),
     ingredients: [
       {
         name: "Noix de cajou",

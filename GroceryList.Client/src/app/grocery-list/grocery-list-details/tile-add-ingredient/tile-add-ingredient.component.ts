@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Output, EventEmitter, inject, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, HostListener, OnInit, Output, EventEmitter, inject, ElementRef, Input, ViewChild, AfterViewInit, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { v4 as UUID } from 'uuid';
@@ -21,7 +21,7 @@ import { InputFieldComponent } from '../../../shared/input-field/input-field.com
 export class TileAddIngredientComponent implements OnInit, AfterViewInit {
   @Output() itemAdded: EventEmitter<Ingredient> = new EventEmitter<Ingredient>();
   @Output() onClickOutside: EventEmitter<void> = new EventEmitter<void>();
-  @Input() sections: Section[] = [];
+  sections = input<Section[]>([]);
   @ViewChild('inputField', { read: InputFieldComponent, static: true }) inputFieldComponent!: InputFieldComponent;
   #elementRef = inject(ElementRef)
   categories: string[] = [];
@@ -44,7 +44,7 @@ export class TileAddIngredientComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.categories = this.sections.map(s => s.name) ?? [];
+    this.categories = this.sections().map(s => s.name) ?? [];
     this.#initForm();
   }
 

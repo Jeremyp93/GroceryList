@@ -3,7 +3,6 @@ using GroceryList.Application;
 using GroceryList.Application.Commands.Login;
 using GroceryList.Application.Commands.Users.AddUser;
 using GroceryList.Application.Queries.Users.GetUserById;
-using GroceryList.Application.Queries.Users.GetUsers;
 using GroceryList.Domain.Aggregates.Users;
 using GroceryList.WebApi.Models.Users;
 using MediatR;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using GroceryList.Application.Abstractions;
+using GroceryList.Application.Models;
 
 namespace GroceryList.WebApi.Controllers;
 
@@ -21,26 +21,12 @@ namespace GroceryList.WebApi.Controllers;
 public class UsersController : BaseController
 {
     private readonly IMediator _mediator;
-    private IClaimReader _claimReader;
+    private readonly IClaimReader _claimReader;
 
     public UsersController(IMediator mediator, IMapper mapper, IClaimReader claimReader) : base(mapper)
     {
         _mediator = mediator;
         _claimReader = claimReader;
-    }
-
-    [Authorize]
-    [HttpGet]
-    public async Task<IActionResult> GetUsers()
-    {
-        var result = await _mediator.Send(new GetUsersQuery());
-
-        if (!result.IsSuccessful)
-        {
-            ErrorResponse(result);
-        }
-
-        return ReturnOk<IEnumerable<UserResponse>, IEnumerable<User>>(result.Data);
     }
 
     [Authorize]
@@ -54,7 +40,7 @@ public class UsersController : BaseController
             return ErrorResponse(result);
         }
 
-        return ReturnOk<UserResponse, User>(result.Data);
+        return ReturnOk<UserResponse, ApplicationUser>(result.Data);
     }
 
     [Authorize]
@@ -69,7 +55,7 @@ public class UsersController : BaseController
             return ErrorResponse(result);
         }
 
-        return ReturnOk<UserResponse, User>(result.Data);
+        return ReturnOk<UserResponse, ApplicationUser>(result.Data);
     }
 
     [HttpPost("login")]
@@ -134,6 +120,6 @@ public class UsersController : BaseController
             return ErrorResponse(result);
         }
 
-        return ReturnOk<UserResponse, User>(result.Data);
+        return ReturnOk<UserResponse, ApplicationUser>(result.Data);
     }
 }

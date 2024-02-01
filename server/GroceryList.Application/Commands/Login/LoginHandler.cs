@@ -1,33 +1,40 @@
-﻿using GroceryList.Application.Abstractions;
-using GroceryList.Domain.Aggregates.Users;
-using GroceryList.Domain.Repositories;
+﻿using GroceryList.Application.Models;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace GroceryList.Application.Commands.Login;
-public class LoginHandler : IRequestHandler<LoginCommand, Result<User>>
+public class LoginHandler : IRequestHandler<LoginCommand, Result<ApplicationUser>>
 {
-    private readonly IUserRepository _repository;
-    private readonly IPasswordHasher _passwordHasher;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public LoginHandler(IUserRepository repository, IPasswordHasher passwordHasher)
+    public LoginHandler(UserManager<ApplicationUser> userManager)
     {
-        _repository = repository;
-        _passwordHasher = passwordHasher;
+        _userManager = userManager;
     }
 
-    public async Task<Result<User>> Handle(LoginCommand command, CancellationToken cancellationToken)
+    public async Task<Result<ApplicationUser>> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        var user = await _repository.SingleOrDefaultAsync(u => u.Email.ToLower() == command.Email.ToLower());
+        var user = await _userManager.FindByEmailAsync(command.Email);
         if (user is null)
         {
-            return Result<User>.Failure(ResultStatusCode.ValidationError, "Invalid credentials.");
+            return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "Invalid credentials.");
         }
 
-        if (!_passwordHasher.Verify(user.Password, command.Password))
+        if (user.PasswordHash is null)
         {
-            return Result<User>.Failure(ResultStatusCode.ValidationError, "Invalid credentials.");
+            return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "Invalid credentials.");
         }
 
-        return Result<User>.Success(user);
+        if (!await _userManager.CheckPasswordAsync(user, command.Password))
+        {
+            return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "Invalid credentials.");
+        }
+
+        if (!user.EmailConfirmed)
+        {
+            return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "Email not confirmed.");
+        }
+
+        return Result<ApplicationUser>.Success(user);
     }
 }
