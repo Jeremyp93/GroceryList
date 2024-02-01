@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
     }
     const isLoggedIn = this.#ngxsStore.selectSnapshot(AuthState.isAuthenticated);
     if (isLoggedIn) {
-      console.log('Login');
       this.#ngxsStore.dispatch(new Logout());
     }
     this.#initForm();

@@ -14,7 +14,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     tap({error: (errorResponse: HttpErrorResponse) => {
       if (errorResponse.status === 401) {
-        console.log('error');
         store.dispatch(new Logout());
         return;
       }

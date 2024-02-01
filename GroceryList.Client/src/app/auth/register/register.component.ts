@@ -39,7 +39,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     const isLoggedIn = this.#ngxsStore.selectSnapshot(AuthState.isAuthenticated);
     if (isLoggedIn) {
-      console.log('Register');
       this.#ngxsStore.dispatch(new Logout());
     }
     this.#initForm();
