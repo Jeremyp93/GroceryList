@@ -1,5 +1,4 @@
-﻿using GroceryList.Domain.Aggregates.GroceryLists;
-using GroceryList.Domain.Events.Users;
+﻿using GroceryList.Domain.Events.Users;
 using GroceryList.Domain.SeedWork;
 
 namespace GroceryList.Domain.Aggregates.Users;
@@ -10,6 +9,7 @@ public class User : AggregateRoot
     public string? LastName { get; private set; }
     public string Email { get; private set; } = string.Empty;
     public string? Password { get; private set; }
+    public bool EmailConfirmed { get; private set; }
 
     private List<OAuthProvider> _oauthProviders = new List<OAuthProvider>();
 
@@ -58,5 +58,10 @@ public class User : AggregateRoot
         }
 
         _oauthProviders.Add(oauthProvider);
+    }
+
+    public void ConfirmEmail()
+    {
+        EmailConfirmed = true;
     }
 }

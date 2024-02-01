@@ -4,10 +4,14 @@
     "admin:$apr1$shqv4foj$Ds2A6X7BGeYZPJoWg0yXX0"
   ]
 
+[middlewares]
+  [middlewares.redirect-to-https.redirectScheme]
+    scheme = "https"
+
 [http.routers.api]
   rule = "Host(`monitor.scotex.tech`)"
   entrypoints = ["websecure"]
-  middlewares = ["simpleAuth"]
+  middlewares = ["simpleAuth", "redirect-to-https"]
   service = "api@internal"
   [http.routers.api.tls]
     certResolver = "lets-encrypt"

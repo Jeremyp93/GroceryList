@@ -4,7 +4,6 @@ import { inject } from '@angular/core';
 
 import { AlertService } from '../shared/alert/alert.service';
 import { Alert, AlertType } from '../shared/alert/alert.model';
-import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Logout } from '../auth/ngxs-store/auth.actions';
 

@@ -1,4 +1,4 @@
-@if(ingredient) {
+@if(ingredient(); as ingredient){
 <div [ngClass]="ingredient.selected ? 'tile-container done' : 'tile-container'">
   <div class="radio-button">
     {{ ingredient.amount }}

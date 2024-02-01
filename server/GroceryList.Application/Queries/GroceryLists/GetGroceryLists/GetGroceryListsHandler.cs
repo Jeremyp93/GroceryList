@@ -1,6 +1,5 @@
 ﻿using GroceryList.Application.Abstractions;
 using GroceryList.Application.Helpers;
-using GroceryList.Domain.Aggregates.Users;
 using GroceryList.Domain.Repositories;
 using MediatR;
 
