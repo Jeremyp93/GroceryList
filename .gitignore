@@ -55,3 +55,4 @@ database
 **/.vs/
 
 /traefik/acme.json
+/traefik/portainer-data
