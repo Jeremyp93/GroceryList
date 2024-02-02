@@ -1,5 +1,4 @@
 ﻿using GroceryList.Application.Models;
-using GroceryList.Domain.Aggregates.Users;
 using MediatR;
 
 namespace GroceryList.Application.Queries.Users.GetUserById;

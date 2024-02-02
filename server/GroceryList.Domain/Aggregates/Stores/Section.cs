@@ -2,7 +2,7 @@
 
 public record Section
 {
-    public string Name { get; private set; }
+    public string Name { get; private set; } = string.Empty;
     public int Priority { get; private set; }
 
     private Section() { }

@@ -10,7 +10,7 @@ public class GroceryListProfile : Profile
     public GroceryListProfile()
     {
         CreateMap<Ingredient, IngredientResponse>()
-            .ForMember(i => i.Category, opt => opt.MapFrom(src => src.Category.Name));
+            .ForMember(i => i.Category, opt => opt.MapFrom(src => src.Category == null ? "" : src.Category.Name));
         CreateMap<GroceryListResponseDto, GroceryListResponse>();
     }
 }

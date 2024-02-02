@@ -1,5 +1,4 @@
 ﻿using GroceryList.Application.Abstractions;
-using GroceryList.Domain.Aggregates.Users;
 using GroceryList.Domain.Helpers.Contracts;
 using GroceryList.Domain.SeedWork;
 using GroceryList.Infrastructure.Extension;
@@ -15,6 +14,7 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
     private readonly IMongoCollection<TAggregateRoot> _collection;
     private readonly IMediator _mediator;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IClaimReader _claimReader;
 
     public MongoDbRepositoryBase(IMongoDatabase database, IMediator mediator,
     IDateTimeProvider dateTimeProvider, IClaimReader claimReader)
@@ -23,6 +23,7 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
         _mediator = mediator;
         _dateTimeProvider = dateTimeProvider;
         _username = claimReader.GetUsernameFromClaim();
+        _claimReader = claimReader;
     }
 
     public async Task<IEnumerable<TAggregateRoot>> GetAllAsync(CancellationToken cancellationToken)
@@ -61,7 +62,9 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
 
     public async Task<TAggregateRoot> AddAsync(TAggregateRoot entity)
     {
+        var userId = _claimReader.GetUserIdFromClaim();
         entity.UpdateTrackingInformation(_username, _dateTimeProvider.UtcNow);
+        entity.AddUser(userId);
 
         await _collection.InsertOneAsync(entity);
 

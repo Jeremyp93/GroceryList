@@ -3,7 +3,6 @@ using GroceryList.Application;
 using GroceryList.Application.Commands.Login;
 using GroceryList.Application.Commands.Users.AddUser;
 using GroceryList.Application.Queries.Users.GetUserById;
-using GroceryList.Domain.Aggregates.Users;
 using GroceryList.WebApi.Models.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -104,7 +103,7 @@ public class UsersController : BaseController
         var allowedEmails = new string[] { "test@test.ca", "jeremy.proot@outlook.com", "fany.panichelli5@hotmail.com" };
         if (!allowedEmails.Contains(userRequest.Email))
         {
-            return ErrorResponse(Result<User>.Failure(ResultStatusCode.ValidationError, "Email is not allowed."));
+            return ErrorResponse(Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "Email is not allowed."));
         }
 
         var result = await _mediator.Send(new AddUserCommand()

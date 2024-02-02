@@ -4,7 +4,7 @@ namespace GroceryList.Domain.Aggregates.Stores;
 
 public record StoreCategory
 {
-    public Category Category { get; private set; }
+    public Category? Category { get; private set; }
     public int Priority { get; private set; } = 0;
 
     private StoreCategory() { }
