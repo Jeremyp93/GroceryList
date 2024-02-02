@@ -1,5 +1,4 @@
 ﻿using AspNetCore.Identity.MongoDbCore.Models;
-using GroceryList.Domain.Aggregates.Users;
 using MongoDbGenericRepository.Attributes;
 
 namespace GroceryList.Application.Models;

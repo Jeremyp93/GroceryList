@@ -17,28 +17,28 @@ public class Result<T>
 
     public static Result<T> Success(T data)
     {
-        return new Result<T>(true, ResultStatusCode.None, default, data);
+        return new Result<T>(true, ResultStatusCode.None, default!, data);
     }
 
     public static Result<T> Failure(ResultStatusCode statusCode, string errorMessage)
     {
-        return new Result<T>(false, statusCode, new List<string>() { errorMessage }, default);
+        return new Result<T>(false, statusCode, new List<string>() { errorMessage }, default!);
     }
 
     public static Result<T> Failure(ResultStatusCode statusCode, List<string> errorMessages)
     {
-        return new Result<T>(false, statusCode, errorMessages, default);
+        return new Result<T>(false, statusCode, errorMessages, default!);
     }
 }
 
 public class Result : Result<object>
 {
     private Result(bool isSuccessful, ResultStatusCode statusCode, List<string> errorMessages)
-        : base(isSuccessful, statusCode, errorMessages, null)
+        : base(isSuccessful, statusCode, errorMessages, null!)
     {
     }
 
-    public static new Result Success()
+    public static Result Success()
     {
         return new Result(true, ResultStatusCode.None, new List<string>());
     }

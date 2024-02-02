@@ -12,13 +12,11 @@ public class AddGroceryListHandler : IRequestHandler<AddGroceryListCommand, Resu
 {
     private readonly IGroceryListRepository _repository;
     private readonly IStoreRepository _storeRepository;
-    private readonly IClaimReader _claimReader;
 
-    public AddGroceryListHandler(IGroceryListRepository repository, IStoreRepository storeRepository, IClaimReader claimReader)
+    public AddGroceryListHandler(IGroceryListRepository repository, IStoreRepository storeRepository)
     {
         _repository = repository;
         _storeRepository = storeRepository;
-        _claimReader = claimReader;
     }
 
     public async Task<Result<GroceryListResponseDto>> Handle(AddGroceryListCommand command, CancellationToken cancellationToken)
@@ -30,9 +28,7 @@ public class AddGroceryListHandler : IRequestHandler<AddGroceryListCommand, Resu
               .Select(x => Ingredient.Create(x.Name, x.Amount, Category.Create(x.Category), x.Selected))
               .ToList();
 
-            var userId = _claimReader.GetUserIdFromClaim();
-
-            var newGroceryList = Domain.Aggregates.GroceryLists.GroceryList.Create(Guid.NewGuid(), command.Name, userId, command.StoreId, ingredients);
+            var newGroceryList = Domain.Aggregates.GroceryLists.GroceryList.Create(Guid.NewGuid(), command.Name, command.StoreId, ingredients);
 
             var result = await _repository.AddAsync(newGroceryList);
 

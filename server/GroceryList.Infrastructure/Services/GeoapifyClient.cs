@@ -30,7 +30,12 @@ namespace GroceryList.Infrastructure.Services
                 var root = JsonSerializer.Deserialize<GeoapifyResult.Root>(result);
                 var addresses = new List<AutocompleteResponse>();
 
-                foreach (var feature in root.Features)
+                if (root is null && root!.Features is null)
+                {
+                    return new List<AutocompleteResponse>();
+                }
+
+                foreach (var feature in root.Features!)
                 {
                     var properties = feature.Properties;
 
@@ -51,7 +56,6 @@ namespace GroceryList.Infrastructure.Services
             }
             else
             {
-                // Handle the error here (e.g., throw an exception)
                 return new List<AutocompleteResponse>();
             }
         }
@@ -63,44 +67,44 @@ namespace GroceryList.Infrastructure.Services
         {
 
             [JsonPropertyName("properties")]
-            public Properties Properties { get; set; }
+            public Properties? Properties { get; set; }
         }
 
         public class Properties
         {
 
             [JsonPropertyName("country")]
-            public string Country { get; set; }
+            public string Country { get; set; } = string.Empty;
 
             [JsonPropertyName("postcode")]
-            public string Postcode { get; set; }
+            public string Postcode { get; set; } = string.Empty;
 
             [JsonPropertyName("state")]
-            public string State { get; set; }
+            public string State { get; set; } = string.Empty;
 
             [JsonPropertyName("city")]
-            public string City { get; set; }
+            public string City { get; set; } = string.Empty;
 
             [JsonPropertyName("state_code")]
-            public string StateCode { get; set; }
+            public string StateCode { get; set; } = string.Empty;
 
             [JsonPropertyName("formatted")]
-            public string Formatted { get; set; }
+            public string Formatted { get; set; } = string.Empty;
 
             [JsonPropertyName("street")]
-            public string Street { get; set; }
+            public string Street { get; set; } = string.Empty;
 
             [JsonPropertyName("housenumber")]
-            public string HouseNumber { get; set; }
+            public string HouseNumber { get; set; } = string.Empty;
         }
 
         public class Root
         {
             [JsonPropertyName("type")]
-            public string Type { get; set; }
+            public string Type { get; set; } = string.Empty;
 
             [JsonPropertyName("features")]
-            public List<Feature> Features { get; set; }
+            public List<Feature>? Features { get; set; }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using GroceryList.Application.Abstractions;
 using GroceryList.Application.Models;
-using GroceryList.Domain.Aggregates.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;

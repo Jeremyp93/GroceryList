@@ -1,6 +1,6 @@
 ﻿using GroceryList.Domain.Exceptions;
 
-namespace GroceryList.Domain.Aggregates.Users;
+namespace GroceryList.Application.Models;
 public record OAuthProvider
 {
     public string OAuthProviderId { get; private set; } = string.Empty;

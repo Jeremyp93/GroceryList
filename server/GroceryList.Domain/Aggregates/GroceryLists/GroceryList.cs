@@ -6,8 +6,7 @@ namespace GroceryList.Domain.Aggregates.GroceryLists;
 
 public class GroceryList : AggregateRoot
 {
-    public string Name { get; private set; }
-    public Guid UserId { get; private set; }
+    public string Name { get; private set; } = string.Empty;
     public Guid? StoreId { get; private set; }
 
     private List<Ingredient> _ingredients = new();
@@ -29,7 +28,7 @@ public class GroceryList : AggregateRoot
         /* private constructor only for EF */
     }
 
-    public static GroceryList Create(Guid id, string name, Guid userId, Guid? storeId, List<Ingredient>? ingredients = null)
+    public static GroceryList Create(Guid id, string name, Guid? storeId, List<Ingredient>? ingredients = null)
     {
         if (string.IsNullOrEmpty(name))
         {
@@ -40,7 +39,6 @@ public class GroceryList : AggregateRoot
         {
             Id = id,
             Name = name,
-            UserId = userId,
             StoreId = storeId,
         };
 
@@ -53,10 +51,9 @@ public class GroceryList : AggregateRoot
         return newGroceryList;
     }
 
-    public void Update(string name, Guid userId, Guid? storeId, List<Ingredient>? ingredients = null) 
+    public void Update(string name, Guid? storeId, List<Ingredient>? ingredients = null) 
     { 
         Name = name;
-        UserId = userId;
         StoreId = storeId;
 
         if (ingredients is not null)

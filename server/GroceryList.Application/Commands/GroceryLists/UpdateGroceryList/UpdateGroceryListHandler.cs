@@ -43,7 +43,7 @@ public class UpdateGroceryListHandler : IRequestHandler<UpdateGroceryListCommand
                 return Result<GroceryListResponseDto>.Failure(ResultStatusCode.ValidationError, $"Grocery List does not belong to user {userId}");
             }
 
-            groceryList.Update(command.Name, userId, command.StoreId, ingredients);
+            groceryList.Update(command.Name, command.StoreId, ingredients);
 
             await _repository.UpdateAsync(groceryList);
 

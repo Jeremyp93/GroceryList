@@ -3,6 +3,7 @@ using GroceryList.Domain.Aggregates.GroceryLists;
 using GroceryList.Domain.Aggregates.Stores;
 using GroceryList.Domain.Repositories;
 using MediatR;
+using System.Linq;
 
 namespace GroceryList.Application.Commands.Stores.UpdateSections;
 public class UpdateSectionsHandler : IRequestHandler<UpdateSectionsCommand, Result<List<Section>>>
@@ -40,7 +41,7 @@ public class UpdateSectionsHandler : IRequestHandler<UpdateSectionsCommand, Resu
             if (sectionsRemoved.Any())
             {
                 var listsToUpdate = (await _groceryListRepository.WhereAsync(
-                        l => l.StoreId == store.Id && l.Ingredients.Any(i => sectionsRemoved.Contains(i.Category.Name)),
+                        l => l.StoreId == store.Id && l.Ingredients.Any(i => sectionsRemoved.Contains(i.Category == null ? "" : i.Category.Name)),
                         null,
                         cancellationToken
                     )).ToList();
@@ -48,7 +49,7 @@ public class UpdateSectionsHandler : IRequestHandler<UpdateSectionsCommand, Resu
                 {
                     var updatedIngredients = list.Ingredients.Select(ingredient =>
                     {
-                        if (sectionsRemoved.Contains(ingredient.Category.Name))
+                        if (sectionsRemoved.Contains(ingredient.Category == null ? "" : ingredient.Category.Name))
                         {
                             return Ingredient.Create(ingredient.Name, ingredient.Amount, Category.Create(string.Empty), ingredient.Selected);
                         }

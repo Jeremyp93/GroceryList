@@ -36,12 +36,12 @@ public class UpdateStoreHandler : IRequestHandler<UpdateStoreCommand, Result<Sto
                 return Result<Store>.Failure(ResultStatusCode.ValidationError, $"Store does not belong to user {userId}");
             }
 
-            var sectionsRemoved = store.Sections.Where(s1 => !command.Sections.Any(s2 => s2.Name == s1.Name)).Select(s => s.Name).ToList();
+            var sectionsRemoved = store.Sections.Where(s1 => command.Sections != null && !command.Sections.Any(s2 => s2.Name == s1.Name)).Select(s => s.Name).ToList();
 
             if (sectionsRemoved.Any())
             {
                 var listsToUpdate = (await _groceryListRepository.WhereAsync(
-                        l => l.StoreId == store.Id && l.Ingredients.Any(i => sectionsRemoved.Contains(i.Category.Name)),
+                        l => l.StoreId == store.Id && l.Ingredients.Any(i => sectionsRemoved.Contains(i.Category == null ? "" : i.Category.Name)),
                         null,
                         cancellationToken
                     )).ToList();
@@ -49,7 +49,7 @@ public class UpdateStoreHandler : IRequestHandler<UpdateStoreCommand, Result<Sto
                 {
                     var updatedIngredients = list.Ingredients.Select(ingredient =>
                     {
-                        if (sectionsRemoved.Contains(ingredient.Category.Name))
+                        if (sectionsRemoved.Contains(ingredient.Category == null ? "" : ingredient.Category.Name))
                         {
                             return Ingredient.Create(ingredient.Name, ingredient.Amount, Category.Create(string.Empty), ingredient.Selected);
                         }
@@ -68,7 +68,7 @@ public class UpdateStoreHandler : IRequestHandler<UpdateStoreCommand, Result<Sto
 
             var address = Address.Create(command.Street, command.City, command.Country, command.ZipCode);
 
-            store.Update(command.Name, userId, sections, address);
+            store.Update(command.Name, sections, address);
 
             await _repository.UpdateAsync(store);
 
