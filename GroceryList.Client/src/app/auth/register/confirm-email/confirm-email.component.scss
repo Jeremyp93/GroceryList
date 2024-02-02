@@ -1,0 +1,59 @@
+@import '_variables';
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #C3E8BD;
+}
+
+.login {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: white;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, .1);
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    padding: 20px;
+    padding-top: 0;
+
+    @media screen and (max-width: 991px) {
+        width: 90%;
+    }
+
+    @media screen and (min-width: 991px) and (max-width: 1500px) {
+        width: 30%;
+    }
+
+    p {
+        margin-bottom: 30px;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+      }
+  
+      .button {
+        //display: flex;
+        margin: 0 auto;
+        width: 20%;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        background-color: $primary-color;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+}

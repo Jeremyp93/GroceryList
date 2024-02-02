@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, map } from 'rxjs';
+import { HeaderComponent } from '../../../shared/header/header.component';
 
 @Component({
   selector: 'app-confirm-email',
   standalone: true,
-  imports: [],
+  imports: [HeaderComponent, RouterModule],
   templateUrl: './confirm-email.component.html',
   styleUrl: './confirm-email.component.scss'
 })
@@ -16,6 +17,6 @@ export class ConfirmEmailComponent {
   constructor(){
     const currentNav = this.#router.getCurrentNavigation();
     const state = currentNav?.extras.state as {email: string};
-    this.email = state.email;
+    this.email = state?.email;
   }
 }
