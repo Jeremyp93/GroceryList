@@ -4,6 +4,8 @@ import { ROUTES_PARAM } from './constants';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { TwitchCallbackComponent } from './auth/callback/twitch-callback/twitch-callback.component';
+import { ConfirmEmailCallbackComponent } from './auth/callback/confirm-email-callback.component';
+import { ConfirmEmailComponent } from './auth/register/confirm-email/confirm-email.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, pathMatch: 'full' },
@@ -27,6 +29,12 @@ export const routes: Routes = [
     },
     {
         path: 'auth/twitch-callback', component: TwitchCallbackComponent, title: 'Redirecting...'
+    },
+    {
+        path: ROUTES_PARAM.CONFIRM_EMAIL, component: ConfirmEmailComponent, title: 'Confirm Email'
+    },
+    {
+        path: 'auth/confirm-email', component: ConfirmEmailCallbackComponent, title: 'Redirecting...'
     },
     { path: '**', redirectTo: ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST }
 ];

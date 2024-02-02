@@ -59,7 +59,7 @@ describe('RegisterComponent', () => {
       password: 'password',
       confirmPassword: 'password'
     } as any));
-    expect(router.navigate).toHaveBeenCalledWith([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
+    expect(router.navigate).toHaveBeenCalledWith([`/${ROUTES_PARAM.CONFIRM_EMAIL}`], { state: { email: 'john.doe@example.com' } });
   });
 
   it('should not submit form when all fields are filled with invalid data', () => {

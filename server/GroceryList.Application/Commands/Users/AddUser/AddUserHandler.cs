@@ -1,51 +1,63 @@
 ﻿using GroceryList.Application.Abstractions;
-using GroceryList.Domain.Aggregates.Users;
+using GroceryList.Application.Models;
 using GroceryList.Domain.Exceptions;
-using GroceryList.Domain.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using MongoDB.Driver;
 
 namespace GroceryList.Application.Commands.Users.AddUser;
 
-public class AddUserHandler : IRequestHandler<AddUserCommand, Result<User>>
+public class AddUserHandler : IRequestHandler<AddUserCommand, Result<ApplicationUser>>
 {
-    private readonly IUserRepository _repository;
-    private readonly IPasswordHasher _passwordHasher;
+    private readonly IEmailService _emailService;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AddUserHandler(IUserRepository repository, IPasswordHasher passwordHasher)
+    public AddUserHandler(IEmailService emailService, UserManager<ApplicationUser> userManager)
     {
-        _repository = repository;
-        _passwordHasher = passwordHasher;
+        _emailService = emailService;
+        _userManager = userManager;
     }
 
-    public async Task<Result<User>> Handle(AddUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<ApplicationUser>> Handle(AddUserCommand command, CancellationToken cancellationToken)
     {
-        try
+        var user = await _userManager.FindByEmailAsync(command.Email.ToLower());
+        if (user is not null && !string.IsNullOrEmpty(user.PasswordHash))
         {
-            var user = await _repository.SingleOrDefaultAsync(u => u.Email.ToLower() == command.Email.ToLower());
-            if (user is not null && !string.IsNullOrEmpty(user.Password))
-            {
-                return Result<User>.Failure(ResultStatusCode.ValidationError, "Email is already taken");
-            }
-
-            var hashedPassword = _passwordHasher.Hash(command.Password);
-            User result;
-            if (user is not null)
-            {
-                result = User.Create(user.Id, command.FirstName, command.LastName, user.Email, hashedPassword, user.OAuthProviders.ToList());
-                await _repository.UpdateAsync(result);
-            }
-            else
-            {
-                var newUser = User.Create(Guid.NewGuid(), command.FirstName, command.LastName, command.Email, hashedPassword);
-
-                result = await _repository.AddAsync(newUser);
-            }
-
-            return Result<User>.Success(result);
+            return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "Email is already taken");
         }
-        catch (BusinessValidationException e)
+
+        ApplicationUser newUser;
+        if (user is not null)
         {
-            return Result<User>.Failure(ResultStatusCode.ValidationError, e.Errors);
+            user.FirstName = command.FirstName;
+            user.LastName = command.LastName;
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, command.Password);
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+            {
+                return Result<ApplicationUser>.Failure(ResultStatusCode.Error, "User could not be created.");
+            }
+            newUser = user;
         }
+        else
+        {
+            newUser = new ApplicationUser
+            {
+                Email = command.Email,
+                FirstName = command.FirstName,
+                LastName = command.LastName,
+                UserName = command.Email
+            };
+            var createResult = await _userManager.CreateAsync(newUser, command.Password);
+            if (!createResult.Succeeded)
+            {
+                return Result<ApplicationUser>.Failure(ResultStatusCode.Error, "User could not be created.");
+            }
+        }
+
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+        await _emailService.SendTokenEmailAsync(newUser.Email, token);
+
+        return Result<ApplicationUser>.Success(newUser);
     }
 }

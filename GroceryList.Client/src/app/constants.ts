@@ -29,6 +29,7 @@ export const ROUTES_PARAM = {
         OAUTH: 'oauth',
         TWITCH_CALLBACK: 'twitch/callback'
     },
+    CONFIRM_EMAIL: 'register/confirm-email',
     ID_PARAMETER: 'id',
 }
 

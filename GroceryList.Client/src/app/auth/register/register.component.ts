@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
     this.#ngxsStore.dispatch(new Register(this.signupForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
-        this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
+        this.#router.navigate([`/${ROUTES_PARAM.CONFIRM_EMAIL}`], {state: {email: this.signupForm.value.email}});
       },
       error: () => {
         this.isLoading = this.isSubmitted = false;

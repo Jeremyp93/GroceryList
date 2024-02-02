@@ -1,9 +1,10 @@
-﻿using GroceryList.Domain.Aggregates.Users;
+﻿using GroceryList.Application.Models;
+using GroceryList.Domain.Aggregates.Users;
 using MediatR;
 
 namespace GroceryList.Application.Commands.Users.AddUser;
 
-public record AddUserCommand() : IRequest<Result<User>>
+public record AddUserCommand() : IRequest<Result<ApplicationUser>>
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

@@ -13,22 +13,26 @@ export class AuthService {
     httpClient = inject(HttpClient);
 
     login = (login: LoginType): Observable<void> => {
-        return this.httpClient.post<void>(`${environment.userApiUrl}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`, { email: login.username, password: login.password });
+        return this.httpClient.post<void>(`${environment.apiUrl}/${environment.userEndpoint}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`, { email: login.username, password: login.password });
     }
 
     register = (registerModel: RegisterType): Observable<void> => {
-        return this.httpClient.post<void>(`${environment.userApiUrl}`, registerModel);
+        return this.httpClient.post<void>(`${environment.apiUrl}/${environment.userEndpoint}`, registerModel);
     }
 
     logout = (): Observable<void> => {
-        return this.httpClient.post<void>(`${environment.userApiUrl}/${ROUTES_PARAM.AUTHENTICATION.LOGOUT}`, null);
+        return this.httpClient.post<void>(`${environment.apiUrl}/${environment.userEndpoint}/${ROUTES_PARAM.AUTHENTICATION.LOGOUT}`, null);
     }
 
     me = (): Observable<UserResponseDto> => {
-        return this.httpClient.get<UserResponseDto>(`${environment.userApiUrl}/${ROUTES_PARAM.AUTHENTICATION.ME}`);
+        return this.httpClient.get<UserResponseDto>(`${environment.apiUrl}/${environment.userEndpoint}/${ROUTES_PARAM.AUTHENTICATION.ME}`);
     }
 
     loginTwitch = (code: string) => {
-        return this.httpClient.post(`${environment.oauthApiUrl}/${ROUTES_PARAM.OAUTH.TWITCH_CALLBACK}`, {code: code});
+        return this.httpClient.post(`${environment.apiUrl}/${environment.oauthEndpoint}/${ROUTES_PARAM.OAUTH.TWITCH_CALLBACK}`, {code: code});
+    }
+
+    confirmEmail = (token: string, email: string) => {
+        return this.httpClient.get(`${environment.apiUrl}/${environment.emailEndpoint}/confirm?token=${token}&email=${email}`);
     }
 }

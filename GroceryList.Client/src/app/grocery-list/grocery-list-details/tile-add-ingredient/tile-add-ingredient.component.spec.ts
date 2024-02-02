@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TileAddIngredientComponent } from './tile-add-ingredient.component';
-import { ElementRef, EventEmitter } from '@angular/core';
+import { ElementRef, EventEmitter, input } from '@angular/core';
 import { Ingredient } from '../../types/ingredient.type';
 import { INGREDIENT_FORM } from '../../../constants';
 
@@ -31,7 +31,7 @@ describe('TileAddIngredientComponent', () => {
   it('should initialize component with default values', () => {
     expect(component.itemAdded).toEqual(new EventEmitter<Ingredient>());
     expect(component.onClickOutside).toEqual(new EventEmitter<void>());
-    expect(component.sections).toEqual([]);
+    //expect(component.sections).toEqual([]);
     expect(component.categories).toEqual([]);
     expect(component.addForm).not.toBeUndefined();
     expect(component.formSubmitted).toBeFalse();

@@ -1,50 +1,55 @@
 ﻿using GroceryList.Application.Abstractions;
+using GroceryList.Application.Models;
 using GroceryList.Domain.Aggregates.Users;
-using GroceryList.Domain.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using MongoDB.Driver;
 
 namespace GroceryList.Application.Queries.Users.GetUserFromTwitch;
-public class GetUserFromTwitchHandler : IRequestHandler<GetUserFromTwitchQuery, Result<User>>
+public class GetUserFromTwitchHandler : IRequestHandler<GetUserFromTwitchQuery, Result<ApplicationUser>>
 {
     private const string TwitchKey = "twitch";
     private readonly ITwitchClient _twitchClient;
-    private readonly IUserRepository _repository;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public GetUserFromTwitchHandler(ITwitchClient twitchClient, IUserRepository repository)
+    public GetUserFromTwitchHandler(ITwitchClient twitchClient, UserManager<ApplicationUser> userManager)
     {
         _twitchClient = twitchClient;
-        _repository = repository;
+        _userManager = userManager;
     }
 
-    public async Task<Result<User>> Handle(GetUserFromTwitchQuery request, CancellationToken cancellationToken)
+    public async Task<Result<ApplicationUser>> Handle(GetUserFromTwitchQuery request, CancellationToken cancellationToken)
     {
         var twitchUser = await _twitchClient.GetUser(request.Code);
         if (twitchUser is null)
         {
-            return Result<User>.Failure(ResultStatusCode.ValidationError, "User info could not be retrieved.");
+            return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "User info could not be retrieved.");
         }
 
-        var existingUser = await _repository.SingleOrDefaultAsync(u => u.OAuthProviders.Any(o => o.OAuthProviderId == twitchUser.Id && o.OAuthProviderName == TwitchKey));
-        if (existingUser is not null) 
+        var existingUser = await _userManager.FindByEmailAsync(twitchUser.Email.ToLower());
+        if (existingUser is not null && existingUser.OAuthProviders.Any(o => o.OAuthProviderId == twitchUser.Id && o.OAuthProviderName == TwitchKey))
         {
-            return Result<User>.Success(existingUser);
+            return Result<ApplicationUser>.Success(existingUser);
         }
 
-        existingUser = await _repository.SingleOrDefaultAsync(u => u.Email.ToLowerInvariant() == twitchUser.Email.ToLowerInvariant());
+        var provider = OAuthProvider.Create(twitchUser.Id, TwitchKey);
         if (existingUser is not null)
         {
-            existingUser.AddOAuthProvider(OAuthProvider.Create(twitchUser.Id, TwitchKey));
-            await _repository.UpdateAsync(existingUser);
-            return Result<User>.Success(existingUser);
+            existingUser.OAuthProviders.Add(provider);
+            var updateResult = await _userManager.UpdateAsync(existingUser);
+            return updateResult.Succeeded ? Result<ApplicationUser>.Success(existingUser) : Result<ApplicationUser>.Failure(ResultStatusCode.Error, "User could not been logged in.");
         }
-        else
+
+        var newUser = new ApplicationUser
         {
-            var newUser = User.Create(Guid.NewGuid(), twitchUser.DisplayName, null, twitchUser.Email, null);
-            newUser.AddOAuthProvider(OAuthProvider.Create(twitchUser.Id, TwitchKey));
+            UserName = twitchUser.Email,
+            Email = twitchUser.Email,
+            FirstName = twitchUser.DisplayName,
+        };
+        newUser.OAuthProviders.Add(provider);
 
-            var createdUser = await _repository.AddAsync(newUser);
+        var createResult = await _userManager.CreateAsync(newUser);
 
-            return Result<User>.Success(createdUser);
-        }
+        return createResult.Succeeded ? Result<ApplicationUser>.Success(newUser) : Result<ApplicationUser>.Failure(ResultStatusCode.Error, "User could not been logged in.");
     }
 }
