@@ -30,7 +30,7 @@ describe('AuthService', () => {
 
     authService.login(mockLogin).subscribe();
 
-    const req = httpTestingController.expectOne(`${environment.userApiUrl}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/${environment.userEndpoint}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ email: mockLogin.username, password: mockLogin.password });
   });
@@ -42,7 +42,7 @@ describe('AuthService', () => {
       expect(response).toBeNull();
     });
 
-    const req = httpTestingController.expectOne(`${environment.userApiUrl}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/${environment.userEndpoint}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockRegister);
 

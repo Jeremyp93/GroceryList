@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmEmailComponent } from './confirm-email.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ConfirmEmailComponent', () => {
   let component: ConfirmEmailComponent;
@@ -8,7 +9,7 @@ describe('ConfirmEmailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmEmailComponent]
+      imports: [ConfirmEmailComponent, RouterTestingModule]
     })
     .compileComponents();
     
