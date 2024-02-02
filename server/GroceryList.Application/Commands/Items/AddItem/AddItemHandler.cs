@@ -29,7 +29,7 @@ internal class AddItemHandler : IRequestHandler<AddItemCommand, Result<Item>>
                 return Result<Item>.Failure(ResultStatusCode.Error, $"Item with name {command.Name} already exists.");
             }
 
-            var newItem = Item.Create(Guid.NewGuid(), command.Name, userId);
+            var newItem = Item.Create(Guid.NewGuid(), command.Name);
 
             var result = await _repository.AddAsync(newItem);
 

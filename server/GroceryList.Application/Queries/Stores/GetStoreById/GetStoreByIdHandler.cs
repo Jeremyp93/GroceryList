@@ -28,7 +28,7 @@ public class GetStoreByIdHandler : IRequestHandler<GetStoreByIdQuery, Result<Sto
 
         var userId = _claimReader.GetUserIdFromClaim();
 
-        if (result.UserId != userId)
+        if (result!.UserId != userId)
         {
             return Result<Store>.Failure(ResultStatusCode.ValidationError, $"Store does not belong to user {userId}");
         }

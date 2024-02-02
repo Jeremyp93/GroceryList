@@ -6,11 +6,10 @@ namespace GroceryList.Domain.Aggregates.Stores;
 
 public class Store : AggregateRoot
 {
-    public string Name { get; private set; }
-    public Guid UserId { get; private set; }
+    public string Name { get; private set; } = string.Empty;
     public Address? Address { get; private set; }
 
-    private List<Section> _sections = new List<Section>();
+    private List<Section> _sections = new();
 
     public IReadOnlyCollection<Section> Sections
     {
@@ -29,25 +28,27 @@ public class Store : AggregateRoot
         /* private constructor only for EF */
     }
 
-    public static Store Create(Guid id, string name, Guid userId, List<Section> sections, Address? address = null)
+    public static Store Create(Guid id, string name, List<Section>? sections, Address? address = null)
     {
         var newStore = new Store()
         {
             Id = id,
-            UserId = userId,
             Name = name,
-            Sections = sections,
             Address = address
         };
+
+        if (sections is not null)
+        {
+            newStore.Sections = sections;
+        }
 
         newStore.AddDomainEvent(new StoreAddedEvent(newStore.Id));
         return newStore;
     }
 
-    public void Update(string name, Guid userId, List<Section>? sections, Address? address = null)
+    public void Update(string name, List<Section>? sections, Address? address = null)
     {
         Name = name;
-        UserId = userId;
         if (address is not null)
         {
             Address = address;

@@ -22,7 +22,7 @@ public abstract class Entity : AuditableEntity
         return Id == default;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null || obj is not Entity)
             return false;

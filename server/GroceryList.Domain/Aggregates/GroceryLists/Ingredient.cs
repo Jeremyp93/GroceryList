@@ -8,7 +8,7 @@ public record Ingredient
 
     public string Name { get; private set; } = string.Empty;
     public int Amount { get; private set; } = 0;
-    public Category Category { get; private set; }
+    public Category? Category { get; private set; }
     public bool Selected { get; set; }
 
     private Ingredient() { }

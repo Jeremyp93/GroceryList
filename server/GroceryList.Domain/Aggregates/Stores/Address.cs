@@ -6,10 +6,10 @@ public record Address
 {
     private const int MaxStreetLength = 50;
     private const int MaxCityLength = 15;
-    public string Street { get; private set; }
-    public string City { get; private set; }
-    public string Country { get; private set; }
-    public string ZipCode { get; private set; }
+    public string Street { get; private set; } = string.Empty;
+    public string City { get; private set; } = string.Empty;
+    public string Country { get; private set; } = string.Empty;
+    public string ZipCode { get; private set; } = string.Empty;
 
     private Address() { }
 
@@ -44,10 +44,10 @@ public record Address
 
         var address = new Address()
         {
-            Street = street,
-            City = city,
-            Country = country,
-            ZipCode = zipCode
+            Street = street!,
+            City = city!,
+            Country = country!,
+            ZipCode = zipCode!
         };
         return address;
     }

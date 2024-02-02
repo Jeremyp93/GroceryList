@@ -5,6 +5,8 @@ namespace GroceryList.Domain.SeedWork;
 
 public abstract class AggregateRoot : Entity
 {
+    public Guid UserId { get; private set; }
+    
     private List<INotification> _domainEvents = new List<INotification>();
 
     [JsonIgnore]
@@ -25,6 +27,11 @@ public abstract class AggregateRoot : Entity
     public void ClearDomainEvents()
     {
         _domainEvents?.Clear();
+    }
+
+    public void AddUser(Guid userId)
+    {
+        UserId = userId;
     }
 }
 
