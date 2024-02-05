@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
-using System.Web;
 
 namespace GroceryList.Application.Commands.Users.ConfirmEmail;
 public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, Result>
@@ -23,6 +22,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, Result>
         var result = await _userManager.ConfirmEmailAsync(user, token);
         return result.Succeeded ? Result.Success() : Result.Failure(ResultStatusCode.Error, "Email could not be confirmed.");
     }
+
     private static string DecodeFrom64(string encodedData)
     {
         byte[] encodedDataAsBytes

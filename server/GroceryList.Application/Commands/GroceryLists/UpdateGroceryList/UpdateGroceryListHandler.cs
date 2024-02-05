@@ -29,19 +29,19 @@ public class UpdateGroceryListHandler : IRequestHandler<UpdateGroceryListCommand
             return Result<GroceryListResponseDto>.Failure(ResultStatusCode.NotFound, $"Grocery List with id {command.Id} was not found");
         }
 
+        var userId = _claimReader.GetUserIdFromClaim();
+
+        if (groceryList.UserId != userId)
+        {
+            return Result<GroceryListResponseDto>.Failure(ResultStatusCode.ValidationError, $"Grocery List does not belong to user {userId}");
+        }
+
         try
         {
             var ingredients = command
               .Ingredients?
               .Select(x => Ingredient.Create(x.Name, x.Amount, Category.Create(x.Category), x.Selected))
             .ToList();
-
-            var userId = _claimReader.GetUserIdFromClaim();
-
-            if (groceryList.UserId != userId)
-            {
-                return Result<GroceryListResponseDto>.Failure(ResultStatusCode.ValidationError, $"Grocery List does not belong to user {userId}");
-            }
 
             groceryList.Update(command.Name, command.StoreId, ingredients);
 

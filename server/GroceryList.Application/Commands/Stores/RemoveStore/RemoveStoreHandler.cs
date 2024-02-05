@@ -33,7 +33,7 @@ public class RemoveStoreHandler : IRequestHandler<RemoveStoreCommand, Result>
             return Result.Failure(ResultStatusCode.ValidationError, $"Store does not belong to user {userId}");
         }
 
-        var lists = (await _groceryListRepository.WhereAsync(l => l.StoreId == store.Id, null, cancellationToken)).ToList();
+        var lists = (await _groceryListRepository.WhereAsync(l => l.StoreId == store.Id, cancellationToken: cancellationToken)).ToList();
         foreach (var list in lists)
         {
             list.UpdateIngredients(list.Ingredients.Select(i => Ingredient.Create(i.Name, i.Amount, Category.Create(string.Empty), i.Selected)).ToList());

@@ -1,5 +1,6 @@
 ﻿using GroceryList.Application.Abstractions;
 using GroceryList.Domain.Aggregates.GroceryLists;
+using GroceryList.Domain.Exceptions;
 using GroceryList.Domain.Repositories;
 using MediatR;
 
@@ -43,10 +44,9 @@ public class UpdateIngredientsHandler : IRequestHandler<UpdateIngredientsCommand
 
             return Result<List<Ingredient>>.Success(ingredients ?? new());
         }
-        catch (Exception)
+        catch (BusinessValidationException e)
         {
-
-            throw;
+            return Result<List<Ingredient>>.Failure(ResultStatusCode.ValidationError, e.Errors);
         }
     }
 }

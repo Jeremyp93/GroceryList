@@ -1,5 +1,4 @@
-﻿using GroceryList.Application.Abstractions;
-using GroceryList.Application.Helpers;
+﻿using GroceryList.Application.Helpers;
 using GroceryList.Domain.Repositories;
 using MediatR;
 
@@ -9,19 +8,16 @@ public class GetGroceryListsHandler : IRequestHandler<GetGroceryListsQuery, Resu
 {
     private readonly IGroceryListRepository _repository;
     private readonly IStoreRepository _storeRepository;
-    private readonly IClaimReader _claimReader;
 
-    public GetGroceryListsHandler(IGroceryListRepository repository, IStoreRepository storeRepository, IClaimReader claimReader)
+    public GetGroceryListsHandler(IGroceryListRepository repository, IStoreRepository storeRepository)
     {
         _repository = repository;
         _storeRepository = storeRepository;
-        _claimReader = claimReader;
     }
 
     public async Task<Result<IEnumerable<GroceryListResponseDto>>> Handle(GetGroceryListsQuery request, CancellationToken cancellationToken)
     {
-        var userId = _claimReader.GetUserIdFromClaim();
-        var result = await _repository.WhereAsync(l => l.UserId == userId, null, cancellationToken);
+        var result = await _repository.GetAllAsync(cancellationToken: cancellationToken);
         var lists = new List<GroceryListResponseDto>();
         foreach (var list in result)
         {
@@ -33,7 +29,6 @@ public class GetGroceryListsHandler : IRequestHandler<GetGroceryListsQuery, Resu
             }
             lists.Add(newList);
         }
-
 
         return Result<IEnumerable<GroceryListResponseDto>>.Success(lists);
     }

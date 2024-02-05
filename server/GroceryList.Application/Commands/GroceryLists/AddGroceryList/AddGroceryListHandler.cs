@@ -1,5 +1,4 @@
-﻿using GroceryList.Application.Abstractions;
-using GroceryList.Application.Helpers;
+﻿using GroceryList.Application.Helpers;
 using GroceryList.Application.Queries.GroceryLists;
 using GroceryList.Domain.Aggregates.GroceryLists;
 using GroceryList.Domain.Exceptions;

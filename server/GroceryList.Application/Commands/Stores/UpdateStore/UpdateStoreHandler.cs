@@ -27,23 +27,22 @@ public class UpdateStoreHandler : IRequestHandler<UpdateStoreCommand, Result<Sto
             return Result<Store>.Failure(ResultStatusCode.NotFound, $"Store with id {command.Id} was not found");
         }
 
+        var userId = _claimReader.GetUserIdFromClaim();
+
+        if (store.UserId != userId)
+        {
+            return Result<Store>.Failure(ResultStatusCode.ValidationError, $"Store does not belong to user {userId}");
+        }
+
         try
         {
-            var userId = _claimReader.GetUserIdFromClaim();
-
-            if (store.UserId != userId)
-            {
-                return Result<Store>.Failure(ResultStatusCode.ValidationError, $"Store does not belong to user {userId}");
-            }
-
             var sectionsRemoved = store.Sections.Where(s1 => command.Sections != null && !command.Sections.Any(s2 => s2.Name == s1.Name)).Select(s => s.Name).ToList();
 
             if (sectionsRemoved.Any())
             {
                 var listsToUpdate = (await _groceryListRepository.WhereAsync(
                         l => l.StoreId == store.Id && l.Ingredients.Any(i => sectionsRemoved.Contains(i.Category == null ? "" : i.Category.Name)),
-                        null,
-                        cancellationToken
+                        cancellationToken: cancellationToken
                     )).ToList();
                 foreach (var list in listsToUpdate)
                 {

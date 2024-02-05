@@ -1,6 +1,5 @@
 ﻿using GroceryList.Application.Abstractions;
 using GroceryList.Domain.Aggregates.Items;
-using GroceryList.Domain.Aggregates.Stores;
 using GroceryList.Domain.Exceptions;
 using GroceryList.Domain.Repositories;
 using MediatR;
@@ -23,7 +22,7 @@ internal class AddItemHandler : IRequestHandler<AddItemCommand, Result<Item>>
         {
             var userId = _claimReader.GetUserIdFromClaim();
 
-            var existingItems = await _repository.WhereAsync(l => l.UserId == userId && l.Name == command.Name, null, cancellationToken);
+            var existingItems = await _repository.WhereAsync(l => l.Name == command.Name, cancellationToken: cancellationToken);
             if (existingItems is not null && existingItems.ToList().Any())
             {
                 return Result<Item>.Failure(ResultStatusCode.Error, $"Item with name {command.Name} already exists.");

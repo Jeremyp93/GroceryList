@@ -14,7 +14,7 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
     private readonly IMongoCollection<TAggregateRoot> _collection;
     private readonly IMediator _mediator;
     private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IClaimReader _claimReader;
+    private static Guid _userId;
 
     public MongoDbRepositoryBase(IMongoDatabase database, IMediator mediator,
     IDateTimeProvider dateTimeProvider, IClaimReader claimReader)
@@ -23,12 +23,17 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
         _mediator = mediator;
         _dateTimeProvider = dateTimeProvider;
         _username = claimReader.GetUsernameFromClaim();
-        _claimReader = claimReader;
+        _userId = claimReader.GetUserIdFromClaim();
     }
 
-    public async Task<IEnumerable<TAggregateRoot>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<TAggregateRoot>> GetAllAsync(bool filterByUser = true, CancellationToken cancellationToken = default)
     {
         var filter = Builders<TAggregateRoot>.Filter.Empty;
+        if (filterByUser) 
+        { 
+            filter = Builders<TAggregateRoot>.Filter.Eq("userId", _userId);
+        }
+        
         var result = await _collection.Find(filter).ToListAsync(cancellationToken);
         return result;
     }
@@ -39,32 +44,46 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public IQueryable<TAggregateRoot> FindQueryable(Expression<Func<TAggregateRoot, bool>> expression, Func<IQueryable<TAggregateRoot>, IOrderedQueryable<TAggregateRoot>>? orderBy = null)
+    public IQueryable<TAggregateRoot> FindQueryable(Expression<Func<TAggregateRoot, bool>> expression, bool filterByUser = true, Func<IQueryable<TAggregateRoot>, IOrderedQueryable<TAggregateRoot>>? orderBy = null)
     {
-        var query = _collection.AsQueryable().Where(expression);
+        var definitiveExpression = expression;
+        if (filterByUser)
+        {
+            definitiveExpression = AddUserCondition(expression);
+        }
+        var query = _collection.AsQueryable().Where(definitiveExpression);
         return orderBy != null ? orderBy(query) : query;
     }
 
-    public async Task<IEnumerable<TAggregateRoot>> WhereAsync(Expression<Func<TAggregateRoot, bool>>? expression, Func<IQueryable<TAggregateRoot>, IOrderedQueryable<TAggregateRoot>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<TAggregateRoot>> WhereAsync(Expression<Func<TAggregateRoot, bool>>? expression, bool filterByUser = true, Func<IQueryable<TAggregateRoot>, IOrderedQueryable<TAggregateRoot>>? orderBy = null, CancellationToken cancellationToken = default)
     {
-        var query = expression != null ? _collection.AsQueryable().Where(expression) : _collection.AsQueryable();
-        query = orderBy != null ? orderBy(query) : query;
+        var definitiveExpression = expression;
+        if (filterByUser)
+        {
+            definitiveExpression = AddUserCondition(expression);
+        }
+        var query = definitiveExpression != null ? _collection.AsQueryable().Where(definitiveExpression) : _collection.AsQueryable();
+        _ = orderBy != null ? orderBy(query) : query;
 
-        var result = await _collection.FindAsync(expression);
-        return result.ToEnumerable();
+        var result = await _collection.FindAsync(definitiveExpression, cancellationToken: cancellationToken);
+        return result.ToEnumerable(cancellationToken: cancellationToken);
     }
 
-    public async Task<TAggregateRoot?> SingleOrDefaultAsync(Expression<Func<TAggregateRoot, bool>> expression)
+    public async Task<TAggregateRoot?> SingleOrDefaultAsync(Expression<Func<TAggregateRoot, bool>> expression, bool filterByUser = true)
     {
-        var filter = Builders<TAggregateRoot>.Filter.Where(expression);
+        var definitiveExpression = expression;
+        if (filterByUser)
+        {
+            definitiveExpression = AddUserCondition(expression);
+        }
+        var filter = Builders<TAggregateRoot>.Filter.Where(definitiveExpression);
         return await _collection.Find(filter).SingleOrDefaultAsync();
     }
 
     public async Task<TAggregateRoot> AddAsync(TAggregateRoot entity)
     {
-        var userId = _claimReader.GetUserIdFromClaim();
         entity.UpdateTrackingInformation(_username, _dateTimeProvider.UtcNow);
-        entity.AddUser(userId);
+        entity.AddUser(_userId);
 
         await _collection.InsertOneAsync(entity);
 
@@ -118,5 +137,25 @@ public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregate
         await _collection.DeleteOneAsync(filter);
 
         await _mediator.DispatchDomainEventsAsync(entity);
+    }
+
+    private static Expression<Func<TAggregateRoot, bool>> AddUserCondition(Expression<Func<TAggregateRoot, bool>>? existingExpression)
+    {
+        Expression<Func<TAggregateRoot, bool>> additionalCondition = entity => entity.UserId == _userId;
+
+        if (existingExpression == null)
+        {
+            return additionalCondition;
+        }
+
+        var combinedExpression = Expression.Lambda<Func<TAggregateRoot, bool>>(
+            Expression.AndAlso(
+                existingExpression.Body,
+                additionalCondition.Body.ReplaceParameter(additionalCondition.Parameters[0], existingExpression.Parameters[0])
+            ),
+            existingExpression.Parameters
+        );
+
+        return combinedExpression;
     }
 }

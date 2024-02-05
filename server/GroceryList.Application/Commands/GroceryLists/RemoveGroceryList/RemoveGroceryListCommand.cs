@@ -2,4 +2,4 @@
 
 namespace GroceryList.Application.Commands.GroceryLists.RemoveGroceryList;
 
-public record RemoveGroceryListCommand(Guid Id) : IRequest<Result<string>>;
+public record RemoveGroceryListCommand(Guid Id) : IRequest<Result>;

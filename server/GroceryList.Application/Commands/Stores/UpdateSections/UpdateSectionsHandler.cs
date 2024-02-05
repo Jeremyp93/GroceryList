@@ -42,8 +42,7 @@ public class UpdateSectionsHandler : IRequestHandler<UpdateSectionsCommand, Resu
             {
                 var listsToUpdate = (await _groceryListRepository.WhereAsync(
                         l => l.StoreId == store.Id && l.Ingredients.Any(i => sectionsRemoved.Contains(i.Category == null ? "" : i.Category.Name)),
-                        null,
-                        cancellationToken
+                        cancellationToken: cancellationToken
                     )).ToList();
                 foreach (var list in listsToUpdate)
                 {
