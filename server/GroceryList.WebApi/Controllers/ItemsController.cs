@@ -29,24 +29,11 @@ public class ItemsController : BaseController
 
         if (!result.IsSuccessful)
         {
-            ErrorResponse(result);
+            return ErrorResponse(result);
         }
 
         return ReturnOk<IEnumerable<ItemResponse>, IEnumerable<Item>>(result.Data);
     }
-
-    //[HttpGet("{id:Guid}", Name = "GetStoreById")]
-    //public async Task<IActionResult> GetStoreById([FromRoute] Guid id)
-    //{
-    //    var result = await _mediator.Send(new GetStoreByIdQuery(id));
-
-    //    if (!result.IsSuccessful)
-    //    {
-    //        return ErrorResponse(result);
-    //    }
-
-    //    return ReturnOk<StoreResponse, Store>(result.Data);
-    //}
 
     [HttpPost]
     public async Task<IActionResult> AddItem([FromBody] ItemRequest itemRequest)

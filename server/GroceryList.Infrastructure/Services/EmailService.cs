@@ -23,9 +23,14 @@ public class EmailService : IEmailService
     public async Task SendTokenEmailAsync(string userEmail, string token)
     {
         string toEmail = userEmail;
-        string subject = "Test Email";
+        string subject = "Grocery List - Confirm your email";
         string body = @$"<html><body>
-                        <a href=""{_configuration.GetValue<string>("clientUrls:ConfirmEmail")}?token={EncodeTo64(token)}&email={userEmail}"">Confirm Email</a>
+                        <p>Hi</p>
+                        <p>Thank you for creating an account on the Grocery List app.<br/>
+                        This app is used to create and manage grocery lists, mainly to gain some precious time in the store !</p>
+                        <p>To use the app, please <a href=""{_configuration.GetValue<string>("clientUrls:ConfirmEmail")}?token={EncodeTo64(token)}&email={userEmail}"">confirm your email</a>.</p>
+                        <p>Have a great day !</p>
+                        <p>Scotex</p>
                         </body></html>";
 
         using SmtpClient smtpClient = new(_smtpConfig.Server, _smtpConfig.Port);

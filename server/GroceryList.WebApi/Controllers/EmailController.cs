@@ -23,7 +23,7 @@ public class EmailController : BaseController
 
         if (!result.IsSuccessful)
         {
-            ErrorResponse(result);
+            return ErrorResponse(result);
         }
 
         return Ok();

@@ -100,12 +100,6 @@ public class UsersController : BaseController
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] UserRequest userRequest)
     {
-        var allowedEmails = new string[] { "test@test.ca", "jeremy.proot@outlook.com", "fany.panichelli5@hotmail.com" };
-        if (!allowedEmails.Contains(userRequest.Email))
-        {
-            return ErrorResponse(Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "Email is not allowed."));
-        }
-
         var result = await _mediator.Send(new AddUserCommand()
         {
             Email = userRequest.Email,

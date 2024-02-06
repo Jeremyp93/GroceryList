@@ -20,8 +20,13 @@ export class ConfirmEmailCallbackComponent implements OnInit {
       const token = params['token'];
       const email = params['email'];
       if (token && email) {
-        this.#authService.confirmEmail(token, email).subscribe(() => {
-          this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`], { queryParams: { confirmed: true } });
+        this.#authService.confirmEmail(token, email).subscribe({
+          next: () => {
+            this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`], { queryParams: { confirmed: true } });
+          },
+          error: () => {
+            this.#router.navigate(['/error']);
+          }
         });
       } else {
         this.#router.navigate(['/error']);
