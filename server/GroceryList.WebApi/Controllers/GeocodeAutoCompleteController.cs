@@ -24,7 +24,7 @@ namespace GroceryList.WebApi.Controllers
 
             if (!result.IsSuccessful)
             {
-                ErrorResponse(result);
+                return ErrorResponse(result);
             }
 
             return Ok(result.Data);

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../auth.service';
+
 import { ROUTES_PARAM } from '../../../constants';
 import { Store } from '@ngxs/store';
 import { CallbackTwitch } from '../../ngxs-store/auth.actions';
@@ -22,8 +22,13 @@ export class TwitchCallbackComponent implements OnInit {
       const code = params['code'];
       if (code) {
         // Call a service to send the authorization code to your backend
-        this.#ngxsStore.dispatch(new CallbackTwitch(code)).subscribe(() => {
-          this.#router.navigate([`/${ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST}`]);
+        this.#ngxsStore.dispatch(new CallbackTwitch(code)).subscribe({
+          next: () => {
+            this.#router.navigate([`/${ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST}`]);
+          },
+          error: () => {
+            this.#router.navigate(['/error']);
+          }
         });
       } else {
         // Redirect to an error page or handle accordingly

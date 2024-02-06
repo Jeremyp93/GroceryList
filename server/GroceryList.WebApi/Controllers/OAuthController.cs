@@ -30,7 +30,7 @@ public class OAuthController : BaseController
 
         if (!result.IsSuccessful)
         {
-            ErrorResponse(result);
+            return ErrorResponse(result);
         }
 
         return Redirect(result.Data);

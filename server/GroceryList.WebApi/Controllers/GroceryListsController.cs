@@ -34,7 +34,7 @@ public class GroceryListsController : BaseController
 
         if (!result.IsSuccessful)
         {
-            ErrorResponse(result);
+            return ErrorResponse(result);
         }
 
         //return Ok(result.Data);

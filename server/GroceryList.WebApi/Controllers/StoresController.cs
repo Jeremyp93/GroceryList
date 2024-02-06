@@ -40,7 +40,7 @@ public class StoresController : BaseController
 
         if (!result.IsSuccessful)
         {
-            ErrorResponse(result);
+            return ErrorResponse(result);
         }
 
         return ReturnOk<IEnumerable<StoreResponse>, IEnumerable<Store>>(result.Data);

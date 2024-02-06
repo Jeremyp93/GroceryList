@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
-using System.Web;
 
 namespace GroceryList.Application.Commands.Users.ConfirmEmail;
 public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, Result>
