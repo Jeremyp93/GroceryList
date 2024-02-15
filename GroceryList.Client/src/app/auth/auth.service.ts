@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { Login as LoginType } from "./types/login.type";
 import { Register as RegisterType } from "./types/register.type";
 import { environment } from "../../environments/environment";
-import { API_ENDPOINTS, ROUTES_PARAM } from "../constants";
+import { API_ENDPOINTS } from "../constants";
 import { UserResponseDto } from "./dtos/user-response-dto.type";
 import { ResetPasswordRequestDto } from "./dtos/reset-password.dto";
 
