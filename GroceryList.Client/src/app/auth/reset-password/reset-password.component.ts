@@ -22,7 +22,6 @@ export class ResetPasswordComponent implements OnInit {
   #router = inject(Router);
   #authService = inject(AuthService);
 
-  readonly loginRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.LOGIN;
   readonly signupFormPassword: string = RESET_PASSWORD_FORM.PASSWORD;
   readonly signupFormConfirmPassword: string = RESET_PASSWORD_FORM.CONFIRM_PASSWORD;
   resetForm!: FormGroup;
@@ -36,6 +35,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('teest');
     this.#route.queryParams.subscribe(params => {
       const token = params['token'];
       const email = params['email'];
@@ -55,7 +55,8 @@ export class ResetPasswordComponent implements OnInit {
     this.isLoading = true;
     this.#authService.resetPassword({email: this.#email, token: this.#token, password: this.resetForm.value[RESET_PASSWORD_FORM.PASSWORD]}).subscribe({
       next: () => {
-        this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`], { queryParams: { reset: true } });
+        this.isLoading = this.isSubmitted = false;
+        this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.AUTH}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`], { queryParams: { reset: true } });
       },
       error: () => {
         this.#router.navigate(['/error']);

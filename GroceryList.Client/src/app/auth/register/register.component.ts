@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Router, RouterModule } from '@angular/router';
 
@@ -23,7 +23,7 @@ import { passwordMatchValidator } from '../validators/password.validator';
 export class RegisterComponent implements OnInit {
   #ngxsStore = inject(Store);
   #router = inject(Router);
-  readonly loginRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.LOGIN;
+  readonly loginRoute: string = `/${ROUTES_PARAM.AUTHENTICATION.AUTH}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`;
   readonly signupFormFirstName: string = SIGNUP_FORM.FIRST_NAME;
   readonly signupFormLastName: string = SIGNUP_FORM.LAST_NAME;
   readonly signupFormEmail: string = SIGNUP_FORM.EMAIL;
@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
     this.#ngxsStore.dispatch(new Register(this.signupForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
-        this.#router.navigate([`/${ROUTES_PARAM.CONFIRM_EMAIL}`], {state: {email: this.signupForm.value.email}});
+        this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.AUTH}/${ROUTES_PARAM.AUTHENTICATION.EMAIL_CONFIRM_INFO}`], {state: {email: this.signupForm.value.email}});
       },
       error: () => {
         this.isLoading = this.isSubmitted = false;

@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit {
   #router = inject(Router);
   #route = inject(ActivatedRoute);
   #alertService = inject(AlertService);
-  readonly registerRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.REGISTER;
+  readonly registerRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.AUTH + '/' + ROUTES_PARAM.AUTHENTICATION.REGISTER;
+  readonly forgotPasswordRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.AUTH + '/' + ROUTES_PARAM.AUTHENTICATION.FORGOT_PASSWORD;
   readonly loginFormUsername: string = LOGIN_FORM.USERNAME;
   readonly loginFormPassword: string = LOGIN_FORM.PASSWORD;
   loginForm!: FormGroup;
@@ -42,8 +43,12 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     const params = this.#route.snapshot.queryParams;
     const confirmed = params['confirmed'];
+    const reset = params['reset'];
     if (confirmed && confirmed === 'true') {
       this.#alertService.setAlertObs(new Alert(AlertType.Info, 'Email has been confirmed. Please log in.'));
+    }
+    if (reset && reset === 'true') {
+      this.#alertService.setAlertObs(new Alert(AlertType.Info, 'Password has been reset. Please log in.'));
     }
     const isLoggedIn = this.#ngxsStore.selectSnapshot(AuthState.isAuthenticated);
     if (isLoggedIn) {

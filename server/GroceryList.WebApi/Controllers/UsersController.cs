@@ -112,10 +112,10 @@ public class UsersController : BaseController
         return ReturnOk<UserResponse, ApplicationUser>(result.Data);
     }
 
-    [HttpGet("confirm")]
-    public async Task<IActionResult> ConfirmEmail([FromQuery] string token, [FromQuery] string email)
+    [HttpPost("confirm")]
+    public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest confirmEmailRequest)
     {
-        var result = await _mediator.Send(new ConfirmEmailCommand(token, email));
+        var result = await _mediator.Send(new ConfirmEmailCommand(confirmEmailRequest.Token, confirmEmailRequest.Email));
 
         if (!result.IsSuccessful)
         {
@@ -125,8 +125,8 @@ public class UsersController : BaseController
         return Ok();
     }
 
-    [HttpPost("forgot-password")]
-    public async Task<IActionResult> ForgotPassword([Required][FromQuery] string email)
+    [HttpPost("{email}/forgot-password")]
+    public async Task<IActionResult> ForgotPassword([Required] string email)
     {
         var result = await _mediator.Send(new ForgotPasswordCommand(email));
 

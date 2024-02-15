@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.#actions.pipe(ofActionCompleted(Logout)).subscribe(() => {
-      this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
+      this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.AUTH}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`]);
     });
 
     this.#ngxsStore.select(AuthState.isAuthenticated).subscribe(value => this.showMenu = value);
