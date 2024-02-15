@@ -26,17 +26,17 @@ export const ROUTES_PARAM = {
         CONFIRM_EMAIL: 'confirm-email',
         EMAIL_CONFIRM_INFO: 'email-confirm-info',
     },
-    OAUTH: {
-        OAUTH: 'oauth',
-        TWITCH_CALLBACK: 'twitch/callback'
-    },
     ID_PARAMETER: 'id',
 }
 
 export const API_ENDPOINTS = {
     LOGIN: 'login',
     LOGOUT: 'logout',
-    ME: 'me'
+    ME: 'me',
+    TWITCH_CALLBACK: 'twitch/callback',
+    CONFIRM: 'confirm',
+    RESET_PASSWORD: 'reset-password',
+    FORGOT_PASSWORD: 'forgot-password'
 }
 
 export const INGREDIENT_FORM = {

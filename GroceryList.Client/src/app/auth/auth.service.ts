@@ -30,18 +30,18 @@ export class AuthService {
     }
 
     loginTwitch = (code: string) => {
-        return this.httpClient.post(`${environment.apiUrl}/${environment.oauthEndpoint}/${ROUTES_PARAM.OAUTH.TWITCH_CALLBACK}`, {code: code});
+        return this.httpClient.post(`${environment.apiUrl}/${environment.oauthEndpoint}/${API_ENDPOINTS.TWITCH_CALLBACK}`, {code: code});
     }
 
     confirmEmail = (token: string, email: string) => {
-        return this.httpClient.post(`${environment.apiUrl}/${environment.userEndpoint}/confirm`, {token, email});
+        return this.httpClient.post(`${environment.apiUrl}/${environment.userEndpoint}/${API_ENDPOINTS.CONFIRM}`, {token, email});
     }
 
     resetPassword = (resetPasswordRequest: ResetPasswordRequestDto) => {
-        return this.httpClient.post<void>(`${environment.apiUrl}/${environment.userEndpoint}/reset-password`, resetPasswordRequest);
+        return this.httpClient.post<void>(`${environment.apiUrl}/${environment.userEndpoint}/${API_ENDPOINTS.RESET_PASSWORD}`, resetPasswordRequest);
     }
 
     forgotPassword = (email: string) => {
-        return this.httpClient.post<void>(`${environment.apiUrl}/${environment.userEndpoint}/${email}/forgot-password`, {});
+        return this.httpClient.post<void>(`${environment.apiUrl}/${environment.userEndpoint}/${email}/${API_ENDPOINTS.FORGOT_PASSWORD}`, {});
     }
 }
