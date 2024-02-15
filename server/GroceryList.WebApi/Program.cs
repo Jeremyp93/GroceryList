@@ -9,7 +9,6 @@ builder.Logging
   .ClearProviders()
   .AddConsole();
 
-
 builder.Services.AddControllersWithViews();
 
 using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
@@ -17,7 +16,6 @@ using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
     .AddConsole());
 
 ILogger logger = loggerFactory.CreateLogger<Program>();
-logger.LogInformation("Example log message");
 
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureMediatR();

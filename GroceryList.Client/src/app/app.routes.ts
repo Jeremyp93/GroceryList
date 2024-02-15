@@ -7,6 +7,7 @@ import { TwitchCallbackComponent } from './auth/callback/twitch-callback/twitch-
 import { ConfirmEmailCallbackComponent } from './auth/callback/confirm-email-callback.component';
 import { ConfirmEmailComponent } from './auth/register/confirm-email/confirm-email.component';
 import { ErrorComponent } from './error.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: ROUTES_PARAM.GROCERY_LIST.GROCERY_LIST, pathMatch: 'full' },
@@ -36,6 +37,9 @@ export const routes: Routes = [
     },
     {
         path: 'auth/confirm-email', component: ConfirmEmailCallbackComponent, title: 'Redirecting...'
+    },
+    {
+        path: 'auth/reset', component: ResetPasswordComponent, title: 'Reset Password'
     },
     {
         path: 'error', component: ErrorComponent, title: 'Error'

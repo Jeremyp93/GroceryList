@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GroceryList.Application;
 using GroceryList.Application.Commands.Login;
 using GroceryList.Application.Commands.Users.AddUser;
 using GroceryList.Application.Queries.Users.GetUserById;
@@ -12,6 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using GroceryList.Application.Abstractions;
 using GroceryList.Application.Models;
+using GroceryList.Application.Commands.Users.ConfirmEmail;
+using System.ComponentModel.DataAnnotations;
+using GroceryList.Application.Commands.Users.ForgotPassword;
+using GroceryList.Application.Commands.Users.ResetPassword;
 
 namespace GroceryList.WebApi.Controllers;
 
@@ -77,24 +80,17 @@ public class UsersController : BaseController
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(identity),
-            new AuthenticationProperties
-            {
-                IsPersistent = true,
-                AllowRefresh = true,
-            });
-
-        return Ok();
+        return SignIn(new ClaimsPrincipal(identity), new AuthenticationProperties
+        {
+            IsPersistent = true,
+            AllowRefresh = true,
+        });
     }
 
     [HttpPost("logout")]
-    public async Task<IActionResult> LogoutUser()
+    public IActionResult LogoutUser()
     {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-        return Ok();
+        return SignOut(CookieAuthenticationDefaults.AuthenticationScheme);
     }
 
     [HttpPost]
@@ -114,5 +110,49 @@ public class UsersController : BaseController
         }
 
         return ReturnOk<UserResponse, ApplicationUser>(result.Data);
+    }
+
+    [HttpGet("confirm")]
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string token, [FromQuery] string email)
+    {
+        var result = await _mediator.Send(new ConfirmEmailCommand(token, email));
+
+        if (!result.IsSuccessful)
+        {
+            return ErrorResponse(result);
+        }
+
+        return Ok();
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([Required][FromQuery] string email)
+    {
+        var result = await _mediator.Send(new ForgotPasswordCommand(email));
+
+        if (!result.IsSuccessful)
+        {
+            return ErrorResponse(result);
+        }
+
+        return Ok();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest resetPasswordRequest)
+    {
+        var result = await _mediator.Send(new ResetPasswordCommand
+        {
+            Email = resetPasswordRequest.Email,
+            Password = resetPasswordRequest.Password,
+            Token = resetPasswordRequest.Token
+        });
+
+        if (!result.IsSuccessful)
+        {
+            return ErrorResponse(result);
+        }
+
+        return Ok();
     }
 }

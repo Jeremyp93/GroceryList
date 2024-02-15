@@ -11,6 +11,7 @@ import { SIGNUP_FORM, ROUTES_PARAM } from '../../constants';
 import { AuthState } from '../ngxs-store/auth.state';
 import { InputFieldComponent } from '../../shared/input-field/input-field.component';
 import { InputType } from '../../shared/input-field/input-type.enum';
+import { passwordMatchValidator } from '../validators/password.validator';
 
 @Component({
   selector: 'app-register',
@@ -65,19 +66,7 @@ export class RegisterComponent implements OnInit {
       [SIGNUP_FORM.LAST_NAME]: new FormControl('', [Validators.required]),
       [SIGNUP_FORM.EMAIL]: new FormControl('', [Validators.required, Validators.email]),
       [SIGNUP_FORM.PASSWORD]: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      [SIGNUP_FORM.CONFIRM_PASSWORD]: new FormControl('', [Validators.required, this.#passwordMatchValidator(SIGNUP_FORM.PASSWORD)])
+      [SIGNUP_FORM.CONFIRM_PASSWORD]: new FormControl('', [Validators.required, passwordMatchValidator(SIGNUP_FORM.PASSWORD)])
     });
-  }
-
-  #passwordMatchValidator = (otherControlName: string): ValidatorFn => {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const otherControl = control.root.get(otherControlName);
-
-      if (otherControl && control.value !== otherControl.value) {
-        return { passwordMismatch: true };
-      }
-
-      return null;
-    };
   }
 }

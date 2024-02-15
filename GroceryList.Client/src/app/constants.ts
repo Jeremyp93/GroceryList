@@ -73,3 +73,8 @@ export const SECTION_FORM = {
     PRIORITY: 'priority',
     NAME: 'name'
 };
+
+export const RESET_PASSWORD_FORM = {
+    PASSWORD: 'password',
+    CONFIRM_PASSWORD: 'confirmPassword'
+};

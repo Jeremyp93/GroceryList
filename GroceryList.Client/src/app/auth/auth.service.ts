@@ -7,6 +7,7 @@ import { Register as RegisterType } from "./types/register.type";
 import { environment } from "../../environments/environment";
 import { ROUTES_PARAM } from "../constants";
 import { UserResponseDto } from "./dtos/user-response-dto.type";
+import { ResetPasswordRequestDto } from "./dtos/reset-password.dto";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -33,6 +34,10 @@ export class AuthService {
     }
 
     confirmEmail = (token: string, email: string) => {
-        return this.httpClient.get(`${environment.apiUrl}/${environment.emailEndpoint}/confirm?token=${token}&email=${email}`);
+        return this.httpClient.get(`${environment.apiUrl}/${environment.userEndpoint}/confirm?token=${token}&email=${email}`);
+    }
+
+    resetPassword = (resetPasswordRequest: ResetPasswordRequestDto) => {
+        return this.httpClient.post<void>(`${environment.apiUrl}/${environment.userEndpoint}/reset-password`, resetPasswordRequest);
     }
 }
