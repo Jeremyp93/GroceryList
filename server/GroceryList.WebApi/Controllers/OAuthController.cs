@@ -14,12 +14,10 @@ namespace GroceryList.WebApi.Controllers;
 [ApiController]
 public class OAuthController : BaseController
 {
-    private readonly IHttpContextAccessor _contextAccessor;
     private readonly IMediator _mediator;
 
-    public OAuthController(IMapper mapper, IHttpContextAccessor contextAccessor, IMediator mediator) : base(mapper)
+    public OAuthController(IMapper mapper, IMediator mediator) : base(mapper)
     {
-        _contextAccessor = contextAccessor;
         _mediator = mediator;
     }
 
@@ -53,15 +51,10 @@ public class OAuthController : BaseController
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(identity),
-            new AuthenticationProperties
-            {
-                IsPersistent = true,
-                AllowRefresh = true,
-            });
-
-        return Ok();
+        return SignIn(new ClaimsPrincipal(identity), new AuthenticationProperties
+        {
+            IsPersistent = true,
+            AllowRefresh = true,
+        });
     }
 }

@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { Login } from './types/login.type';
 import { Register } from './types/register.type';
 import { environment } from '../../environments/environment';
-import { ROUTES_PARAM } from '../constants';
+import { API_ENDPOINTS } from '../constants';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -30,7 +30,7 @@ describe('AuthService', () => {
 
     authService.login(mockLogin).subscribe();
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/${environment.userEndpoint}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/${environment.userEndpoint}/${API_ENDPOINTS.LOGIN}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ email: mockLogin.username, password: mockLogin.password });
   });
