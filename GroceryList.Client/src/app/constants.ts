@@ -7,9 +7,7 @@ export const ROUTES_PARAM = {
     GROCERY_LIST: {
         GROCERY_LIST: 'grocery-lists',
         EDIT: 'edit',
-        EDIT2: 'edit2',
-        NEW: 'new',
-        NEW2: 'new2'
+        NEW: 'new'
     },
     STORE: {
         STORE: 'stores',
@@ -20,17 +18,25 @@ export const ROUTES_PARAM = {
         ITEMS: 'items'
     },
     AUTHENTICATION: {
+        AUTH: 'auth',
         LOGIN: 'login',
         REGISTER: 'register',
-        LOGOUT: 'logout',
-        ME: 'me'
+        FORGOT_PASSWORD: 'forgot-password',
+        RESET_PASSWORD: 'reset-password',
+        CONFIRM_EMAIL: 'confirm-email',
+        EMAIL_CONFIRM_INFO: 'email-confirm-info',
     },
-    OAUTH: {
-        OAUTH: 'oauth',
-        TWITCH_CALLBACK: 'twitch/callback'
-    },
-    CONFIRM_EMAIL: 'register/confirm-email',
     ID_PARAMETER: 'id',
+}
+
+export const API_ENDPOINTS = {
+    LOGIN: 'login',
+    LOGOUT: 'logout',
+    ME: 'me',
+    TWITCH_CALLBACK: 'twitch/callback',
+    CONFIRM: 'confirm',
+    RESET_PASSWORD: 'reset-password',
+    FORGOT_PASSWORD: 'forgot-password'
 }
 
 export const INGREDIENT_FORM = {
@@ -72,4 +78,13 @@ export const SECTION_FORM = {
     ID: 'id',
     PRIORITY: 'priority',
     NAME: 'name'
+};
+
+export const RESET_PASSWORD_FORM = {
+    PASSWORD: 'password',
+    CONFIRM_PASSWORD: 'confirmPassword'
+};
+
+export const FORGOT_PASSWORD_FORM = {
+    EMAIL: 'email'
 };

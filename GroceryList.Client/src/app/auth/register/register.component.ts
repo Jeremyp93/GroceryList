@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Router, RouterModule } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { SIGNUP_FORM, ROUTES_PARAM } from '../../constants';
 import { AuthState } from '../ngxs-store/auth.state';
 import { InputFieldComponent } from '../../shared/input-field/input-field.component';
 import { InputType } from '../../shared/input-field/input-type.enum';
+import { passwordMatchValidator } from '../validators/password.validator';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +23,7 @@ import { InputType } from '../../shared/input-field/input-type.enum';
 export class RegisterComponent implements OnInit {
   #ngxsStore = inject(Store);
   #router = inject(Router);
-  readonly loginRoute: string = '/' + ROUTES_PARAM.AUTHENTICATION.LOGIN;
+  readonly loginRoute: string = `/${ROUTES_PARAM.AUTHENTICATION.AUTH}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`;
   readonly signupFormFirstName: string = SIGNUP_FORM.FIRST_NAME;
   readonly signupFormLastName: string = SIGNUP_FORM.LAST_NAME;
   readonly signupFormEmail: string = SIGNUP_FORM.EMAIL;
@@ -51,7 +52,7 @@ export class RegisterComponent implements OnInit {
     this.#ngxsStore.dispatch(new Register(this.signupForm.value)).subscribe({
       next: () => {
         this.isLoading = this.isSubmitted = false;
-        this.#router.navigate([`/${ROUTES_PARAM.CONFIRM_EMAIL}`], {state: {email: this.signupForm.value.email}});
+        this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.AUTH}/${ROUTES_PARAM.AUTHENTICATION.EMAIL_CONFIRM_INFO}`], {state: {email: this.signupForm.value.email}});
       },
       error: () => {
         this.isLoading = this.isSubmitted = false;
@@ -65,19 +66,7 @@ export class RegisterComponent implements OnInit {
       [SIGNUP_FORM.LAST_NAME]: new FormControl('', [Validators.required]),
       [SIGNUP_FORM.EMAIL]: new FormControl('', [Validators.required, Validators.email]),
       [SIGNUP_FORM.PASSWORD]: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      [SIGNUP_FORM.CONFIRM_PASSWORD]: new FormControl('', [Validators.required, this.#passwordMatchValidator(SIGNUP_FORM.PASSWORD)])
+      [SIGNUP_FORM.CONFIRM_PASSWORD]: new FormControl('', [Validators.required, passwordMatchValidator(SIGNUP_FORM.PASSWORD)])
     });
-  }
-
-  #passwordMatchValidator = (otherControlName: string): ValidatorFn => {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const otherControl = control.root.get(otherControlName);
-
-      if (otherControl && control.value !== otherControl.value) {
-        return { passwordMismatch: true };
-      }
-
-      return null;
-    };
   }
 }

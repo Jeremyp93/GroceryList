@@ -1,4 +1,5 @@
-﻿using GroceryList.Application.Models;
+﻿using GroceryList.Application.Helpers;
+using GroceryList.Application.Models;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
@@ -18,18 +19,8 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, Result>
         var user = await _userManager.FindByEmailAsync(command.Email.ToLower());
         if (user == null)
             return Result.Failure(ResultStatusCode.NotFound, "User was not found.");
-        var token = DecodeFrom64(command.Token);
+        var token = Base64Helper.DecodeFrom64(command.Token);
         var result = await _userManager.ConfirmEmailAsync(user, token);
         return result.Succeeded ? Result.Success() : Result.Failure(ResultStatusCode.Error, "Email could not be confirmed.");
-    }
-    private static string DecodeFrom64(string encodedData)
-    {
-        byte[] encodedDataAsBytes
-            = Convert.FromBase64String(encodedData);
-
-        string returnValue =
-           ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-
-        return returnValue;
     }
 }

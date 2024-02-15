@@ -1,4 +1,5 @@
 ﻿using GroceryList.Application.Abstractions;
+using GroceryList.Application.Helpers;
 using GroceryList.Application.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -28,7 +29,8 @@ public class EmailService : IEmailService
                         <p>Hi</p>
                         <p>Thank you for creating an account on the Grocery List app.<br/>
                         This app is used to create and manage grocery lists, mainly to gain some precious time in the store !</p>
-                        <p>To use the app, please <a href=""{_configuration.GetValue<string>("clientUrls:ConfirmEmail")}?token={EncodeTo64(token)}&email={userEmail}"">confirm your email</a>.</p>
+public static class Base64Helper
+                        <p>To use the app, please <a href=""{_configuration.GetValue<string>("clientUrls:ConfirmEmail")}?token={Base64Helper.EncodeTo64(token)}&email={userEmail}"">confirm your email</a>.</p>
                         <p>Have a great day !</p>
                         <p>Scotex</p>
                         </body></html>";
@@ -41,18 +43,23 @@ public class EmailService : IEmailService
         await smtpClient.SendMailAsync(mailMessage);
     }
 
-    private static string EncodeTo64(string toEncode)
+    public async Task SendForgotPasswordLink(string userEmail, string token)
     {
+        string toEmail = userEmail;
+        string subject = "Grocery List - Reset your password";
+        string body = @$"<html><body>
+                        <p>Hi</p>
+                        <p>Please click on the link to reset your password.</p>
+                        <p><a href=""{_configuration.GetValue<string>("clientUrls:ResetPassword")}?token={Base64Helper.EncodeTo64(token)}&email={userEmail}"">Reset password</a></p>
+                        <p>Have a great day !</p>
+                        <p>Scotex</p>
+                        </body></html>";
 
-        byte[] toEncodeAsBytes
+        using SmtpClient smtpClient = new(_smtpConfig.Server, _smtpConfig.Port);
+        smtpClient.Credentials = new NetworkCredential(_smtpConfig.Username, _smtpConfig.Password);
+        smtpClient.EnableSsl = true;
 
-              = ASCIIEncoding.ASCII.GetBytes(toEncode);
-
-        string returnValue
-
-              = Convert.ToBase64String(toEncodeAsBytes);
-
-        return returnValue;
-
+        var mailMessage = new MailMessage(_smtpConfig.FromEmail, toEmail, subject, body);
+        await smtpClient.SendMailAsync(mailMessage);
     }
 }

@@ -6,6 +6,5 @@ export const environment = {
     userEndpoint: 'users',
     autocompleteEndpoint: 'geocodeautocomplete',
     itemEndpoint: 'items',
-    oauthEndpoint: 'oauth',
-    emailEndpoint: 'email'
+    oauthEndpoint: 'oauth'
 };

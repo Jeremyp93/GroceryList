@@ -22,7 +22,7 @@ export class ConfirmEmailCallbackComponent implements OnInit {
       if (token && email) {
         this.#authService.confirmEmail(token, email).subscribe({
           next: () => {
-            this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`], { queryParams: { confirmed: true } });
+            this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.AUTH}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`], { queryParams: { confirmed: true } });
           },
           error: () => {
             this.#router.navigate(['/error']);
