@@ -42,9 +42,3 @@ export class SetIngredients {
 
     constructor(public ingredients: Ingredient[]) { }
 }
-
-export class SetSections {
-    static readonly type = '[GroceryList] Set Sections For Selected List';
-
-    constructor(public sections: Section[]) { }
-}

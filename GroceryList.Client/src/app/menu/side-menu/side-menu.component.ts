@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Select } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
-import { NavigationStart, Router, RouterModule } from '@angular/router';
+import { NavigationSkipped, NavigationStart, Router, RouterModule } from '@angular/router';
 
 import { AuthState } from '../../auth/ngxs-store/auth.state';
 import { SideMenuService } from './side-menu.service';
@@ -39,24 +39,23 @@ export class SideMenuComponent implements OnInit {
   #router = inject(Router);
   #sideMenuService = inject(SideMenuService);
   #renderer = inject(Renderer2);
-  isOpen = false;
   @Select(AuthState.getName) name$!: Observable<string>;
   #sideMenuSubscription!: Subscription;
   #routerSubscription!: Subscription;
 
   ngOnInit(): void {
     this.#routerSubscription = this.#router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
+      if (event instanceof NavigationStart || event instanceof NavigationSkipped) {
         this.#sideMenuService.closeMenu();
       }
     });
+
     this.#sideMenuSubscription = this.#sideMenuService.isOpen$.subscribe(open => {
       if (open) {
         this.#renderer.addClass(document.body, 'sidebar-open');
       } else {
         this.#renderer.removeClass(document.body, 'sidebar-open');
       }
-      this.isOpen = open;
     });
   }
 

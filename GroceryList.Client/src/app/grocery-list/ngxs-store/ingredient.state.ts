@@ -4,7 +4,7 @@ import { Injectable, inject } from '@angular/core';
 import { v4 as UUID } from 'uuid';
 
 import { Ingredient } from '../types/ingredient.type';
-import { AddIngredient, DeleteIngredient, ResetIngredients, SaveIngredients, SelectIngredient, SetIngredients, SetSections } from './ingredient.actions';
+import { AddIngredient, DeleteIngredient, ResetIngredients, SaveIngredients, SelectIngredient, SetIngredients } from './ingredient.actions';
 import { GroceryListService } from '../grocery-list.service';
 import { Section } from '../../store/types/section.type';
 import { GroceryListState } from './grocery-list.state';

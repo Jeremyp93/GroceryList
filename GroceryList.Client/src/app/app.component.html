@@ -1,7 +1,9 @@
 <app-alert></app-alert>
 <app-confirm-dialog></app-confirm-dialog>
 @if(showMenu) {
-<app-side-menu></app-side-menu>
+  @if(showSidebar) {
+    <app-side-menu></app-side-menu>
+  }
 <div class="top-menu">
   <div class="sidebar-toggle" (click)="openCloseSidebar()">
     @if (showSidebar) {
