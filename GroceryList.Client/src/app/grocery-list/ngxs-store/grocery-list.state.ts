@@ -5,7 +5,7 @@ import { Injectable, inject } from '@angular/core';
 import { GroceryList } from '../types/grocery-list.type';
 import { GroceryListService } from '../grocery-list.service';
 import { AddGroceryList, DeleteGroceryList, GetGroceryLists, GetSelectedGroceryList, SetSelectedGroceryList, UpdateGroceryList } from './grocery-list.actions';
-import { SetIngredients, SetSections } from './ingredient.actions';
+import { SetIngredients } from './ingredient.actions';
 import { IngredientState } from './ingredient.state';
 import { SetSelectedStore } from '../../store/ngxs-store/store.actions';
 
@@ -131,7 +131,7 @@ export class GroceryListState {
                 });
                 
                 dispatch(new SetIngredients(result?.ingredients ?? []));
-                dispatch(new SetSections(result?.store?.sections ?? []));
+                dispatch(new SetSelectedStore(result?.store ?? null));
             }));
     }
 }
