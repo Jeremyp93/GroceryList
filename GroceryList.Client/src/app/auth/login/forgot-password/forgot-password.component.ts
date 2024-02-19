@@ -33,7 +33,6 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('teeest');
     this.#initForm();
   }
 

@@ -29,7 +29,6 @@ export class IngredientState {
     @Selector([StoreState])
     static getIngredients(state: IngredientStateModel, storeState: StoreStateModel) {
         const sections = StoreState.getSections(storeState);
-        console.log(sections);
         return sortIngredientsByPriority(state.ingredients, sections);
     }
 
