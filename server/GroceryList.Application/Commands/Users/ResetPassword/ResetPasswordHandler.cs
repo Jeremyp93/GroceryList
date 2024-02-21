@@ -21,7 +21,7 @@ public class ResetPasswordHandler : IRequestHandler<ResetPasswordCommand, Result
             return Result.Failure(ResultStatusCode.NotFound, "Email does not exist.");
         }
         var resetToken = Base64Helper.DecodeFrom64(command.Token);
-        await _userManager.ResetPasswordAsync(user, resetToken, command.Password);
-        return Result.Success();
+        var result  = await _userManager.ResetPasswordAsync(user, resetToken, command.Password);
+        return result.Succeeded ? Result.Success() : Result.Failure(ResultStatusCode.Error, "Password could not be reset.");
     }
 }
