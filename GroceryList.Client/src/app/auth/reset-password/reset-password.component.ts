@@ -58,7 +58,7 @@ export class ResetPasswordComponent implements OnInit {
         this.#router.navigate([`/${ROUTES_PARAM.AUTHENTICATION.AUTH}/${ROUTES_PARAM.AUTHENTICATION.LOGIN}`], { queryParams: { reset: true } });
       },
       error: () => {
-        this.#router.navigate(['/error']);
+        this.isLoading = this.isSubmitted = false;
       }
     });
   }
