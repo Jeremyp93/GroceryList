@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { AuthService } from './auth.service';
 import { Login } from './types/login.type';
 import { Register } from './types/register.type';
 import { environment } from '../../environments/environment';
 import { API_ENDPOINTS } from '../constants';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -13,9 +14,9 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [AuthService],
-    });
+    imports: [],
+    providers: [AuthService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     authService = TestBed.inject(AuthService);
     httpTestingController = TestBed.inject(HttpTestingController);

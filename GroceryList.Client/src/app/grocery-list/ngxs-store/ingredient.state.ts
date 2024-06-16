@@ -26,7 +26,7 @@ export class IngredientState {
     groceryListService = inject(GroceryListService);
     ngxsStore = inject(Store);
 
-    @Selector([StoreState])
+    @Selector([IngredientState, StoreState])
     static getIngredients(state: IngredientStateModel, storeState: StoreStateModel) {
         const sections = StoreState.getSections(storeState);
         return sortIngredientsByPriority(state.ingredients, sections);

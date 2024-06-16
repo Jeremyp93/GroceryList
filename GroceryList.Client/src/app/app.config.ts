@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     importProvidersFrom(NgxsModule.forRoot([GroceryListState, IngredientState, AuthState, StoreState]),
-    NgxsStoragePluginModule.forRoot({ key: AuthState }),
+    NgxsStoragePluginModule.forRoot({ keys: [AuthState] }),
     NgxsLoggerPluginModule.forRoot({
       collapsed: false,
       disabled: environment.production
