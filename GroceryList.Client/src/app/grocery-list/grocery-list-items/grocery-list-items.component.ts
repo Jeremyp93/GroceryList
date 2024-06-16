@@ -51,7 +51,7 @@ import { InputFieldComponent } from '../../shared/input-field/input-field.compon
 export class GroceryListItemsComponent implements OnInit {
   #router = inject(Router);
   #ngStore = inject(Store);
-  @Select(GroceryListState.getGroceryLists) groceryLists$!: Observable<GroceryList[]>;
+  groceryLists$: Observable<GroceryList[]> = this.#ngStore.select(GroceryListState.getGroceryLists);
   modalOpen: boolean = false;
   duplicateForm!: FormGroup;
   duplicateFormSubmitted = false;

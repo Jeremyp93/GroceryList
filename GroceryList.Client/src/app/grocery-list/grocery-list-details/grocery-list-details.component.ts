@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, lastValueFrom, take } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Select, Store as NgxsStore } from '@ngxs/store';
+import { Store as NgxsStore } from '@ngxs/store';
 
 import { TileIngredientComponent } from './tile-ingredient/tile-ingredient.component';
 import { HeaderComponent } from '../../shared/header/header.component';
@@ -51,9 +51,9 @@ export class GroceryListDetailsComponent implements OnInit, OnDestroy, Component
   #router = inject(Router);
   #ngStore = inject(NgxsStore);
   #alertService = inject(AlertService);
-  @Select(IngredientState.getIngredients) ingredients$!: Observable<Ingredient[]>;
-  @Select(StoreState.getSections) sections$!: Observable<Section[]>;
-  @Select(StoreState.getStores) stores$!: Observable<Store[]>;
+  ingredients$: Observable<Ingredient[]> = this.#ngStore.select(IngredientState.getIngredients);
+  sections$: Observable<Section[]> = this.#ngStore.select(StoreState.getSections);
+  stores$: Observable<Store[]> = this.#ngStore.select(StoreState.getStores);
   id = '';
   sections: Section[] = [];
   title: string = 'Ingredients to buy';

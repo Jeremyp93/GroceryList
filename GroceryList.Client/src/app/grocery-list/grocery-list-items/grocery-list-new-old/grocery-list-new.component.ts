@@ -4,7 +4,7 @@ import { Observable, Subscription, lastValueFrom } from 'rxjs';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { v4 as UUID } from 'uuid';
-import { Store as NgxsStore, Select } from '@ngxs/store';
+import { Store as NgxsStore } from '@ngxs/store';
 
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { StoreService } from '../../../store/store.service';
@@ -37,7 +37,7 @@ export class GroceryListNewOldComponent implements OnInit, OnDestroy {
   #router = inject(Router);
   #route = inject(ActivatedRoute);
   #ngStore = inject(NgxsStore);
-  @Select(StoreState.getStores) stores$!: Observable<Store[]>;
+  stores$: Observable<Store[]> = this.#ngStore.select(StoreState.getStores);
   groceryListForm!: FormGroup;
   categories: string[] = [];
   editMode: boolean = false;

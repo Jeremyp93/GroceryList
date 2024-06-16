@@ -1,8 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideStore } from '@ngxs/store';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 import { StoreDetailComponent } from './store-detail.component';
-import { NgxsModule } from '@ngxs/store';
-import { RouterTestingModule } from '@angular/router/testing';
+import { StoreState } from '../ngxs-store/store.state';
 
 describe('StoreDetailComponent', () => {
   let component: StoreDetailComponent;
@@ -10,7 +13,8 @@ describe('StoreDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StoreDetailComponent, NgxsModule.forRoot(), RouterTestingModule],
+      imports: [StoreDetailComponent],
+      providers: [ provideRouter([]), provideStore([StoreState]), provideHttpClient(), provideHttpClientTesting() ]
     })
     .compileComponents();
     

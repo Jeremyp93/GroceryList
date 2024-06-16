@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRouteSnapshot,
+  GuardResult,
+  MaybeAsync,
   RouterStateSnapshot,
   UrlSegment,
   UrlTree
@@ -49,21 +51,21 @@ describe('AuthGuard', () => {
     expect(mockDispatch).toHaveBeenCalledWith(new Logout());
   });
 
-  function getAuthGuardWithDummyUrl(urlPath: string): () => boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> {
+  function getAuthGuardWithDummyUrl(urlPath: string): () => boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> | MaybeAsync<GuardResult>{
     const dummyRoute = new ActivatedRouteSnapshot( )
     dummyRoute.url = [ new UrlSegment(urlPath, {}) ]
     const dummyState: RouterStateSnapshot = { url: urlPath, root:  new ActivatedRouteSnapshot() }
     return () => authGuard(dummyRoute, dummyState)
   }
 
-  async function runAuthGuardWithContext(authGuard: () => boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree>): Promise<boolean | UrlTree> {
+  async function runAuthGuardWithContext(authGuard: () => boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> | MaybeAsync<GuardResult>): Promise<boolean | UrlTree | GuardResult> {
     const result = TestBed.runInInjectionContext(authGuard)
     const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
     return authenticated
   }
 
-  function handleObservableResult(result: Observable<boolean | UrlTree>): Promise<boolean | UrlTree> {
-    return new Promise<boolean | UrlTree>((resolve) => {
+  function handleObservableResult(result: Observable<boolean | UrlTree | GuardResult>): Promise<boolean | UrlTree | GuardResult> {
+    return new Promise<boolean | UrlTree | GuardResult>((resolve) => {
       result.subscribe((value) => {
         resolve(value);
       });
