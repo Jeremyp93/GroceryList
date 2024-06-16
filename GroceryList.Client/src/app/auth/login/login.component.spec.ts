@@ -1,12 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
-import { NgxsModule, Store } from '@ngxs/store';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Store, provideStore } from '@ngxs/store';
+import { Router, provideRouter } from '@angular/router';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 import { Login, Logout } from '../ngxs-store/auth.actions';
 import { LOGIN_FORM } from '../../constants';
 import { LoginComponent } from './login.component';
-import { Router } from '@angular/router';
+import { AuthState } from '../ngxs-store/auth.state';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -16,7 +18,8 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginComponent, NgxsModule.forRoot(), RouterTestingModule]
+      imports: [LoginComponent],
+      providers: [provideRouter([]), provideStore([AuthState]), provideHttpClient(), provideHttpClientTesting()]
     })
       .compileComponents();
     ngxsStore = TestBed.inject(Store);

@@ -5,7 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CdkDropListGroup, CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { trigger, transition, animate, style } from '@angular/animations';
 
-import { Store as NgxsStore, Select } from '@ngxs/store';
+import { Store as NgxsStore } from '@ngxs/store';
 import { StoreState } from '../ngxs-store/store.state';
 import { Section } from '../types/section.type';
 import { HeaderComponent } from '../../shared/header/header.component';
@@ -39,7 +39,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy, ComponentCanDeac
   #ngxsStore = inject(NgxsStore);
   #route = inject(ActivatedRoute);
   #router = inject(Router);
-  @Select(StoreState.getSections) sections$!: Observable<Section[]>;
+  sections$: Observable<Section[]> = this.#ngxsStore.select(StoreState.getSections);
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   title: string = 'Sections';
   isLoading: boolean = false;

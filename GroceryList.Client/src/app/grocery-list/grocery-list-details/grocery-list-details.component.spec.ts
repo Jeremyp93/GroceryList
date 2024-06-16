@@ -1,9 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideStore } from '@ngxs/store';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { GroceryListDetailsComponent } from './grocery-list-details.component';
-import { RouterTestingModule  } from '@angular/router/testing';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { NgxsModule } from '@ngxs/store';
+import { StoreState } from '../../store/ngxs-store/store.state';
+import { IngredientState } from '../ngxs-store/ingredient.state';
+import { GroceryListState } from '../ngxs-store/grocery-list.state';
 
 describe('GroceryListDetailsComponent', () => {
   let component: GroceryListDetailsComponent;
@@ -11,8 +15,8 @@ describe('GroceryListDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroceryListDetailsComponent, RouterTestingModule, NgxsModule.forRoot()],
-      providers: [ HttpClient, HttpHandler ]
+      imports: [GroceryListDetailsComponent],
+      providers: [provideRouter([]), provideStore([StoreState, IngredientState, GroceryListState]), provideHttpClient(), provideHttpClientTesting()]
     })
     .compileComponents();
     

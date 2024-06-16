@@ -1,7 +1,7 @@
 import { Component, Renderer2, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Select } from '@ngxs/store';
+import { Store as NgxsStore } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { NavigationSkipped, NavigationStart, Router, RouterModule } from '@angular/router';
 
@@ -39,7 +39,7 @@ export class SideMenuComponent implements OnInit {
   #router = inject(Router);
   #sideMenuService = inject(SideMenuService);
   #renderer = inject(Renderer2);
-  @Select(AuthState.getName) name$!: Observable<string>;
+  name$: Observable<string | null> = inject(NgxsStore).select(AuthState.getName);
   #sideMenuSubscription!: Subscription;
   #routerSubscription!: Subscription;
 

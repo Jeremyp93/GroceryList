@@ -42,7 +42,7 @@ import { ROUTES_PARAM } from '../../constants';
 export class StoreListComponent implements OnInit {
   #ngxsStore = inject(NgxsStore);
   #router = inject(Router);
-  @Select(StoreState.getStores) stores$!: Observable<Store[]>;
+  stores$: Observable<Store[]> = this.#ngxsStore.select(StoreState.getStores);
 
   get hoverChoices(): typeof ButtonHover {
     return ButtonHover;

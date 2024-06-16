@@ -41,7 +41,7 @@ export class GroceryListNewComponent implements OnInit, OnDestroy {
   #route = inject(ActivatedRoute);
   #ngStore = inject(NgxsStore);
   #itemsService = inject(ItemsService);
-  @Select(StoreState.getStores) stores$!: Observable<Store[]>;
+  stores$: Observable<Store[]> = this.#ngStore.select(StoreState.getStores);
   groceryListForm!: FormGroup;
   categories: any[] = [];
   editMode: boolean = false;
