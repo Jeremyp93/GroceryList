@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   isSubmitted: boolean = false;
   twitchUrl: string = '';
+  googleUrl: string = '';
 
   get inputTypes(): typeof InputType {
     return InputType;
@@ -56,6 +57,7 @@ export class LoginComponent implements OnInit {
     }
     this.#initForm();
     this.twitchUrl = `${environment.apiUrl}/${environment.oauthEndpoint}/twitch/login`
+    this.googleUrl = `${environment.apiUrl}/${environment.oauthEndpoint}/google/login`
   }
 
   onSubmit = () => {

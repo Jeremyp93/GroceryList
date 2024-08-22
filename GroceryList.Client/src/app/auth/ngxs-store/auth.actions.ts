@@ -20,6 +20,11 @@ export class CallbackTwitch {
     constructor(public code: string) { }
 }
 
+export class CallbackGoogle {
+    static readonly type = '[Auth] Callback Google';
+    constructor(public code: string) { }
+}
+
 export class GetMyself {
     static readonly type = '[Auth] Me';
 }
