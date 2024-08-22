@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using System.Text.Json;
 
 namespace GroceryList.Application.Queries.Users.GetUserFromGoogle;
 public class GetUserFromGoogleHandler : IRequestHandler<GetUserFromGoogleQuery, Result<ApplicationUser>>
@@ -24,7 +25,7 @@ public class GetUserFromGoogleHandler : IRequestHandler<GetUserFromGoogleQuery, 
     public async Task<Result<ApplicationUser>> Handle(GetUserFromGoogleQuery request, CancellationToken cancellationToken)
     {
         var googleUser = await _googleClient.GetUser(request.Code);
-        _logger.LogError("Google user: {0}", googleUser);
+        _logger.LogError("Google user: {0}", JsonSerializer.Serialize(googleUser));
         if (googleUser is null)
         {
             return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "User info could not be retrieved.");
@@ -52,10 +53,10 @@ public class GetUserFromGoogleHandler : IRequestHandler<GetUserFromGoogleQuery, 
             FirstName = googleUser.Name,
         };
         newUser.OAuthProviders.Add(provider);
-        _logger.LogError("New user: {0}", newUser);
+        _logger.LogError("New user: {0}", JsonSerializer.Serialize(newUser));
 
         var createResult = await _userManager.CreateAsync(newUser);
-        _logger.LogError("Create result: {0}", createResult);
+        _logger.LogError("Create result: {0}", JsonSerializer.Serialize(createResult));
         return createResult.Succeeded ? Result<ApplicationUser>.Success(newUser) : Result<ApplicationUser>.Failure(ResultStatusCode.Error, "User could not been logged in.");
     }
 }
