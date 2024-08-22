@@ -34,6 +34,7 @@ export const API_ENDPOINTS = {
     LOGOUT: 'logout',
     ME: 'me',
     TWITCH_CALLBACK: 'twitch/callback',
+    GOOGLE_CALLBACK: 'google/callback',
     CONFIRM: 'confirm',
     RESET_PASSWORD: 'reset-password',
     FORGOT_PASSWORD: 'forgot-password'

@@ -33,6 +33,10 @@ export class AuthService {
         return this.httpClient.post(`${environment.apiUrl}/${environment.oauthEndpoint}/${API_ENDPOINTS.TWITCH_CALLBACK}`, {code: code});
     }
 
+    loginGoogle = (code: string) => {
+        return this.httpClient.post(`${environment.apiUrl}/${environment.oauthEndpoint}/${API_ENDPOINTS.GOOGLE_CALLBACK}`, {code: code});
+    }
+
     confirmEmail = (token: string, email: string) => {
         return this.httpClient.post(`${environment.apiUrl}/${environment.userEndpoint}/${API_ENDPOINTS.CONFIRM}`, {token, email});
     }
