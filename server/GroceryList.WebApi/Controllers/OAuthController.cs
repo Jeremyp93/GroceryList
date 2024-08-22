@@ -49,6 +49,9 @@ public class OAuthController : BaseController
 
         var result = await _mediator.Send(new GetUserFromTwitchQuery(code!));
 
+        if (!result.IsSuccessful)
+            return ErrorResponse(result);
+
         var claims = new List<Claim>
         {
             new("user_id", result.Data.Id.ToString())
@@ -85,7 +88,10 @@ public class OAuthController : BaseController
         }
 
         var result = await _mediator.Send(new GetUserFromGoogleQuery(code!));
-        _logger.LogError("User logged in with Google: {Email}", result?.Data?.Email);
+
+        if (!result.IsSuccessful)
+            return ErrorResponse(result);
+
         var claims = new List<Claim>
         {
             new("user_id", result.Data.Id.ToString())

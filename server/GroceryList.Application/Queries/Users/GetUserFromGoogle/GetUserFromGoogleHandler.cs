@@ -25,14 +25,12 @@ public class GetUserFromGoogleHandler : IRequestHandler<GetUserFromGoogleQuery, 
     public async Task<Result<ApplicationUser>> Handle(GetUserFromGoogleQuery request, CancellationToken cancellationToken)
     {
         var googleUser = await _googleClient.GetUser(request.Code);
-        _logger.LogError("Google user: {0}", JsonSerializer.Serialize(googleUser));
         if (googleUser is null)
         {
             return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "User info could not be retrieved.");
         }
 
         var existingUser = await _userManager.FindByEmailAsync(googleUser.Email.ToLower());
-        _logger.LogError("Existing user: {0}", existingUser);
         if (existingUser is not null && existingUser.OAuthProviders.Any(o => o.OAuthProviderId == googleUser.Id && o.OAuthProviderName == GoogleKey))
         {
             return Result<ApplicationUser>.Success(existingUser);
@@ -53,10 +51,14 @@ public class GetUserFromGoogleHandler : IRequestHandler<GetUserFromGoogleQuery, 
             FirstName = googleUser.Name,
         };
         newUser.OAuthProviders.Add(provider);
-        _logger.LogError("New user: {0}", JsonSerializer.Serialize(newUser));
 
         var createResult = await _userManager.CreateAsync(newUser);
-        _logger.LogError("Create result: {0}", JsonSerializer.Serialize(createResult));
-        return createResult.Succeeded ? Result<ApplicationUser>.Success(newUser) : Result<ApplicationUser>.Failure(ResultStatusCode.Error, "User could not been logged in.");
+        if (!createResult.Succeeded)
+        {
+            _logger.LogError("Create result: {0}", JsonSerializer.Serialize(createResult));
+            return Result<ApplicationUser>.Failure(ResultStatusCode.Error, "User could not been created.");
+        }
+        
+        return Result<ApplicationUser>.Success(newUser);
     }
 }
