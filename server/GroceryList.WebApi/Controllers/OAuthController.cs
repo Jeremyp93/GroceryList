@@ -85,7 +85,7 @@ public class OAuthController : BaseController
         }
 
         var result = await _mediator.Send(new GetUserFromGoogleQuery(code!));
-        _logger.LogTrace("User logged in with Google: {Email}", result?.Data?.Email);
+        _logger.LogError("User logged in with Google: {Email}", result?.Data?.Email);
         var claims = new List<Claim>
         {
             new("user_id", result.Data.Id.ToString())
