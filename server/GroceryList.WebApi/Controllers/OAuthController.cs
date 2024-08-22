@@ -17,10 +17,12 @@ namespace GroceryList.WebApi.Controllers;
 public class OAuthController : BaseController
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<OAuthController> _logger;
 
-    public OAuthController(IMapper mapper, IMediator mediator) : base(mapper)
+    public OAuthController(IMapper mapper, IMediator mediator, ILogger<OAuthController> logger) : base(mapper)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     [HttpGet("twitch/login")]
@@ -83,7 +85,7 @@ public class OAuthController : BaseController
         }
 
         var result = await _mediator.Send(new GetUserFromGoogleQuery(code!));
-
+        _logger.LogTrace("User logged in with Google: {Email}", result.Data.Email);
         var claims = new List<Claim>
         {
             new("user_id", result.Data.Id.ToString())
