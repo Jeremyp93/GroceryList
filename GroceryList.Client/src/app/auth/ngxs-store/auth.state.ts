@@ -2,7 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { tap } from "rxjs";
 
-import { CallbackTwitch, GetMyself, Login, Logout, Register } from "./auth.actions";
+import { CallbackGoogle, CallbackTwitch, GetMyself, Login, Logout, Register } from "./auth.actions";
 import { AuthService } from "../auth.service";
 
 export interface AuthStateModel {
@@ -80,6 +80,18 @@ export class AuthState {
     @Action(CallbackTwitch)
     callbackTwitch(ctx: StateContext<AuthStateModel>, {code}: CallbackTwitch) {
         return this.authService.loginTwitch(code).pipe(
+            tap(() => {
+                ctx.patchState({
+                    isAuthenticated: true
+                });
+                ctx.dispatch(new GetMyself());
+            })
+        );
+    }
+
+    @Action(CallbackGoogle)
+    callbackGoogle(ctx: StateContext<AuthStateModel>, {code}: CallbackGoogle) {
+        return this.authService.loginGoogle(code).pipe(
             tap(() => {
                 ctx.patchState({
                     isAuthenticated: true

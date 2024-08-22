@@ -9,6 +9,7 @@ import { ResetPasswordComponent } from "./reset-password/reset-password.componen
 import { ConfirmEmailCallbackComponent } from "./callback/confirm-email-callback.component";
 import { ConfirmEmailComponent } from "./register/confirm-email/confirm-email.component";
 import { TwitchCallbackComponent } from "./callback/twitch-callback/twitch-callback.component";
+import { GoogleCallbackComponent } from "./callback/google-callback/google-callback.component";
 
 export const AUTH_ROUTES: Routes = [
     {
@@ -21,6 +22,7 @@ export const AUTH_ROUTES: Routes = [
             { path: ROUTES_PARAM.AUTHENTICATION.CONFIRM_EMAIL, component: ConfirmEmailCallbackComponent, title: 'Redirecting...' },
             { path: ROUTES_PARAM.AUTHENTICATION.EMAIL_CONFIRM_INFO, component: ConfirmEmailComponent, title: 'Auth - Cofirm Email Info' },
             { path: 'twitch-callback', component: TwitchCallbackComponent, title: 'Redirecting...' },
+            { path: 'google-callback', component: GoogleCallbackComponent, title: 'Redirecting...' },
         ]
     },
 ];

@@ -3,6 +3,7 @@ using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using AspNetCore.Identity.MongoDbCore.Models;
 using GroceryList.Application;
 using GroceryList.Application.Abstractions;
+using GroceryList.Application.Commands.LoginGoogle;
 using GroceryList.Application.Commands.LoginTwitch;
 using GroceryList.Application.Models;
 using GroceryList.Domain.Events;
@@ -126,6 +127,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection SetupCookieAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOptions<TwitchOptions>().Bind(configuration.GetSection("twitch"));
+        services.AddOptions<GoogleOptions>().Bind(configuration.GetSection("google"));
         services.AddHttpContextAccessor();
         services.AddScoped<IClaimReader, ClaimReader>();
 
@@ -165,6 +167,11 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient<ITwitchClient, TwitchClient>(twithClient =>
         {
             twithClient.BaseAddress = new Uri("https://api.twitch.tv/helix/");
+        });
+
+        services.AddHttpClient<IGoogleClient, GoogleClient>(googleClient =>
+        {
+            googleClient.BaseAddress = new Uri("https://www.googleapis.com/oauth2/v1/");
         });
 
         services.AddSingleton<IEmailService, EmailService>();

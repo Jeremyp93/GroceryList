@@ -33,6 +33,7 @@
     margin-bottom: 10px;
     @include flex-column;
     align-items: center;
+    gap: 10px;
 
     .twitch-anchor {
         width: 70%;
@@ -50,6 +51,29 @@
         }
 
         .twitch-logo {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+    }
+
+    .google-anchor {
+        width: 70%;
+        background-color: white;
+        border: 1px solid black;
+        color: black;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        @include flex-center;
+
+        &:hover {
+            background-color: rgba(255, 0, 0, 0.548);
+        }
+
+        .google-logo {
             width: 20px;
             height: 20px;
             margin-right: 5px;
