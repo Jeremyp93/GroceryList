@@ -29,7 +29,7 @@ public class EmailService : IEmailService
                         <p>Hi</p>
                         <p>Thank you for creating an account on the Grocery List app.<br/>
                         This app is used to create and manage grocery lists, mainly to gain some precious time in the store !</p>
-public static class Base64Helper
+
                         <p>To use the app, please <a href=""{_configuration.GetValue<string>("clientUrls:ConfirmEmail")}?token={Base64Helper.EncodeTo64(token)}&email={userEmail}"">confirm your email</a>.</p>
                         <p>Have a great day !</p>
                         <p>Scotex</p>
