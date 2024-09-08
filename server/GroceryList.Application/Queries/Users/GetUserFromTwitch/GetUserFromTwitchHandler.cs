@@ -20,7 +20,7 @@ public class GetUserFromTwitchHandler : IRequestHandler<GetUserFromTwitchQuery, 
     public async Task<Result<ApplicationUser>> Handle(GetUserFromTwitchQuery request, CancellationToken cancellationToken)
     {
         var twitchUser = await _twitchClient.GetUser(request.Code);
-        if (twitchUser is null)
+        if (twitchUser is null || string.IsNullOrEmpty(twitchUser.Email))
         {
             return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "User info could not be retrieved.");
         }
