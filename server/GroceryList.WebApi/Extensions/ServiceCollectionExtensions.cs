@@ -15,10 +15,11 @@ using GroceryList.Infrastructure.Repositories;
 using GroceryList.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Configuration;
+using System.Net;
+using System.Net.Mail;
 
 namespace GroceryList.WebApi.Extensions;
 
@@ -174,8 +175,19 @@ public static class ServiceCollectionExtensions
             googleClient.BaseAddress = new Uri("https://www.googleapis.com/oauth2/v1/");
         });
 
-        services.AddSingleton<IEmailService, EmailService>();
+        services.AddTransient<IEmailService, EmailService>();
         services.AddOptions<SmtpOptions>().Bind(configuration.GetSection("smtp"));
+
+        services.AddTransient(serviceProvider =>
+        {
+            var smtpOptions = serviceProvider.GetRequiredService<IOptions<SmtpOptions>>().Value;
+            var client = new SmtpClient(smtpOptions.Server, smtpOptions.Port)
+            {
+                Credentials = new NetworkCredential(smtpOptions.Username, smtpOptions.Password),
+                EnableSsl = true,
+            };
+            return client;
+        });
 
         return services;
     }

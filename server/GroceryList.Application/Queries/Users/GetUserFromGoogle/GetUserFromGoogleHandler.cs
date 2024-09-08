@@ -25,7 +25,7 @@ public class GetUserFromGoogleHandler : IRequestHandler<GetUserFromGoogleQuery, 
     public async Task<Result<ApplicationUser>> Handle(GetUserFromGoogleQuery request, CancellationToken cancellationToken)
     {
         var googleUser = await _googleClient.GetUser(request.Code);
-        if (googleUser is null)
+        if (googleUser is null || string.IsNullOrEmpty(googleUser.Email))
         {
             return Result<ApplicationUser>.Failure(ResultStatusCode.ValidationError, "User info could not be retrieved.");
         }
