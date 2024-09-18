@@ -89,7 +89,6 @@ public class ColruytClient
 
             var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             request.Headers.Add("X-Cg-Apikey", xCgApiKey);
-            request.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0");
 
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();

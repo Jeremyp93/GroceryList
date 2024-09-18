@@ -19,7 +19,21 @@ builder.Services.ConfigureMongoDb(configuration);
 builder.Services.AddSingleton<ColruytClient>();
 builder.Services.AddHttpClient<ColruytClient>(colruytClient =>
 {
-    colruytClient.BaseAddress = new Uri("https://apip.colruyt.be/gateway/emec.colruyt.protected.bffsvc/cg/fr/api/");
+    var baseUrl = configuration["ColruytBaseApi"];
+    if (string.IsNullOrEmpty(baseUrl))
+    {
+        throw new InvalidOperationException("ColruytBaseApi is not configured");
+    }
+    if (!builder.Environment.IsDevelopment())
+    {
+        var scraperKey = configuration["ScraperApiKey"];
+        if (string.IsNullOrEmpty(scraperKey))
+        {
+            throw new InvalidOperationException("ScraperApiKey is not configured");
+        }
+        baseUrl = string.Format(baseUrl, scraperKey);
+    }
+    colruytClient.BaseAddress = new Uri(baseUrl);
     colruytClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0");
 });
 
