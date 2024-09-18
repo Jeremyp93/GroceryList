@@ -1,0 +1,5 @@
+Build image
+docker build -t dev-colruyt-scraper-worker:latest ../server/ColruytScraper
+
+running image
+docker run -d --name ColruytScraper --network dev_grocery-list --env-file worker.env --restart no dev-colruyt-scraper-worker:latest

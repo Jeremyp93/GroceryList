@@ -15,6 +15,7 @@ namespace ColruytScraper
             {
                 Headless = true, // Set to true for headless mode
                 ExecutablePath = installedBrowser.GetExecutablePath(),
+                Args = new[] { "--no-sandbox" }
             };
 
             using var browser = await Puppeteer.LaunchAsync(options);
@@ -44,7 +45,7 @@ namespace ColruytScraper
 
             await page.GoToAsync("https://colruyt.be/nl", new NavigationOptions
             {
-                WaitUntil = [WaitUntilNavigation.DOMContentLoaded],
+                WaitUntil = new[] { WaitUntilNavigation.DOMContentLoaded },
                 Timeout = 120000
             });
 

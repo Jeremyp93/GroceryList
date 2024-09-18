@@ -9,7 +9,7 @@ public class ProxyService
     public ProxyService(IHttpClientFactory httpClient)
     {
         _httpClient = httpClient.CreateClient();
-        _proxies = [];
+        _proxies = new List<WebProxy>();
     }
 
     private async Task FetchProxiesAsync()

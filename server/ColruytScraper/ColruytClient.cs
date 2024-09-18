@@ -20,7 +20,7 @@ public class ColruytClient
         if (string.IsNullOrEmpty(apiKey))
         {
             _logger.LogError("API key not found");
-            return [];
+            return Array.Empty<ColruytProduct>();
         }
 
         var allProducts = new List<ColruytProduct>();
@@ -30,7 +30,7 @@ public class ColruytClient
         if (productsResponse is null)
         {
             _logger.LogError("Failed to deserialize products response");
-            return [];
+            return Array.Empty<ColruytProduct>();
         }
 
         var totalProductsFound = productsResponse.ProductsFound;
@@ -53,7 +53,7 @@ public class ColruytClient
             if (productsResponse is null)
             {
                 _logger.LogError("Failed to retrieve products response");
-                return [];
+                return Array.Empty<ColruytProduct>();
             }
 
             // Add unique products
@@ -124,7 +124,8 @@ public class ColruytClient
                 Image = p.FullImage,
                 Thumbnail = p.SquareImage,
                 ProductId = p.ProductId,
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                CreatedOn = DateTime.UtcNow
             };
             if (p.Categories is not null && p.Categories.Count != 0)
             {

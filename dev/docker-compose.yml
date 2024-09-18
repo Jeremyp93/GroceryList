@@ -40,19 +40,6 @@ services:
       - mongodb-dev
     networks:
       - grocery-list
-  
-  worker-dev:
-    container_name: worker-dev
-    build:
-      context: ../server/ColruytScraper
-    env_file:
-      - worker.env
-    ports:
-      - 5059:8800
-    depends_on:
-      - mongodb-dev
-    networks:
-      - grocery-list
 
 networks:
   grocery-list:

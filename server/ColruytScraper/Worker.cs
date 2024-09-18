@@ -30,6 +30,8 @@ public class Worker : BackgroundService
             {
                 await SaveToMongoDbAsync(result);
             }
+
+            Environment.Exit(0);
         }
     }
 

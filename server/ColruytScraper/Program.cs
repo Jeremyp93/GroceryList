@@ -2,12 +2,16 @@ using ColruytScraper;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.Development.json", optional: false, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build();
+var configBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
+if (builder.Environment.IsDevelopment())
+{
+    configBuilder
+        .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+}
+configBuilder
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
+var configuration = configBuilder.Build();
 
 builder.Services.AddHostedService<Worker>();
 builder.Services.ConfigureMongoDb(configuration);

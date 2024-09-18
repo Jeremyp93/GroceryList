@@ -8,6 +8,7 @@ public class ColruytProduct
     public string Thumbnail { get; set; } = string.Empty;
     public double Price { get; set; }
     public ColruytCategory? Category { get; set; }
+    public DateTime CreatedOn { get; set; }
 }
 
 public class ColruytCategory
