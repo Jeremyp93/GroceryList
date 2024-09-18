@@ -2,7 +2,7 @@ Build image
 docker build -t colruyt-scraper-worker:latest ../server/ColruytScraper
 
 running image
-docker run -d --name ColruytScraper --network deploy_internal --env-file worker.env --restart no colruyt-scraper-worker:latest
+docker run -d --name ColruytScraper --network deploy_internal --env-file worker.env --restart no colruyt-scraper-worker:latest >> /home/deploy_user/colruyt_scraper.log 2>&1
 
 cron job
-0 2 * * * docker run --rm --name ColruytScraper --network deploy_internal --env-file worker.env --restart no colruyt-scraper-worker:latest >> /var/log/colruyt_scraper.log 2>&1
+0 2 * * * cd src/GroceryList/deploy && docker run --rm --name ColruytScraper --network deploy_internal --env-file worker.env --restart no colruyt-scraper-worker:latest >> /home/deploy_user/colruyt_scraper.log 2>&1
