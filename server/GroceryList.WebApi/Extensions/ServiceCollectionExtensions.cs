@@ -37,6 +37,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IStoreRepository, StoreRepository>();
         services.AddTransient<IGroceryListRepository, GroceryListRepository>();
         services.AddTransient<IItemRepository, ItemRepository>();
+        services.AddTransient<IProductRepository, ProductRepository>();
 
         return services;
     }
