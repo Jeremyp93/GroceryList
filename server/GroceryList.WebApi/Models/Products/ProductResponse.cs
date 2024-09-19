@@ -7,6 +7,7 @@ public class ProductResponse
     public string Name { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
     public string Thumbnail { get; set; } = string.Empty;
+    public string Brand { get; set; } = string.Empty;
     public double Price { get; set; }
     public CategoryResponse? Category { get; set; }
     public DateTime CreatedOn { get; set; }
