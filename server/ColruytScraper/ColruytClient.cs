@@ -125,7 +125,7 @@ public class ColruytClient
                 Thumbnail = p.SquareImage,
                 ProductId = p.ProductId,
                 Id = Guid.NewGuid(),
-                CreatedOn = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow
             };
             if (p.Categories is not null && p.Categories.Count != 0)
             {

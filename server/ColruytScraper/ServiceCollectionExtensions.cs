@@ -1,4 +1,7 @@
-﻿using MongoDB.Bson.Serialization.Conventions;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
 namespace ColruytScraper;
@@ -7,9 +10,9 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection ConfigureMongoDb(this IServiceCollection services, IConfiguration configuration)
     {
         var pack = new ConventionPack
-        {
-            new CamelCaseElementNameConvention()
-        };
+                    {
+                        new CamelCaseElementNameConvention()
+                    };
 
         ConventionRegistry.Register("camelCase", pack, t => true);
 
@@ -23,6 +26,8 @@ public static class ServiceCollectionExtensions
 
             return mongoDatabase;
         });
+
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
         return services;
     }
