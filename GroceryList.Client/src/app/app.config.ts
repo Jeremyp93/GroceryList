@@ -14,6 +14,7 @@ import { StoreState } from './store/ngxs-store/store.state';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { environment } from '../environments/environment';
 import { authInterceptor } from './auth/auth.interceptor';
+import { ProductService } from './new/category/product.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes, withViewTransitions()),

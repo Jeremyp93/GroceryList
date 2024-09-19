@@ -26,6 +26,9 @@ export const ROUTES_PARAM = {
         CONFIRM_EMAIL: 'confirm-email',
         EMAIL_CONFIRM_INFO: 'email-confirm-info',
     },
+    CATEGORY:{
+        CATEGORY: 'categories'
+    },
     ID_PARAMETER: 'id',
 }
 

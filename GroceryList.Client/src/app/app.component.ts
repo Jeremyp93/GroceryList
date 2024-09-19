@@ -1,8 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Actions, Select, Store, ofActionCompleted, ofActionDispatched } from '@ngxs/store';
-import { Observable, Subscription } from 'rxjs';
+import { Actions, Store, ofActionCompleted } from '@ngxs/store';
+import { Subscription } from 'rxjs';
 
 import { ROUTES_PARAM } from './constants';
 import { AuthState } from './auth/ngxs-store/auth.state';

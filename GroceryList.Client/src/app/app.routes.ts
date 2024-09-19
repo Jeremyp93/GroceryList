@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import { ROUTES_PARAM } from './constants';
-import { TwitchCallbackComponent } from './auth/callback/twitch-callback/twitch-callback.component';
 import { ErrorComponent } from './error.component';
 
 export const routes: Routes = [
@@ -21,6 +20,10 @@ export const routes: Routes = [
     {
         path: ROUTES_PARAM.AUTHENTICATION.AUTH,
         loadChildren: () => import('./auth/auth.routes').then(m => m.AUTH_ROUTES),
+    },
+    {
+        path: ROUTES_PARAM.CATEGORY.CATEGORY,
+        loadChildren: () => import('./new/category/category.routes').then(m => m.CATEGORY_ROUTES),
     },
     {
         path: 'error', component: ErrorComponent, title: 'Error'

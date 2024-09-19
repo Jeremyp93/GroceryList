@@ -1,0 +1,10 @@
+<ul>
+@for (category of categories; track category.id) {
+    <li>
+        <a href="/category/{{category.id}}">
+            <img src="../../../../assets/products_category/{{category.id}}.jpg" alt="{{category.name}}" width="100" />
+            <span>{{category.name}}</span>
+        </a>
+    </li>
+}
+</ul>

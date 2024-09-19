@@ -11,7 +11,7 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { GroceryList } from '../types/grocery-list.type';
-import { Select, Store } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { GroceryListState } from '../ngxs-store/grocery-list.state';
 import { AddGroceryList, DeleteGroceryList, GetGroceryLists, SetSelectedGroceryList } from '../ngxs-store/grocery-list.actions';
 import { ButtonStyle } from '../../shared/button/button-style.enum';
