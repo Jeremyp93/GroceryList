@@ -11,6 +11,7 @@ import { AlertComponent } from './shared/alert/alert.component';
 import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 import { SideMenuComponent } from './menu/side-menu/side-menu.component';
 import { SideMenuService } from './menu/side-menu/side-menu.service';
+import { GetCategories } from './new/category/ngxs-store/product.action';
 
 @Component({
   selector: 'app-root',
@@ -57,6 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.#ngxsStore.select(AuthState.isAuthenticated).subscribe(value => this.showMenu = value);
 
     this.#sideMenuSubscription = this.#sideMenuService.isOpen$.subscribe(open => this.showSidebar = open);
+    this.#ngxsStore.dispatch(new GetCategories());
   }
 
   onLogout = () => {
