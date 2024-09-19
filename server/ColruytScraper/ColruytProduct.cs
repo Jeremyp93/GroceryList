@@ -6,6 +6,7 @@ public class ColruytProduct
     public string Name { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
     public string Thumbnail { get; set; } = string.Empty;
+    public string Brand { get; set; } = string.Empty;
     public double Price { get; set; }
     public ColruytCategory? Category { get; set; }
     public DateTime CreatedAt { get; set; }
