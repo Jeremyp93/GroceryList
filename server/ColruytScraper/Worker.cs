@@ -24,7 +24,7 @@ public class Worker : BackgroundService
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             }
 
-            var result = await _colruytClient.GetAllProducts(100);
+            var result = await _colruytClient.GetAllProducts(25);
 
             if (result.Any())
             {

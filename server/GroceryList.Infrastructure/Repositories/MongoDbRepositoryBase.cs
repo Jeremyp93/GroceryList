@@ -11,7 +11,7 @@ namespace GroceryList.Infrastructure.Repositories;
 public class MongoDbRepositoryBase<TAggregateRoot, TId> : IRepository<TAggregateRoot, TId> where TAggregateRoot : AggregateRoot
 {
     private readonly string _username;
-    private readonly IMongoCollection<TAggregateRoot> _collection;
+    protected IMongoCollection<TAggregateRoot> _collection;
     private readonly IMediator _mediator;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IClaimReader _claimReader;
