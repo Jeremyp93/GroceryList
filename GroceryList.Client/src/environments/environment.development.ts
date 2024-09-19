@@ -8,5 +8,5 @@ export const environment = {
     itemEndpoint: 'items',
     oauthEndpoint: 'oauth',
     productEndpoint: 'products',
-    categoriesEndpoint: 'products/categories'
+    categoriesEndpoint: 'categories'
 };
