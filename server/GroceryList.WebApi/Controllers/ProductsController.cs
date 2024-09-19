@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GroceryList.Application.Queries.Products.GetCategories;
 using GroceryList.Application.Queries.Products.GetProducts;
+using GroceryList.Application.Queries.Products.GetProductsByCategory;
 using GroceryList.Domain.Aggregates.Products;
 using GroceryList.WebApi.Models.Products;
 using MediatR;
@@ -34,7 +35,21 @@ public class ProductsController : BaseController
     }
 
     [HttpGet]
-    [Route("categories")]
+    [Route("/api/categories/{id}/products")]
+    public async Task<IActionResult> GetProductsByCategory([FromRoute] string id)
+    {
+        var result = await _mediator.Send(new GetProductsByCategoryQuery(id));
+
+        if (!result.IsSuccessful)
+        {
+            return ErrorResponse(result);
+        }
+
+        return ReturnOk<IEnumerable<ProductResponse>, IEnumerable<Product>>(result.Data);
+    }
+
+    [HttpGet]
+    [Route("/api/categories")]
     public async Task<IActionResult> GetCategories()
     {
         var result = await _mediator.Send(new GetCategoriesQuery());

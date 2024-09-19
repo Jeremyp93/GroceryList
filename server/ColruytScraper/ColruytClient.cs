@@ -123,6 +123,7 @@ public class ColruytClient
                 Name = p.LongName,
                 Image = p.FullImage,
                 Thumbnail = p.SquareImage,
+                Brand = p.Brand,
                 ProductId = p.ProductId,
                 Id = Guid.NewGuid(),
                 CreatedAt = DateTime.UtcNow
