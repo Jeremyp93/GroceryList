@@ -1,0 +1,22 @@
+<div class="cards">
+    <ng-container *ngrxLet="products$ as products">
+    @if (products.length > 0) {
+        @for (product of products; track product.id) {
+            <div class="card">
+                <div class="body"><img [src]="product.thumbnail" [alt]="product.name" width="150" /></div>
+                <div class="footer">
+                    {{product.name}}
+                </div>
+            </div>
+            }
+    }
+    @else {
+        <div class="flex-center mt-20">
+            <app-loading
+            [size]="loadingSizes.large"
+            [color]="loadingColors.app"
+          ></app-loading>
+        </div> 
+    }
+</ng-container>
+</div>

@@ -8,5 +8,5 @@ export type Product = {
     category: Category;
     price: number;
     thumbnail: string;
-    picture: string;
+    image: string;
 }

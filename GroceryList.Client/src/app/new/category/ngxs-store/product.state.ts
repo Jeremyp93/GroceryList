@@ -43,6 +43,11 @@ export class ProductState {
         return state.categories;
     }
 
+    @Selector()
+    static getFilteredProducts(state: ProductStateModel): Product[] {
+        return state.filteredProducts;
+    }
+
     @Action(GetProducts)
     getProducts({ getState, setState }: StateContext<ProductStateModel>) {
         return this.productService.getAllProducts().pipe(

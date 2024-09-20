@@ -1,8 +1,8 @@
 <div class="cards">
     <ng-container *ngrxLet="categories$ as categories">
     @for (category of categories; track category.id) {
-    <div class="card">
-        <div class="body"><img src="../../../../assets/products_category/{{category.id}}.jpg" alt="{{category.name}}" width="100" /></div>
+    <div class="card" (click)="onSelectCategory(category.id)">
+        <div class="body"><img src="../../../../assets/products_category/{{category.id}}.jpg" alt="{{category.name}}" width="250" /></div>
         <div class="footer">
             {{category.name}}
         </div>
