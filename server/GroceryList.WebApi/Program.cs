@@ -18,7 +18,7 @@ using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
 
 ILogger logger = loggerFactory.CreateLogger<Program>();
 
-logger.LogInformation(JsonSerializer.Serialize($"THIS IS THE ACTIVE CONFIG: {builder.Configuration.GetSection("twitch").AsEnumerable()}"));
+logger.LogInformation($"THIS IS THE ACTIVE CONFIG: {JsonSerializer.Serialize(builder.Configuration.GetSection("twitch").AsEnumerable())}");
 
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureMediatR();
