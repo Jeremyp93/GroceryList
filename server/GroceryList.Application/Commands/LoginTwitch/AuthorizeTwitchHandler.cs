@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
 using System.Web;
 
 namespace GroceryList.Application.Commands.LoginTwitch;
@@ -17,7 +18,7 @@ public class AuthorizeTwitchHandler : IRequestHandler<AuthorizeTwitchCommand, Re
 
     public Task<Result<string>> Handle(AuthorizeTwitchCommand command, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"AuthorizeTwitch command: {_twitchConfiguration.AuthorizationEndpoint}");
+        _logger.LogInformation($"Login twitch options: {JsonSerializer.Serialize(_twitchConfiguration)}");
         return Task.FromResult(Result<string>.Success($"{_twitchConfiguration.AuthorizationEndpoint}?response_type=code&client_id={_twitchConfiguration.ClientId}&redirect_uri={_twitchConfiguration.CallbackUrl}&scope={HttpUtility.UrlEncode($"{_twitchConfiguration.Scope}")}"));
     }
 }
