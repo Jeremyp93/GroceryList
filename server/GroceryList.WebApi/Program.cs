@@ -1,5 +1,6 @@
 using GroceryList.WebApi.Extensions;
 using Microsoft.OpenApi.Models;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
     .AddConsole());
 
 ILogger logger = loggerFactory.CreateLogger<Program>();
+
+logger.LogInformation(JsonSerializer.Serialize($"THIS IS THE ACTIVE CONFIG: {builder.Configuration}"));
 
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureMediatR();
