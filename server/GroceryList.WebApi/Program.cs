@@ -28,6 +28,7 @@ using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
 ILogger logger = loggerFactory.CreateLogger<Program>();
 
 logger.LogInformation($"THIS IS THE ACTIVE CONFIG: {JsonSerializer.Serialize(builder.Configuration.AsEnumerable())}");
+logger.LogInformation($"THIS IS THE ATTACHED CONFIG: {JsonSerializer.Serialize(configuration.AsEnumerable())}");
 
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureMediatR();
