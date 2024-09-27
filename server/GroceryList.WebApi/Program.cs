@@ -5,16 +5,6 @@ using System.Text.Json;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-var configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{environment}.json", optional: true)
-    .AddEnvironmentVariables()
-    .Build();
-
-builder.Configuration.AddConfiguration(configuration);
-
 builder.Logging
   .ClearProviders()
   .AddConsole();
@@ -26,9 +16,6 @@ using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
     .AddConsole());
 
 ILogger logger = loggerFactory.CreateLogger<Program>();
-
-logger.LogInformation($"THIS IS THE ACTIVE CONFIG: {JsonSerializer.Serialize(builder.Configuration.AsEnumerable())}");
-logger.LogInformation($"THIS IS THE ATTACHED CONFIG: {JsonSerializer.Serialize(configuration.AsEnumerable())}");
 
 builder.Services.ConfigureAutoMapper();
 builder.Services.ConfigureMediatR();
