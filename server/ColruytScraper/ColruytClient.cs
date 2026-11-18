@@ -123,9 +123,10 @@ public class ColruytClient
                 Name = p.LongName,
                 Image = p.FullImage,
                 Thumbnail = p.SquareImage,
+                Brand = p.Brand,
                 ProductId = p.ProductId,
                 Id = Guid.NewGuid(),
-                CreatedOn = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow
             };
             if (p.Categories is not null && p.Categories.Count != 0)
             {

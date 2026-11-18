@@ -11,9 +11,13 @@ COPY ./GroceryList.Infrastructure/GroceryList.Infrastructure.csproj  ./GroceryLi
 
 # Restore as distinct layers
 RUN dotnet restore "GroceryList.WebApi/GroceryList.WebApi.csproj"
-COPY . ./
+COPY ./GroceryList.WebApi/ ./GroceryList.WebApi/
+COPY ./GroceryList.Application/ ./GroceryList.Application/
+COPY ./GroceryList.Domain/ ./GroceryList.Domain/
+COPY ./GroceryList.Infrastructure/ ./GroceryList.Infrastructure/
 # Build and publish a release
-RUN dotnet publish -c Release -o out
+RUN dotnet publish "GroceryList.WebApi/GroceryList.WebApi.csproj" -c Release -o out
+# RUN dotnet publish -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0

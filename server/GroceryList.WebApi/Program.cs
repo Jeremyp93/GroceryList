@@ -1,10 +1,10 @@
 using GroceryList.WebApi.Extensions;
 using Microsoft.OpenApi.Models;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Logging
   .ClearProviders()
   .AddConsole();
