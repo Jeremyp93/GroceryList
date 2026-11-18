@@ -1,13 +1,10 @@
-version: '3.8'
-
 services:
   traefik:
-    image: traefik:v2.2
+    image: traefik:v3.6.1          # exact tag, 3.6.1 or newer
     container_name: traefik
     restart: always
     ports:
       - "443:443"
-      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
@@ -18,7 +15,7 @@ services:
       - traefik
 
   portainer:
-    image: portainer/portainer-ce:2.20.3
+    image: portainer/portainer-ce:<current-LTS-tag>    # 2.33.5 or newer
     command: -H unix:///var/run/docker.sock
     restart: always
     volumes:
@@ -27,14 +24,14 @@ services:
     labels:
       # Frontend
       - "traefik.enable=true"
-      - "traefik.http.routers.portainer-frontend.rule=Host(`portainer.scotex.tech`)"
+      - "traefik.http.routers.portainer-frontend.rule=Host(`portainer.scotex.dev`)"
       - "traefik.http.routers.portainer-frontend.entrypoints=websecure"
       - "traefik.http.services.portainer-frontend.loadbalancer.server.port=9000"
       - "traefik.http.routers.portainer-frontend.tls.certresolver=lets-encrypt"
       - "traefik.http.routers.portainer-frontend.service=portainer-frontend"
 
       # Edge
-      - "traefik.http.routers.portainer-edge.rule=Host(`edge.scotex.tech`)"
+      - "traefik.http.routers.portainer-edge.rule=Host(`edge.scotex.dev`)"
       - "traefik.http.routers.portainer-edge.entrypoints=websecure"
       - "traefik.http.services.portainer-edge.loadbalancer.server.port=8000"
       - "traefik.http.routers.portainer-edge.tls.certresolver=lets-encrypt"

@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   mongodb-dev:
     container_name: mongodb-dev
